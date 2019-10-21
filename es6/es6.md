@@ -315,23 +315,47 @@
      直接返回一个resolved状态的Promise对象
 
 * 如果希望得到一个 Promise 对象，比较方便的方法就是直接调用Promise.resolve()方法。
-* 立即resolve()的Promise 对象，是在本轮"事件循环"的结束执行，而不是在下一轮"事件循环"的开始时
 
-如：setTimeout(function () {
-    console.log('three');
+* macrotask和microtask
+  * js中分为两种任务类型：macrotask和microtask，microtask称为jobs，macrotask可称为task
+  * microtask称为jobs，macrotask可称为task
+  * macrotask(又称之宏任务)，可以理解是每次执行栈执行的代码就是一个宏任务（包括每次从事件队列中获取一个事件回调并放到执行栈中执行）
+       * 每一个task会从头到尾将这个任务执行完毕，不会执行其它
+       * 浏览器为了能够使得JS内部task与DOM任务能够有序的执行，会在一个task执行结束后，在下一个 task 执行开始前，对页面进行重新渲染
+  * microtask（又称为微任务），可以理解是在当前 task 执行结束后立即执行的任务
+       * 也就是说，在当前task任务后，下一个task之前，在渲染之前
+       * 所以它的响应速度相比setTimeout（setTimeout是task）会更快，因为无需等渲染
+       * 也就是说，在某一个macrotask执行完后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）
+  * 形成macrotask和microtask的场景
+       * macrotask：主代码块，setTimeout，setInterval等（可以看到，事件队列中的每一个事件都是一个macrotask）
+       * microtask：Promise，process.nextTick等
+  * 再根据线程理解一下
+       * macrotask中的事件都是放在一个事件队列中的，而这个队列由事件触发线程维护
+       * microtask中的所有微任务都是添加到微任务队列（Job Queues）中，等待当前macrotask执行完毕后执行，而这个队列由JS引擎线程维护
+       * 所以，总结下运行机制：
+            * 执行一个宏任务（栈中没有就从事件队列中获取）
+            * 执行过程中如果遇到微任务，就将它添加到微任务的任务队列中
+            * 宏任务执行完毕后，立即执行当前微任务队列中的所有微任务（依次执行）
+            * 当前宏任务执行完毕，开始检查渲染，然后GUI线程接管渲染
+            * 渲染完毕后，JS线程继续接管，开始下一个宏任务（从事件队列中获取）
+
+
+如：console.log('script start');
+   setTimeout(function() {
+    console.log('setTimeout');
    }, 0);
-
-   Promise.resolve().then(function () {
-     console.log('two');
+   Promise.resolve().then(function() {
+     console.log('promise1');
+   }).then(function() {
+     console.log('promise2');
    });
+   console.log('script end');
 
-   console.log('one');
-
-   // one
-  // two
-  // three
-
-上面代码中，setTimeout(fn, 0)在下一轮“事件循环”开始时执行，Promise.resolve()在本轮“事件循环”结束时执行，console.log('one')则是立即执行，因此最先输出。
+  // script start
+  // script end
+  // promise1
+  // promise2
+  // setTimeout
 
 (11)Promise.reject()
 
@@ -362,3 +386,573 @@
    // true
 
 catch方法的参数不是reject抛出的'出错了'，而是thenable对象，这也印证了Promise.reject()方法的参数会原封不动的作为reject的理由，变成后续方法的参数
+
+6.class类
+
+(1)定义
+
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+}
+
+* 类本质上是原型链的二次包装，类相当于实例的原型，所有在类中定义的方法，都会被实例继承
+* 以上就是定义了一个类，可以看到里面有一个constructor方法，这就是构造方法，而this关键字则代表实例对象
+* 类的数据类型就是函数，类本身就指向构造函数。
+
+如：class Point {
+    // ...
+   }
+
+   typeof Point // "function"
+   Point === Point.prototype.constructor // true
+
+* 使用的时候，也是直接对类使用new命令，跟构造函数的用法完全一致。
+
+如：class Bar {
+    doStuff() {
+      console.log('stuff');
+    }  
+   }
+
+  var b = new Bar();
+   b.doStuff() // "stuff"
+
+生成的实例b没有constructor属性，所以b会沿着原型链(b.__proto__)向上寻找
+
+* 类的内部所有定义的方法，都是不可枚举的
+* 类没有提升
+* 不能使用字面量定义属性
+类中无法像对象一样使用 prop: value 或者 prop = value 的形式定义一个类的属性，我们只能在类的构造方法或其他方法中使用 this.prop = value 的形式为类添加属性。
+* 类和模块的内部，默认就是严格模式，所以不需要使用use strict指定运行模式。只要你的代码写在类或模块之中，就只有严格模式可用
+* 由于本质上，ES6 的类只是 ES5 的构造函数的一层包装，所以函数的许多特性都被Class继承，包括name属性，name属性总是返回紧跟在class关键字后面的类名
+
+如：class Point {}
+	Point.name // "Point"
+
+(2)constructor方法
+
+* constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法
+* 一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加。
+ 如：class Point {
+	}
+	
+	// 等同于
+	class Point {
+	  constructor() {}
+	}
+
+* constructor方法默认返回实例对象（即this），完全可以指定返回另外一个对象。
+
+如：class Foo {
+	  constructor() {
+	    return Object.create(null);
+	  }
+	}
+	
+	new Foo() instanceof Foo
+	// false
+
+上面代码中，constructor函数返回一个全新的对象，结果导致实例对象不是Foo类的实例。
+
+* 类必须使用new调用，否则会报错。这是它跟普通构造函数的一个主要区别，后者不用new也可以执行
+
+(3)类的实例
+
+* 使用new命令生成类的实例，如果忘记加上new，像函数那样调用Class，将会报错
+* new生成实例时，会默认调用constructor方法
+* 与 ES5 一样，实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）
+
+如：class Point {
+
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  toString() {
+    return '(' + this.x + ', ' + this.y + ')';
+  }
+
+}
+
+var point = new Point(2, 3);
+
+point.toString() // (2, 3)
+
+point.hasOwnProperty('x') // true
+point.hasOwnProperty('y') // true
+point.hasOwnProperty('toString') // false
+point.__proto__.hasOwnProperty('toString') // true
+
+上面代码中，x和y都是实例对象point自身的属性（因为定义在this变量上），所以hasOwnProperty方法返回true，而toString是原型对象的属性（因为定义在Point类上），所以hasOwnProperty方法返回false
+
+* 定义实例属性的新写法
+
+实例属性除了定义在constructor()方法里面的this上面，也可以定义在类的最顶层
+
+如：class IncreasingCounter {
+  _count = 0;
+  get value() {
+    console.log('Getting the current value!');
+    return this._count;
+  }
+  increment() {
+    this._count++;
+  }
+}
+
+上面代码中，实例属性_count与取值函数value()和increment()方法，处于同一个层级。这时，不需要在实例属性前面加上this
+
+* 与 ES5 一样，类的所有实例共享一个原型对象
+
+如：var p1 = new Point(2,3);
+	var p2 = new Point(3,2);
+	
+	p1.__proto__ === p2.__proto__
+	//true
+
+
+* 可以通过实例的__proto__属性为“类”添加方法，实例的__proto__属性改写原型，必须相当谨慎，不推荐使用
+
+(4)属性表达式
+
+类的属性名，可以采用表达式
+
+如：let methodName = 'getArea';
+
+class Square {
+  constructor(length) {
+    // ...
+  }
+
+  [methodName]() {
+    // ...
+  }
+}
+
+(5)class表达式
+
+如:const MyClass = class Me {
+	  getClassName() {
+	    return Me.name;
+	  }
+	};
+
+* 这个类的名字是Me，但是Me只在 Class 的内部可用，指代当前类。在 Class 外部，这个类只能用MyClass引用
+
+如：let inst = new MyClass();
+	inst.getClassName() // Me
+	Me.name // ReferenceError: Me is not defined
+
+* 如果类的内部没用到的话，可以省略Me
+* 采用 Class 表达式，可以写出立即执行的 Class
+ 
+如：let person = new class {
+  constructor(name) {
+    this.name = name;
+  }
+
+  sayName() {
+    console.log(this.name);
+  }
+}('张三');
+
+person.sayName(); // "张三"
+
+(6)Generator方法
+
+* 如果某个方法之前加上星号（*），就表示该方法是一个 Generator 函数
+
+如：class Foo {
+  constructor(...args) {
+    this.args = args;
+  }
+  * [Symbol.iterator]() {
+    for (let arg of this.args) {
+      yield arg;
+    }
+  }
+}
+
+for (let x of new Foo('hello', 'world')) {
+  console.log(x);
+}
+// hello
+// world
+
+上面代码中，Foo类的Symbol.iterator方法前有一个星号，表示该方法是一个 Generator 函数。Symbol.iterator方法返回一个Foo类的默认遍历器，for...of循环会自动调用这个遍历器。
+
+(7)this指向
+
+* 类的方法内部如果含有this，它默认指向类的实例。但是，必须非常小心，一旦单独使用该方法，很可能报错
+
+如：class Logger {
+	  printName(name = 'there') {
+	    this.print(`Hello ${name}`);
+	  }
+	
+	  print(text) {
+	    console.log(text);
+	  }
+	}
+	
+	const logger = new Logger();
+	const { printName } = logger;
+	printName(); // TypeError: Cannot read property 'print' of undefined
+
+printName方法中的this，默认指向Logger类的实例。但是，如果将这个方法提取出来单独使用，this会指向该方法运行时所在的环境（由于 class 内部是严格模式，所以 this 实际指向的是undefined），从而导致找不到print方法而报错
+
+* 解决办法
+  * 在构造方法中绑定this
+   
+   如：class Logger {
+	  constructor() {
+	    this.printName = this.printName.bind(this);
+	  }
+	
+	  // ...
+	}
+   
+   * 使用箭头函数
+    
+   如：class Obj {
+	  constructor() {
+	    this.getThis = () => this;
+	  }
+	}
+	
+	const myObj = new Obj();
+	myObj.getThis() === myObj // true
+
+  * 使用Proxy，获取方法的时候，自动绑定this
+  
+   如：function selfish (target) {
+	  const cache = new WeakMap();
+	  const handler = {
+	    get (target, key) {
+	      const value = Reflect.get(target, key);
+	      if (typeof value !== 'function') {
+	        return value;
+	      }
+	      if (!cache.has(value)) {
+	        cache.set(value, value.bind(target));
+	      }
+	      return cache.get(value);
+	    }
+	  };
+	  const proxy = new Proxy(target, handler);
+	  return proxy;
+	}
+	
+	const logger = selfish(new Logger());
+
+(8)静态方法
+
+* 如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”
+
+如：class Foo {
+	  static classMethod() {
+	    return 'hello';
+	  }
+	}
+	
+	Foo.classMethod() // 'hello'
+	
+	var foo = new Foo();
+	foo.classMethod()
+	// TypeError: foo.classMethod is not a function
+
+Foo类的classMethod方法前有static关键字，表明该方法是一个静态方法，可以直接在Foo类上调用（Foo.classMethod()），而不是在Foo类的实例上调用。如果在实例上调用静态方法，会抛出一个错误，表示不存在该方法
+
+* 如果静态方法包含this关键字，这个this指的是类，而不是实例
+
+如：class Foo {
+	  static bar() {
+	    this.baz();
+	  }
+	  static baz() {
+	    console.log('hello');
+	  }
+	  baz() {
+	    console.log('world');
+	  }
+	}
+	
+	Foo.bar() // hello
+
+静态方法bar调用了this.baz，这里的this指的是Foo类，而不是Foo的实例，等同于调用Foo.baz。另外，从这个例子还可以看出，静态方法可以与非静态方法重名
+
+* 父类的静态方法，可以被子类继承
+
+如：class Foo {
+	  static classMethod() {
+	    return 'hello';
+	  }
+	}
+	
+	class Bar extends Foo {
+	}
+	
+	Bar.classMethod() // 'hello'
+
+* 静态方法也是可以从super对象上调用的
+如：class Foo {
+	  static classMethod() {
+	    return 'hello';
+	  }
+	}
+	
+	class Bar extends Foo {
+	  static classMethod() {
+	    return super.classMethod() + ', too';
+	  }
+	}
+	
+	Bar.classMethod() // "hello, too"
+
+(9)静态属性
+
+* 静态属性指的是 Class 本身的属性，即Class.propName，而不是定义在实例对象（this）上的属性
+
+	如：class Foo {
+		}
+		
+		Foo.prop = 1;
+		Foo.prop // 1
+
+* 新写法
+
+	如：class Foo {
+		  static prop = 1;
+		}
+
+
+7.class的继承
+
+(1)定义
+
+* 使用extends关键词可以实现类的继承
+* es6的继承机制是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this
+* es5的继承机制是先创造子类的实例对象this，然后再将父类的方法添加到this上面（Parent.apply(this)）
+* 子类必须在constructor方法中调用super方法，否则新建实例时会报错。这是因为子类自己的this对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，加上子类自己的实例属性和方法。如果不调用super方法，子类就得不到this对象。
+* 如果子类没有没有定义constructor方法，这个方法会被默认添加
+
+	如：class ColorPoint extends Point {
+	   }
+		 
+	   // 等同于
+	   class ColorPoint extends Point {
+		  constructor(...args) {
+		    super(...args);
+		  }
+	   }
+
+* 在子类的构造函数中只有调用super()方法后才能使用this关键字，否则会报错。这是因为子类实例的构建，基于父类实例，只有super方法才能调用父类实例
+* 父类的静态方法也会被子类继承
+
+(2)Object.getPrototypeOf方法可以用来从子类上获取父类
+
+  Object.getPrototypeOf(Child) // Person
+
+(3)super关键字
+
+* 作为函数调用：
+      * super作为函数调用时，代表父类的构造函数，但是返回的是子类B的实例，即super内部的this指的是B的实例，因此super()在这里相当于A.prototype.constructor.call(this)
+        
+        如：class A {
+			  constructor() {
+			    console.log(new.target.name);
+			  }
+			}
+			class B extends A {
+			  constructor() {
+			    super();
+			  }
+			}
+			new A() // A
+			new B() // B
+
+     new.target指向当前正在执行的函数。可以看到，在super()执行时，它指向的是子类B的构造函数，而不是父类A的构造函数。也就是说，super()内部的this指向的是B
+     
+     * 作为函数时，super()只能用在子类的构造函数之中，用在其他地方就会报错
+     
+        如：class A {}
+           class B extends A {
+			  m() {
+			    super(); // 报错
+			  }
+			}
+
+* 作为对象调用
+      * 在普通方法中，super对象指向父类的原型对象
+      
+       如：class A {
+			  p() {
+			    return 2;
+			  }
+			}
+			
+			class B extends A {
+			  constructor() {
+			    super();
+			    console.log(super.p()); // 2
+			  }
+			}
+			
+			let b = new B();
+
+       上例中，super对象指向父类的原型对象，super.p=A.prototype.p
+
+       * 在普通方法中,由于super指向父类的原型对象，所以定义在父类实例上的方法或属性，是无法通过super调用的
+       
+        如：class A {
+			  constructor() {
+			    this.p = 2;
+			  }
+			}
+			
+			class B extends A {
+			  get m() {
+			    return super.p;
+			  }
+			}
+			
+			let b = new B();
+			b.m // undefined
+        
+      * 在子类普通方法中通过super调用父类的方法时，方法内部的this指向当前的子类实例
+      
+       如：class A {
+			  constructor() {
+			    this.x = 1;
+			  }
+			  print() {
+			    console.log(this.x);
+			  }
+			}
+			
+			class B extends A {
+			  constructor() {
+			    super();
+			    this.x = 2;
+			  }
+			  m() {
+			    super.print();
+			  }
+			}
+			
+			let b = new B();
+			b.m() // 2
+
+      * 由于this指向子类实例，所以如果通过super对某个属性赋值，这时super就是this，赋值的属性会变成子类实例的属性
+      
+        如:class A {
+			  constructor() {
+			    this.x = 1;
+			  }
+			}
+			
+			class B extends A {
+			  constructor() {
+			    super();
+			    this.x = 2;
+			    super.x = 3;
+			    console.log(super.x); // undefined
+			    console.log(this.x); // 3
+			  }
+			}
+			
+			let b = new B();
+
+        上面代码中，super.x赋值为3，这时等同于对this.x赋值为3。而当读取super.x的时候，读的是A.prototype.x，所以返回undefined。
+
+     * 在静态方法中，super对象指向父类
+     
+      如：class Parent {
+		  static myMethod(msg) {
+		    console.log('static', msg);
+		  }
+		
+		  myMethod(msg) {
+		    console.log('instance', msg);
+		  }
+		}
+		
+		class Child extends Parent {
+		  static myMethod(msg) {
+		    super.myMethod(msg);
+		  }
+		
+		  myMethod(msg) {
+		    super.myMethod(msg);
+		  }
+		}
+		
+		Child.myMethod(1); // static 1
+		
+		var child = new Child();
+		child.myMethod(2); // instance 2
+
+     上面代码中，super在静态方法之中指向父类，在普通方法之中指向父类的原型对象
+
+   * 在子类的静态方法中通过super调用父类的方法时，方法内部的this指向当前的子类，而不是子类的实例
+    
+     如：class A {
+		  constructor() {
+		    this.x = 1;
+		  }
+		  static print() {
+		    console.log(this.x);
+		  }
+		}
+		
+		class B extends A {
+		  constructor() {
+		    super();
+		    this.x = 2;
+		  }
+		  static m() {
+		    super.print();
+		  }
+		}
+		
+		B.x = 3;
+		B.m() // 3
+
+* 使用super时必须显示的指定是作为对象还是函数，否则会报错
+* 由于对象总是继承其他对象的，所以可以在任意一个对象中，使用super关键字
+ 
+	  如：var obj = {
+		  toString() {
+		    return "MyObject: " + super.toString();
+		  }
+		};
+		
+		obj.toString(); // MyObject: [object Object]
+
+(4)类的prototype属性和——proto——属性
+
+* 子类的__proto__属性，表示构造函数的继承，总是指向父类。
+
+* 子类prototype属性的__proto__属性，表示方法的继承，总是指向父类的prototype属性。
+
+	如：class A {
+		}
+		
+		class B extends A {
+		}
+		
+		B.__proto__ === A // true
+		B.prototype.__proto__ === A.prototype // true
+
+
+(5)实例的——proto__属性
+
+* 子类实例的__proto__属性的__proto__属性，指向父类实例的__proto__属性。也就是说，子类的原型的原型，是父类的原型
