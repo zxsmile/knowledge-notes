@@ -351,3 +351,4 @@
 	   inheritPrototype(SubType, SuperType) 
 	   var instance = new SubType('Jiang', 'student') 
 	   console.log(instance.colors)
+
