@@ -352,3 +352,101 @@
 	   var instance = new SubType('Jiang', 'student') 
 	   console.log(instance.colors)
 
+
+
+三、localstorage sessionstorage session cookie区别 
+
+1.cookie
+
+(1)原理
+
+由于http是无状态的协议，一旦客户端和服务器的数据交换完毕，就会断开连接，再次请求，会重新连接，这就说明服务器单从网络连接上是没有办法知道用户身份的。怎么办呢？那就给每次新的用户请求时，给它颁发一个身份证（独一无二）吧，下次访问，必须带上身份证，这样服务器就会知道是谁来访问了，针对不同用户，做出不同的响应
+
+(2)工作流程
+
+* 首先，我们假设当前域名下还是没有 Cookie 的
+* 接下来，浏览器发送了一个请求给服务器（这个请求是还没带上 Cookie 的）
+* 服务器设置 Cookie 并发送给浏览器（当然也可以不设置）
+* 浏览器将 Cookie 保存下来
+* 接下来，以后的每一次对该域的请求，都会带上这些 Cookie，发送给服务器
+
+ps:
+Cookie 虽然是存储在浏览器，但是通常由服务器端进行设置，当然客户端也可以设置
+
+(3)属性介绍
+
+其实cookie是一个很小的文本文件，是浏览器储存在用户的机器上的。Cookie是纯文本，没有可执行代码。储存一些服务器需要的信息，每次请求站点，会发送相应的cookie，这些cookie可以用来辨别用户身份信息等作用
+
+* NAME=VALUE：键值对，可以设置要保存的 Key/Value，注意这里的 NAME 不能和其他属性项的名字一样
+* Expires：过期时间，在设置的某个时间点后该 Cookie 就会失效
+* Domain：生成该 Cookie 的域名，如 domain="www.baidu.com"
+* Path：该 Cookie 是在当前的哪个路径下生成的，如 path=/wp-admin/
+* Secure：如果设置了这个属性，那么只会在 SSH 连接时才会回传该 Cookie
+
+Expires
+
+* 该属性用来设置Cookie的有效期，必须是 GMT 格式的时间
+* 如果maxAge属性为正数，则表示该Cookie会在maxAge秒之后自动失效
+* 当maxAge属性为负数，则表示该Cookie只是一个临时Cookie，不会被持久化，仅在本浏览器窗口或者本窗口打开的子窗口中有效，关闭浏览器后该Cookie立即失效
+* 当maxAge为0时，表示立即删除Cookie
+
+Domain
+
+* 该属性用来的设置cookie的域，如果没有设置path，默认为该页面的域
+* domain参数可以设置父域名以及自身，但不能设置其它域名，包括子域名，否则cookie不起作用
+    * 如：网站的域名为，i.xiaohan.com,那么前端cookie的domain只能设置，i.xiaohan.com和其父域名xiaohan.com，如果设置成同级域名如api.xiaohan.com或者子域名api.i.xiaohan.com 那么cookie设置将无效
+    * 同样在服务端上，如果制定你的server服务的域名为server.xiaohan.com那么在服务端生成的cookie的domain只能指定为server.xiaohan.com或者xiaohan.com 其他domain都无法成功设置cookie
+* cookie的作用域是domain本身以及domain下的所有子域名。例如设置xiaohan.com为domain的cookie时，只有该域名或者其子域名才能获取到这个cookie
+
+Path
+
+* path表示cookie所在页面，如果没有设置path值，则默认为该页面的path
+* 要想同域名下的所有页面都可以访问到cookie值，则可以将path设置为'/'
+* 比如path值设为'/E:/Demo/'，则在'/E:/Demo/'下的所有页面都可以访问到该cookie
+* 比如path值设为'/E:/Demo/dir'，则在'/E:/Demo/dir'下的所有页面都可以访问到该cookie,而'/E:/Demo/'下的页面不能访问
+
+secure
+
+* secure 选项用来设置 Cookie 只在确保安全的请求中才会发送
+* 当请求是 HTTPS 或者其他安全协议时，包含 secure 选项的 Cookie 才能被保存到浏览器或者发送至服务器。
+* 默认情况下，Cookie 不会带 secure 选项(即为空)。所以默认情况下，不管是 HTTPS 协议还是 HTTP 协议的请求，Cookie 都会被发送至服务端
+
+httpOnly
+
+* 这个选项用来设置 Cookie 是否能通过 js 去访问
+* 默认情况下，Cookie 不会带 httpOnly 选项(即为空)，客户端是可以通过 js 代码去访问（包括读取、修改、删除等）这个 Cookie 的。当 Cookie 带 httpOnly 选项时，客户端则无法通过 js 代码去访问（包括读取、修改、删除等）这个 Cookie
+
+(4)cookie的设置
+
+* cookie既可以在客户端设置又可以在服务端设置
+
+* 客户端设置
+   
+   * 设值
+     
+     如：document.cookie = 'name=value'
+
+   * 自定义存、取、删除cookie函数
+   
+     如：function setCookie(name,value,iDay){
+		    var oDate=new Date();
+		    oDate.setDate(oDate.getDate()+iDay);
+		    document.cookie=name+'='+value+';expires='+oDate+';path=/E:/Demo'+';domain=www.baidu.com';
+		}
+		
+		function getCookie(name){
+		   var arr=document.cookie.split('; ');
+		   for(var i=0;i<arr.length;i++){
+		       var arr1=arr[i].split('=');
+		       if(arr1[0]==name){
+		           return arr1[1];
+		       }
+		   }
+		    return '';
+		}
+		
+		function removeCookie(name){
+		   setCookie(name,'1',-1);
+		}
+
+
