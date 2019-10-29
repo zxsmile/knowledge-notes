@@ -29,7 +29,7 @@
 	
 	        // new 调用时，其实this instanceof bound判断也不是很准确。es6 new.target就是解决这一问题的
 	
-	        if(self instanceof bound){
+	        if(this instanceof bound){
 	      
 	            // 1.创建一个全新的对象
 	            // 2.并且执行[[Prototype]]链接
