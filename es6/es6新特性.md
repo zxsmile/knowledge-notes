@@ -387,7 +387,180 @@
 
 catch方法的参数不是reject抛出的'出错了'，而是thenable对象，这也印证了Promise.reject()方法的参数会原封不动的作为reject的理由，变成后续方法的参数
 
-6.class类
+6.symbol
+
+(1)定义
+
+* ES6 引入了一种新的原始数据类型Symbol，表示独一无二的值。它是 JavaScript 语言的第七种数据类型
+* 对象的属性名现在可以有两种类型，一种是原来就有的字符串，另一种就是新增的 Symbol 类型。凡是属性名属于 Symbol 类型，就都是独一无二的，可以保证不会与其他属性名产生冲突
+
+(2)语法
+
+* Symbol值通过Symbol函数生成
+* Symbol函数前不能使用new命令，否则会报错。这是因为生成的 Symbol 是一个原始类型的值，不是对象。也就是说，由于 Symbol 值不是对象，所以不能添加属性
+* 用typeOf检测结果为Symbol
+
+	如：let s = Symbol();
+	
+	typeof s
+	// "symbol"
+
+(3)参数(描述)
+
+* Symbol函数可以接受一个字符串作为参数，表示对 Symbol 实例的描述，主要是为了在控制台显示，或者转为字符串时，比较容易区分
+* Symbol函数的参数只是表示对当前 Symbol 值的描述，因此相同参数的Symbol函数的返回值是不相等的
+* 如果 Symbol 的参数是一个对象，就会调用该对象的toString方法，将其转为字符串，然后才生成一个 Symbol 值
+
+(4)运算
+
+* Symbol 值不能与其他类型的值进行运算，会报错
+	
+	如：let sym = Symbol('My symbol');
+	
+	"your symbol is " + sym
+	// TypeError: can't convert symbol to string
+
+	`your symbol is ${sym}`
+	// TypeError: can't convert symbol to string
+
+(5)强制转化
+
+* Symbol 值可以显式转为字符串
+
+	如：let sym = Symbol('My symbol');
+	
+	String(sym) // 'Symbol(My symbol)'
+	
+	sym.toString() // 'Symbol(My symbol)'
+
+* Symbol 值也可以转为布尔值，但是不能转为数值
+
+	如：let sym = Symbol();
+	Boolean(sym) // true
+	!sym  // false
+	
+	if (sym) {
+	  // ...
+	}
+	
+	Number(sym) // TypeError
+	sym + 2 // TypeError
+
+(6)Symbol.prototype.description
+
+* 实例属性description，用于返回Symbol的描述
+
+	如：const sym = Symbol('foo');
+	
+		sym.description // "foo"
+
+* 本来读取描述很麻烦，需要将 Symbol 显式转为字符串
+
+	如：const sym = Symbol('foo');
+	
+		String(sym) // "Symbol(foo)"
+		sym.toString() // "Symbol(foo)"
+
+(7)作为属性名的 Symbol 
+
+* Symbol 值作为对象属性名时，不能用点运算符,因为点运算符后面总是字符串
+
+	如：const mySymbol = Symbol();
+	const a = {};
+	
+	a.mySymbol = 'Hello!';
+	a[mySymbol] // undefined
+	a['mySymbol'] // "Hello!"
+
+上面代码中，因为点运算符后面总是字符串，所以不会读取mySymbol作为标识名所指代的那个值，导致a的属性名实际上是一个字符串，而不是一个 Symbol 值。
+
+* 在对象的内部，使用 Symbol 值定义属性时，Symbol 值必须放在方括号之中。
+
+	如：let s = Symbol();
+	
+	let obj = {
+	  [s]: function (arg) { ... }
+	};
+	
+	obj[s](123);
+
+上面代码中，如果s不放在方括号中，该属性的键名就是字符串s，而不是s所代表的那个 Symbol 值
+
+* Symbol 值作为属性名时，该属性还是公开属性，不是私有属性
+
+(8)属性名的遍历
+
+* Symbol 作为属性名，该属性不会出现在for...in、for...of循环中，也不会被Object.keys()、Object.getOwnPropertyNames()、JSON.stringify()返回
+* Object.getOwnPropertySymbols方法，可以获取指定对象的所有 Symbol 属性名
+* Object.getOwnPropertySymbols方法返回一个数组，成员是当前对象的所有用作属性名的 Symbol 值
+
+	如：const obj = {};
+		let a = Symbol('a');
+		let b = Symbol('b');
+		
+		obj[a] = 'Hello';
+		obj[b] = 'World';
+		
+		const objectSymbols = Object.getOwnPropertySymbols(obj);
+		
+		objectSymbols
+		// [Symbol(a), Symbol(b)]
+
+* Reflect.ownKeys方法可以返回所有类型的键名，包括常规键名和 Symbol 键名
+
+(9)Symbol.for()，Symbol.keyFor()
+
+* Symbol.for()
+
+     * 它接受一个字符串作为参数，然后搜索有没有以该参数作为名称的 Symbol 值。如果有，就返回这个 Symbol 值，否则就新建并返回一个以该字符串为名称的 Symbol 值
+
+         如；let s1 = Symbol.for('foo');
+			let s2 = Symbol.for('foo');
+			
+			s1 === s2 // true
+
+         上面代码中，s1和s2都是 Symbol 值，但是它们都是同样参数的Symbol.for方法生成的，所以实际上是同一个值
+      
+     * Symbol.for为 Symbol 值登记的名字，是全局环境的，可以在不同的 iframe 或 service worker 中取到同一个值
+
+* Symbol.for()与Symbol()
+
+    * 共同点
+    
+          * 都会生成新的 Symbol
+          
+    * 区别
+
+         * Symbol.for()会被登记在全局环境中供搜索，Symbol()不会
+         * Symbol.for()不会每次调用就返回一个新的 Symbol 类型的值，而是会先检查给定的key是否已经存在，如果不存在才会新建一个值。Symbol()每次调用就返回一个新的 Symbol 类型的值
+
+* Symbol.keyFor()
+
+   * 返回一个已登记的 Symbol 类型值的key
+
+     如:let s1 = Symbol.for("foo");
+		Symbol.keyFor(s1) // "foo"
+		
+		let s2 = Symbol("foo");
+		Symbol.keyFor(s2) // undefined
+
+    上面代码中，变量s2属于未登记的 Symbol 值，所以返回undefined
+
+(10)内置的 Symbol 值 
+
+* Symbol.hasInstance
+* Symbol.isConcatSpreadable
+* Symbol.species
+* Symbol.match
+* Symbol.replace
+* Symbol.search 
+* Symbol.split 
+* Symbol.iterator
+* Symbol.toPrimitive 
+* Symbol.toPrimitive 
+* Symbol.unscopables 
+
+7.class类
 
 (1)定义
 
