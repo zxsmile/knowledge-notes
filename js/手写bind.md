@@ -18,7 +18,7 @@
 		    // 存储调用bind的函数本身
 		    var self = this;
 		
-		    // 去除thisArg的其他参数 转成数组
+		    // 返回的是arguments数组从1号位开始的片段，因为0号位是this  转成数组
 		    var args = Array.prototype.slice.call(arguments, 1);
 		
 		    var bound = function(){
@@ -64,7 +64,7 @@
 		    return bound;
 	  }
 
-说明：本来星号标注部分是写在bound函数内部的，测试时发现，将所给构造函数用bind绑定后，然后用new调用该构造函数发现，所创建的实例不是该构造函数的实例而是bindFn返回的bound的实例
+* 说明：本来星号标注部分是写在bound函数内部的，测试时发现，将所给构造函数用bind绑定后，然后用new调用该构造函数发现，所创建的实例不是该构造函数的实例而是bindFn返回的bound的实例
 
 		如：let obj = {
 			    name:'tiger'
@@ -82,6 +82,14 @@
             console.log(instance.prototype)  // fn{}
 
 这样的结果是因为，当星号标注部分是写在bound函数内部时，第一步使用bind的时候返回bound函数，这时bound函数还不在fn的原型链中，然后生成实例instance时，instance.__proto__指向bound的原型对象bound{}，执行生成实例那一句会执行bound函数，然后执行星号部分的时候改变了bound.prototype但实例是在改变之前生成的，所以instance.__proto__还是指向原来的bound.prototype，所以导致instance不是fn的实例，所以星号部分要在执行bind那一句就执行
+
+* Array.prototype.slice.call(arguments,1)理解
+
+   * 数组的slice(start,end)方法，返回从start开始到end的子数组，如果start和end都没有设置，则返回整个数组，这个过程不影响原数组
+   * func.call(food,"orange",15)，call方法的第一个参数代替func方法内部的this，其他参数为原func方法的参数
+   * slice内部的基本原理就类似我们上面开头写的for循环遍历原数组，根据start和end的值再复制一份到新数组并返回
+   * 所以当我们使用Array.prototype.slice.call(arguments)，slice方法内部的this就会被替换成arguments，并循环遍历arguments，复制到新数组返回，这样就得到了一个复制arguments类数组的数组对象
+   * Array.prototype.slice.call(arguments)用来将类数组对象转换成数组对象
 
 * 使用：
 
