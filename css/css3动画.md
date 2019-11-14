@@ -374,7 +374,7 @@ https://www.tuicool.com/articles/na6jy2
 * 用法：
 
 .animation {
-   animation-direction: normal | alternate [, normal | alternate]*;
+   animation-direction: normal | alternate;
 }
 
 
