@@ -265,6 +265,8 @@ https://www.tuicool.com/articles/na6jy2
 
 * transition是一次性的，不能重复发生，除非一再触发
 
+* 一条transition规则，只能定义一个属性的变化，不能涉及多个属性 
+
 
 三、animation
 
