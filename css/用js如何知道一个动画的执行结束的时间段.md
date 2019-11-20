@@ -87,6 +87,8 @@ animationend事件会在动画结束时被触发
 
 * transitionend事件在CSS transition完成的时候触发。如果transition在完成前被删除（例如remove掉transition属性），则不会触发。如在transition完成前设置 display: none，或CSS未作改变，事件同样不会被触发
 
+* transitionend 事件是双向触发的 - 当完成到转换状态的过渡，以及完全恢复到默认或非转换状态时都会触发。 如果没有过渡延迟或持续时间，即两者的值都为0s或者都未声明， 则不发生过渡，并且任何过渡事件都不会触发
+
 * 不同浏览器写法：(transitionend,oTransitionEnd,MozTransitionEnd,webkitTransitionEnd)
 
 2.使用transitionend事件的缺点
@@ -99,4 +101,4 @@ animationend事件会在动画结束时被触发
 
 * 上述第一条'多属性'与'重复的执行'transition属性不同，'多属性'指一条属性附带多个属性，如border、margin、padding等，'重复的执行'指transition属性有多条属性需要过度，如操作一个div同一时间过度'color、width、height、background'时
 
-* hover将触发两次transition,也将触发两次transitionend
+* hover将触发两次transition,也将触发两次transitionend(transitionend 事件是双向触发的)

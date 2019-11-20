@@ -143,6 +143,10 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 
 * transform中translate，scale，rotate，skew背后实现原理也对应着matrix变化
 
+* 当给dom元素同时设置多个变换transform属性时它们的执行顺序是从后向前执行的
+
+	如:transform: rotate(360deg) scale(2,2) skew(10deg,5deg)
+
 https://www.tuicool.com/articles/na6jy2
 
 二、transition
@@ -160,7 +164,7 @@ https://www.tuicool.com/articles/na6jy2
 
 (1)transition-property
 
-* 它是用来设置哪些属性的改变会有这种平滑过渡的效果
+* 指明什么属性将触发动画效果。none 值表示没有变化。 all 值表示所有可以动画演示的属性都可以触发动画效果。否则，只有指定的属性值方式变化才能触发动画效果
 
 * 主要有以下的值:
 
@@ -181,7 +185,13 @@ https://www.tuicool.com/articles/na6jy2
 	如：.transition-property {
 		   transition-property： height
 		 }
-	  
+	    
+        div:hover{
+                 
+             height:200px
+         }
+
+表示当鼠标移到该div上时，发生transition动画，将height变为200px;因为上面指定的是height属性触发动画效果，所有只有该div的height变化才能触发动画效果
 
 (2)transition-duration
 
@@ -263,9 +273,36 @@ https://www.tuicool.com/articles/na6jy2
 
 * transition需要事件触发，所以没法在网页加载时自动发生
 
+   * 可触发的方式有：
+       * :hoever 
+       * :focus 
+       * :checked 
+       * 媒体查询触发 
+       * JavaScript触发 
+
+	如：div {
+		  opacity: 1;
+		  transition: opacity 1s linear;
+		}
+		
+		div:hover {
+		  opacity: 0;
+		}
+
+	点击一个div会让div透明度变为0，上例中使用hover触发了transition动画
+
 * transition是一次性的，不能重复发生，除非一再触发
 
 * 一条transition规则，只能定义一个属性的变化，不能涉及多个属性 
+
+* Transition属性中的每个属性都支持多个参数值，参数值之间用逗号分隔，这样能够用一个样式规则制定多种CSS属性的变化
+
+	如：div {
+		  transition-property: opacity, left;
+		  transition-duration: 2s, 4s;
+		}
+
+	上面的演示规则中，opacity的变化过程将会持续2秒，而left值的变化过程将会持续4秒
 
 
 三、animation
