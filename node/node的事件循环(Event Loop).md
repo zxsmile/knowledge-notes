@@ -209,7 +209,7 @@ Node 中的 Event Loop 和浏览器中的是完全不相同的东西。Node.js �
 
 浏览器环境下，microtask 的任务队列是每个 macrotask 执行完之后执行。而在 Node.js 中，microtask 会在事件循环的各个阶段之间执行，也就是一个阶段执行完毕，就会去执行 microtask 队列的任务。
 
-![](https://upload-images.jianshu.io/upload_images/3973862-853c495782d9350f.png?imageMogr2/auto-orient/strip|imageView2/2/w/1051)
+![](../图片/event-loop.png)
 
 		例：setTimeout(()=>{
 		    console.log('timer1')
