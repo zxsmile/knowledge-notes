@@ -144,39 +144,236 @@
       -ES5 的Object.getOwnPropertyDescriptor()方法会返回某个对象属性的描述对象（descriptor）
       -ES2017 引入了Object.getOwnPropertyDescriptors()方法，返回指定对象所有自身属性（非继承属性）的描述对象
 
-         let obj={
-             foo:'123',
-             get bar() {
-                 return 'abc'
-             }
-         }
-
-         Object.getOwnPropertyDescriptors(obj)  
-         
-         // { foo:
-                { value: '123',
-                    writable: true,
-                    enumerable: true,
-                    configurable: true 
-                },
-                bar:
-                { get: [Function: get bar],
-                    set: undefined,
-                    enumerable: true,
-                    configurable: true
-                } 
+            let obj={
+                foo:'123',
+                get bar() {
+                    return 'abc'
+                }
             }
-    上面代码中，Object.getOwnPropertyDescriptors()方法返回一个对象，所有原对象的属性名都是该对象的属性名，对应的属性值就是该属性的描述对象。
+
+            Object.getOwnPropertyDescriptors(obj)  
+            
+            // { foo:
+                    { value: '123',
+                        writable: true,
+                        enumerable: true,
+                        configurable: true 
+                    },
+                    bar:
+                    { get: [Function: get bar],
+                        set: undefined,
+                        enumerable: true,
+                        configurable: true
+                    } 
+                }
+            上面代码中，Object.getOwnPropertyDescriptors()方法返回一个对象，所有原对象的属性名都是该对象的属性名，对应的属性值就是该属性的描述对象。
+
+      -实现getOwnPropertyDescriptors方法：
+
+            function getOwnPropertyDescriptors(obj){
+
+                 let result ={}
+                for(let key of Reflect.ownKeys(obj)){
+                    result[key] = Object.getOwnPropertyDescriptor(obj,key)
+                }
+
+                return result
+                
+            }
+
+            // Reflect.ownKeys() 返回对象的所有属性
+
+      -该方法的引入主要是为了解决Object.assign方法无法正确拷贝set属性和get属性，实现如下（Object.getOwnPropertyDescriptors方法配合Object.defineProperties方法）：
+
+             Object.defineProperties(obj,proto)
+
+                  -该方法用于在一个对象上定义一个或多个新的属性或者修改新的属性，并返回该对象
+                  -obj:将要被添加属性或修改属性的对象
+                  -proto:该对象的一个或多个键值对定义了将要为对象添加或修改的属性的具体配置
+                  -如 Object.defineProperties(obj,{
+                      name: {
+                        value: '张三',
+                        configurable: false,
+                        writable: true,
+                        enumerable: true
+                      },
+                      age: {
+                          value: 18,
+                          configurable: true
+                      }
+                  })
+
+                  function clone(target,source){
+
+                      target = Object.defineProperties(target,Object.getOwnPropertyDescriptors(source))
+                      return target
+                  }
+      
+               
+      -该方法可与Object.create方法配合将一个方法属性克隆到一个新对象，属于浅拷贝
+
+                let shallowClone = (obj)=>{
+                     
+                     let result={}
+                    Object.create(Object.getPrototypeOf(obj),Object.getOwnPropertyDescriptors(obj))
+                    return result
+                }
+                
+                let b =shallowClone(obj)
+
+                Object.create(obj,[propertiesObject]) 
+                
+                    -该方法用于获取obj的实例对象
+                    -obj：表示新建对象的原型对象
+                    -propertiesObject：可选， 添加到新创建对象的可枚举属性
+
+                Object.getPrototypeOf(obj) 
+                
+                    -获取对象的原型对象
+      -Object.getOwnPropertyDescriptors方法可实现一个对象继承另一个对象
+      
+                以前可用以下方法实现：
+
+                     let obj = Object.create(pront)
+                     obj.foo = 123
+
+                     或者
+
+                     let obj = Object.creat(pront,{
+                         foo:123
+                     })
+
+                使用Object.getOwnPropertyDescriptors实现：
+
+                     let obj = Object.create(
+                        prot,
+                        Object.getOwnPropertyDescriptors({
+                            foo: 123,
+                        })
+                        );
+
+*/
+
+/* 4. __proto__
+
+调用__proto__实际上是调用的Object.prototype.__proto__,具体实现是如下：
+
+       Object.defineProperty=(Object.prototype,'__proto__',{
+
+        get() {
+            let thisObj=Object(this)
+            return Object.getPrototypeOf(thisObj) //获取调用__proto__对象的原型对象
+        },
+
+        set(proto) {
+
+            if(this===undefined||this===null){
+                throw new TypeError()
+            }
+
+            if(!isObject(this)){
+                return undefind
+            }
+
+            if(!isObject(proto)){
+                return undefined
+            }
+
+            let status = Reflect.setPrototypeOf(this,proto)
+
+            if(!status){
+                throw new TypeError()
+            }
+        }
+
+       })
+
+       function isObject(value){
+       
+              return Object(value)===value
+       }
+*/
+
+/* 5.Object.setPrototypeOf
+
+       -该方法用来设置一个对象的prototype对象
+       
+              Object.setProtorypeOf(obj,prototype) //将prototype对象设置为obj的原型对象
+
+       -如果第一个参数不是对象，会自动转换为对象
+       -由于undefined和null无法转换为对象，所以第一个参数为undefined或null会报错
+*/
+
+/* 6.Object.getPrototypeOf
+
+       -该方法用于读取一个对象的原型对象
+       
+            Object.getPrototypeOf(obj)
+
+       -如果第一个参数不是对象，则会自动转化为对象
+       -如果为undefined或null会报错
+
+*/
+
+/* 6.Object.keys(),Object.values(),Object.entries()
+
+      (1)Object.keys()
+
+          -返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名
+
+      (2)Object.values()
+
+          -返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值
+          -Object.values会过滤属性名为 Symbol 值的属性
+          -如果Object.values方法的参数是一个字符串，会返回各个字符组成的一个数组
+          -如果参数不是对象，Object.values会先将其转为对象。由于数值和布尔值的包装对象，都不会为实例添加非继承的属性。所以，Object.values会返回空数组。
+
+      (3)Object.entries()
+
+          -返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组
+          -如果原对象的属性名是一个 Symbol 值，该属性会被忽略
+          -Object.entries方法的另一个用处是，将对象转为真正的Map结构
+
+                const obj = { foo: 'bar', baz: 42 };
+                const map = new Map(Object.entries(obj));
+                map // Map { foo: "bar", baz: 42 }
+
+          -自己实现Object.entries方法
+
+               //非Generator方法
+
+                function entries(obj){
+                    let arr =[]
+                    for(let key of Object.keys(obj)){
+                        arr.push([key,obj[key]])
+                    }
+                       return arr
+                }
+
+              //Generator方法
+
+              function* entries(obj) {
+                for (let key of Object.keys(obj)) {
+                    yield [key,obj[key]];
+                }
+                }
 
 
 */
 
+/* 7.Object.fromEntries()
 
-let obj={
-    foo:'123',
-    get bar() {
-        return 'abc'
-    }
-}
+         -Object.fromEntries()方法是Object.entries()的逆操作，用于将一个键值对数组转为对象
 
-console.log(Object.getOwnPropertyDescriptors(obj))
+              Object.fromEntries([['foo','bar'],['baz',123]])  // {foo:'bar',baz:123}
+
+        -该方法的主要目的，是将键值对的数据结构还原为对象，因此特别适合将 Map 结构转为对象
+
+              let entries = new Map([['foo','bar'],['baz',123]])
+              Object.fromEntries(entries)
+
+        -该方法的一个用处是配合URLSearchParams对象，将查询字符串转为对象
+
+              Object.fromEntries(new URLSearchParams('foo=bar&baz=qux'))
+*/
+
