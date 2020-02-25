@@ -384,3 +384,34 @@
      - Proxy.revocable的一个使用场景是，目标对象不允许直接访问，必须通过代理访问，一旦访问结束，就收回代理权，不允许再次访问
 
 */
+
+/* 4.使用Proxy实例实现观察者模式
+
+   const queuedObservers = new Set()
+   const observe = fn =>queuedObservers.add(fn)
+   const observable = obj => new Proxy(obj,{set})
+
+   function set(target,key,value,receiver){
+          const result = Reflect.set(target,key,value,receiver)
+          queuedObservers.forEach(observe=>observe())
+
+          return result
+
+   }
+
+   const person = observable({
+    name: '张三',
+    age: 20
+  });
+  
+  function print() {
+    console.log(`${person.name}, ${person.age}`)
+  }
+  
+  observe(print);
+  person.name = '李四';
+
+
+*/
+
+
