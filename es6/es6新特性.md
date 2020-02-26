@@ -194,22 +194,22 @@
 
 * promise新建后就会立即执行，promise构造函数是同步执行的，而then方法是异步执行的
 
-   如：let promise = new Promise(function(resolve, reject) {
-           console.log('Promise');
-           resolve();
-        });
+	   如：let promise = new Promise(function(resolve, reject) {
+	           console.log('Promise');
+	           resolve();
+	        });
+	
+	        promise.then(function() {
+	          console.log('resolved');
+	        });
+	
+	        console.log('Hi!');
+	
+	      // Promise
+	      // Hi!
+	      // resolved
 
-        promise.then(function() {
-          console.log('resolved');
-        });
-
-        console.log('Hi!');
-
-      // Promise
-      // Hi!
-      // resolved
-
-上面代码中，Promise 新建后立即执行，所以首先输出的是Promise。然后，then方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行，所以resolved最后输出。
+     上面代码中，Promise 新建后立即执行，所以首先输出的是Promise。然后，then方法指定的回调函数，将在当前脚本所有同步任务执行完才会执行，所以resolved最后输出。
 
 * promise有三种状态pending(进行中)、fulfilled(已成功)、rejected(已失败)
 * promise有两个过程pending-fulfilled、pending-rejected
@@ -237,10 +237,10 @@
 (3)Promise.prototype.catch()
 
 * 用于指定错误时的回调函数
-* 如果异步操作抛出错误，状态就会变为rejected，就会调用catch方法指定的回调函数，另外，then方法指定的回调函数，如果运行中抛出错误，也会被catch方法捕获。
-* 如果catch前面的then方法里面有处理异步错误的方法，则异步错误就会被then方法里面的回调捕获，不会再被catch捕获了。
-* 如果catch前面的then方法里面有处理异步错误的方法，异步操作抛出错误的同时，catch前面的then方法也抛出了错误，则异步错误就会被then方法里面的回调捕获，then方法里面错误既不会被then方法里面的回调捕获，也不会被catch捕获。
-* 如果catch前面的then方法里面有处理异步错误的方法，只有catch前面的then方法抛出了错误，则then方法里面错误会被catch捕获
+* 如果异步操作抛出错误，状态就会变为rejected，就会调用catch方法指定的回调函数，另外，then方法指定的回调函数，如果运行中抛出错误，也会被catch方法捕获
+* 如果catch前面的then方法里面有处理异步错误的方法，则异步错误就会被then方法里面的回调捕获，不会再被catch捕获了
+* 如果catch前面的then方法里面有处理异步错误的方法，异步操作抛出错误的同时，catch前面的then方法也抛出了错误，则异步错误就会被then方法里面的回调捕获，then方法里面错误会被catch捕获
+* 如果catch前面的then方法里面有处理异步错误的方法，只要catch前面的then方法抛出了错误，则then方法里面错误会被catch捕获
 * catch中还会再抛出错误
 * 如果 Promise 状态已经变成resolved，再抛出错误是无效的，因为 Promise 的状态一旦改变，就永久保持该状态，不会再变了
 * Promise 对象的错误具有“冒泡”性质，会一直向后传递，直到被捕获为止。也就是说，错误总是会被下一个catch语句捕获
