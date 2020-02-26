@@ -10,6 +10,7 @@ function fn (num){
           for(var i =3;i<num;){
              arr.push(i)
              i=i+2
+             /*数组里放小于num的全部奇数 */
            }
     }
     arr.forEach((value,index)=>{
