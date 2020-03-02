@@ -14,7 +14,7 @@ function Ajax(url,fnSucc,fnFaild){
         oAjax = new ActiveXObject("Microsoft.XMLHTTP")
     }
 
-    oAjax.open("post",url,true) // true表示异步
+    oAjax.open('post',url,true) // true表示异步
 
     oAjax.send('name=milk&age=18') //用于post传参，形式："a=1&b=2"，而get传参就在url后面用“?”拼接
 

@@ -1,23 +1,18 @@
 var express = require('express')
 var fs = require('fs')
 
-
 var server = express()
 
-server.use("/",function(req,res){
-   
-    // 读取ajax.html
-    fs.readFile('.'+req.url,function(err,data){
-        if(err){
+server.use('/',function(req,res){
+    fs.readFile('.'+req.url,function(error,data){
+        if(error){
             res.write('404')
         }else{
             res.write(data)
         }
 
-        res.send()
+        res.end()
     })
-
-
 })
 
 server.listen(8080)

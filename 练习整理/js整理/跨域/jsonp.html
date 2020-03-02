@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input id="butn1" type="button" value="提交">
+    <script>
+        var btn = document.getElementById('butn1')
+        btn.onclick = function(){
+            var script = document.createElement('script')
+            script.type = 'text/javascript'
+            script.src = 'http://localhost:8081?name=milk&callback=handleCallback'
+            document.body.appendChild(script);
+        }
+
+        function handleCallback(res){
+           console.log(JSON.stringify(res))
+        }
+    </script>
+</body>
+</html>
