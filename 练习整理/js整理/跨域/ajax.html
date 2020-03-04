@@ -13,7 +13,8 @@
     <script>
            var oBtn = document.getElementById('button')
             oBtn.onclick=function(){
-                Ajax('http://localhost:8081?name=milk&age=18',function(){
+                Ajax('http://localhost:8081?name=milk&age=18',function(res){
+                    console.log(res)
                     alert('succ')
                 },function(){
                     alert('faild')

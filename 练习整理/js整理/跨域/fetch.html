@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <input value='提交' type='button' id='btn' name='btn' />
+
+    <script>
+        function fetch(url,options={}){
+
+    options={
+        methods:options.methods||"GET",
+        headers:options.headers||{
+            'content-type':"application/json;charset=UTF-8"
+        },
+        body:options.body||'',
+        credentials:options.credentials||'omit',
+        mode:options.mode||'no-cros',
+
+    }
+    console.log(typeof options.methods)
+    
+    return new Promise((reslove,reject)=>{
+           
+         var Ajax = null
+         if(window.XMLHttpRequest){
+             Ajax = new XMLHttpRequest()
+         }else if(window.ActiveXObject){
+             Ajax = new ActiveXObject('Microsoft.XMLHTTPS')
+         }
+
+         Ajax.open(options.methods,url,true)
+         if(options.body){
+             Ajax.send(JSON.stringify(options.body))
+         }else{
+             Ajax.send()
+         }
+         
+         Ajax.onreadystatechange=function(){
+             if(Ajax.readyState==4){
+                 if(Ajax.status==200){
+                     reslove(Ajax.responseText)
+                 }else{
+                     reject()
+                 }
+             }
+         }
+    })
+}
+        var btn = document.getElementById('btn')
+        btn.onclick=function(){
+            fetch('http://localhost:8081?name=milk&age=18')
+               .then(res=>{
+                   console.log(res)
+               })
+              
+        }
+
+    </script>
+    
+</body>
+</html>

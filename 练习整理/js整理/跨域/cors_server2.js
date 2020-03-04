@@ -22,6 +22,7 @@ server.use('/',function(req,res){
     Post = req.body
 
     console.log(Get,Post)
+    res.send('222')
    
      res.end()
 })
