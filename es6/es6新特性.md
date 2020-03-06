@@ -573,38 +573,38 @@ catch方法的参数不是reject抛出的'出错了'，而是thenable对象，�
 
 (1)定义
 
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  toString() {
-    return '(' + this.x + ', ' + this.y + ')';
-  }
-}
+	class Point {
+	  constructor(x, y) {
+	    this.x = x;
+	    this.y = y;
+	  }
+	
+	  toString() {
+	    return '(' + this.x + ', ' + this.y + ')';
+	  }
+	}
 
 * 类本质上是原型链的二次包装，类相当于实例的原型，所有在类中定义的方法，都会被实例继承
 * 以上就是定义了一个类，可以看到里面有一个constructor方法，这就是构造方法，而this关键字则代表实例对象
 * 类的数据类型就是函数，类本身就指向构造函数。
 
-如：class Point {
-    // ...
-   }
-
-   typeof Point // "function"
-   Point === Point.prototype.constructor // true
+	如：class Point {
+	    // ...
+	   }
+	
+	   typeof Point // "function"
+	   Point === Point.prototype.constructor // true
 
 * 使用的时候，也是直接对类使用new命令，跟构造函数的用法完全一致。
 
-如：class Bar {
-    doStuff() {
-      console.log('stuff');
-    }  
-   }
-
-  var b = new Bar();
-   b.doStuff() // "stuff"
+	如：class Bar {
+	    doStuff() {
+	      console.log('stuff');
+	    }  
+	   }
+	
+	  var b = new Bar();
+	   b.doStuff() // "stuff"
 
 生成的实例b没有constructor属性，所以b会沿着原型链(b.__proto__)向上寻找
 
@@ -613,33 +613,33 @@ class Point {
 * 不能使用字面量定义属性
 类中无法像对象一样使用 prop: value 或者 prop = value 的形式定义一个类的属性，我们只能在类的构造方法或其他方法中使用 this.prop = value 的形式为类添加属性。
 * 类和模块的内部，默认就是严格模式，所以不需要使用use strict指定运行模式。只要你的代码写在类或模块之中，就只有严格模式可用
-* 由于本质上，ES6 的类只是 ES5 的构造函数的一层包装，所以函数的许多特性都被Class继承，包括name属性，name属性总是返回紧跟在class关键字后面的类名
+* 由于本质上，ES6的类只是ES5的构造函数的一层包装，所以函数的许多特性都被Class继承，包括name属性，name属性总是返回紧跟在class关键字后面的类名
 
-如：class Point {}
-	Point.name // "Point"
+	如：class Point {}
+		Point.name // "Point"
 
 (2)constructor方法
 
 * constructor方法是类的默认方法，通过new命令生成对象实例时，自动调用该方法
 * 一个类必须有constructor方法，如果没有显式定义，一个空的constructor方法会被默认添加。
- 如：class Point {
-	}
-	
-	// 等同于
-	class Point {
-	  constructor() {}
-	}
+	 如：class Point {
+		}
+		
+		// 等同于
+		class Point {
+		  constructor() {}
+		}
 
 * constructor方法默认返回实例对象（即this），完全可以指定返回另外一个对象。
 
-如：class Foo {
-	  constructor() {
-	    return Object.create(null);
-	  }
-	}
-	
-	new Foo() instanceof Foo
-	// false
+	如：class Foo {
+		  constructor() {
+		    return Object.create(null);
+		  }
+		}
+		
+		new Foo() instanceof Foo
+		// false
 
 上面代码中，constructor函数返回一个全新的对象，结果导致实例对象不是Foo类的实例。
 
@@ -651,27 +651,27 @@ class Point {
 * new生成实例时，会默认调用constructor方法
 * 与 ES5 一样，实例的属性除非显式定义在其本身（即定义在this对象上），否则都是定义在原型上（即定义在class上）
 
-如：class Point {
-
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-
-  toString() {
-    return '(' + this.x + ', ' + this.y + ')';
-  }
-
-}
-
-var point = new Point(2, 3);
-
-point.toString() // (2, 3)
-
-point.hasOwnProperty('x') // true
-point.hasOwnProperty('y') // true
-point.hasOwnProperty('toString') // false
-point.__proto__.hasOwnProperty('toString') // true
+	如：class Point {
+	
+	  constructor(x, y) {
+	    this.x = x;
+	    this.y = y;
+	  }
+	
+	  toString() {
+	    return '(' + this.x + ', ' + this.y + ')';
+	  }
+	
+	}
+	
+	var point = new Point(2, 3);
+	
+	point.toString() // (2, 3)
+	
+	point.hasOwnProperty('x') // true
+	point.hasOwnProperty('y') // true
+	point.hasOwnProperty('toString') // false
+	point.__proto__.hasOwnProperty('toString') // true
 
 上面代码中，x和y都是实例对象point自身的属性（因为定义在this变量上），所以hasOwnProperty方法返回true，而toString是原型对象的属性（因为定义在Point类上），所以hasOwnProperty方法返回false
 
@@ -679,26 +679,26 @@ point.__proto__.hasOwnProperty('toString') // true
 
 实例属性除了定义在constructor()方法里面的this上面，也可以定义在类的最顶层
 
-如：class IncreasingCounter {
-  _count = 0;
-  get value() {
-    console.log('Getting the current value!');
-    return this._count;
-  }
-  increment() {
-    this._count++;
-  }
-}
+	如：class IncreasingCounter {
+	  _count = 0;
+	  get value() {
+	    console.log('Getting the current value!');
+	    return this._count;
+	  }
+	  increment() {
+	    this._count++;
+	  }
+	}
 
 上面代码中，实例属性_count与取值函数value()和increment()方法，处于同一个层级。这时，不需要在实例属性前面加上this
 
 * 与 ES5 一样，类的所有实例共享一个原型对象
 
-如：var p1 = new Point(2,3);
-	var p2 = new Point(3,2);
-	
-	p1.__proto__ === p2.__proto__
-	//true
+	如：var p1 = new Point(2,3);
+		var p2 = new Point(3,2);
+		
+		p1.__proto__ === p2.__proto__
+		//true
 
 
 * 可以通过实例的__proto__属性为“类”添加方法，实例的__proto__属性改写原型，必须相当谨慎，不推荐使用
@@ -707,67 +707,68 @@ point.__proto__.hasOwnProperty('toString') // true
 
 类的属性名，可以采用表达式
 
-如：let methodName = 'getArea';
-
-class Square {
-  constructor(length) {
-    // ...
-  }
-
-  [methodName]() {
-    // ...
-  }
-}
+	如：let methodName = 'getArea';
+	
+	class Square {
+	  constructor(length) {
+	    // ...
+	  }
+	
+	  [methodName]() {
+	    // ...
+	  }
+	}
 
 (5)class表达式
 
-如:const MyClass = class Me {
-	  getClassName() {
-	    return Me.name;
-	  }
-	};
+	如:const MyClass = class Me {
+		  getClassName() {
+		    return Me.name;
+		  }
+		};
 
 * 这个类的名字是Me，但是Me只在 Class 的内部可用，指代当前类。在 Class 外部，这个类只能用MyClass引用
 
-如：let inst = new MyClass();
-	inst.getClassName() // Me
-	Me.name // ReferenceError: Me is not defined
+	如：let inst = new MyClass();
+		inst.getClassName() // Me
+		Me.name // ReferenceError: Me is not defined
 
 * 如果类的内部没用到的话，可以省略Me
 * 采用 Class 表达式，可以写出立即执行的 Class
  
-如：let person = new class {
-  constructor(name) {
-    this.name = name;
-  }
-
-  sayName() {
-    console.log(this.name);
-  }
-}('张三');
-
-person.sayName(); // "张三"
+	如：let person = new class {
+	  constructor(name) {
+	    this.name = name;
+	  }
+	
+	  sayName() {
+	    console.log(this.name);
+	  }
+	}('张三');
+	
+	person.sayName(); // "张三"
 
 (6)Generator方法
 
 * 如果某个方法之前加上星号（*），就表示该方法是一个 Generator 函数
 
-如：class Foo {
-  constructor(...args) {
-    this.args = args;
-  }
-  * [Symbol.iterator]() {
-    for (let arg of this.args) {
-      yield arg;
-    }
-  }
-}
 
-for (let x of new Foo('hello', 'world')) {
-  console.log(x);
-}
-// hello
-// world
+	如：class Foo {
+	  constructor(...args) {
+	    this.args = args;
+	  }
+	  * [Symbol.iterator]() {
+	    for (let arg of this.args) {
+	      yield arg;
+	    }
+	  }
+	}
+	
+	for (let x of new Foo('hello', 'world')) {
+	  console.log(x);
+	}
+	// hello
+	// world
 
 上面代码中，Foo类的Symbol.iterator方法前有一个星号，表示该方法是一个 Generator 函数。Symbol.iterator方法返回一个Foo类的默认遍历器，for...of循环会自动调用这个遍历器。
 
@@ -775,23 +776,24 @@ for (let x of new Foo('hello', 'world')) {
 
 * 类的方法内部如果含有this，它默认指向类的实例。但是，必须非常小心，一旦单独使用该方法，很可能报错
 
-如：class Logger {
-	  printName(name = 'there') {
-	    this.print(`Hello ${name}`);
-	  }
-	
-	  print(text) {
-	    console.log(text);
-	  }
-	}
-	
-	const logger = new Logger();
-	const { printName } = logger;
-	printName(); // TypeError: Cannot read property 'print' of undefined
+	如：class Logger {
+		  printName(name = 'there') {
+		    this.print(`Hello ${name}`);
+		  }
+		
+		  print(text) {
+		    console.log(text);
+		  }
+		}
+		
+		const logger = new Logger();
+		const { printName } = logger;
+		printName(); // TypeError: Cannot read property 'print' of undefined
 
 printName方法中的this，默认指向Logger类的实例。但是，如果将这个方法提取出来单独使用，this会指向该方法运行时所在的环境（由于 class 内部是严格模式，所以 this 实际指向的是undefined），从而导致找不到print方法而报错
 
 * 解决办法
+
   * 在构造方法中绑定this
    
    如：class Logger {
@@ -804,100 +806,101 @@ printName方法中的this，默认指向Logger类的实例。但是，如果将�
    
    * 使用箭头函数
     
-   如：class Obj {
-	  constructor() {
-	    this.getThis = () => this;
-	  }
-	}
+     如：class Obj {
+		  constructor() {
+		    this.getThis = () => this;
+		  }
+	 }
 	
 	const myObj = new Obj();
 	myObj.getThis() === myObj // true
 
   * 使用Proxy，获取方法的时候，自动绑定this
   
-   如：function selfish (target) {
-	  const cache = new WeakMap();
-	  const handler = {
-	    get (target, key) {
-	      const value = Reflect.get(target, key);
-	      if (typeof value !== 'function') {
-	        return value;
-	      }
-	      if (!cache.has(value)) {
-	        cache.set(value, value.bind(target));
-	      }
-	      return cache.get(value);
-	    }
-	  };
-	  const proxy = new Proxy(target, handler);
-	  return proxy;
-	}
-	
-	const logger = selfish(new Logger());
+	   如：function selfish (target) {
+			  const cache = new WeakMap();
+			  const handler = {
+				    get (target, key) {
+				      const value = Reflect.get(target, key);
+				      if (typeof value !== 'function') {
+				        return value;
+				      }
+				      if (!cache.has(value)) {
+				        cache.set(value, value.bind(target));
+				      }
+				      return cache.get(value);
+				    }
+			  };
+			  const proxy = new Proxy(target, handler);
+			  return proxy;
+		}
+		
+		const logger = selfish(new Logger());
 
 (8)静态方法
 
 * 如果在一个方法前，加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为“静态方法”
 
-如：class Foo {
-	  static classMethod() {
-	    return 'hello';
-	  }
-	}
-	
-	Foo.classMethod() // 'hello'
-	
-	var foo = new Foo();
-	foo.classMethod()
-	// TypeError: foo.classMethod is not a function
+	   如：class Foo {
+		  static classMethod() {
+		    return 'hello';
+		  }
+		}
+		
+		Foo.classMethod() // 'hello'
+		
+		var foo = new Foo();
+		foo.classMethod()
+		// TypeError: foo.classMethod is not a function
 
 Foo类的classMethod方法前有static关键字，表明该方法是一个静态方法，可以直接在Foo类上调用（Foo.classMethod()），而不是在Foo类的实例上调用。如果在实例上调用静态方法，会抛出一个错误，表示不存在该方法
 
 * 如果静态方法包含this关键字，这个this指的是类，而不是实例
 
-如：class Foo {
-	  static bar() {
-	    this.baz();
-	  }
-	  static baz() {
-	    console.log('hello');
-	  }
-	  baz() {
-	    console.log('world');
-	  }
-	}
-	
-	Foo.bar() // hello
+	如：class Foo {
+		  static bar() {
+		    this.baz();
+		  }
+		  static baz() {
+		    console.log('hello');
+		  }
+		  baz() {
+		    console.log('world');
+		  }
+		}
+		
+		Foo.bar() // hello
 
 静态方法bar调用了this.baz，这里的this指的是Foo类，而不是Foo的实例，等同于调用Foo.baz。另外，从这个例子还可以看出，静态方法可以与非静态方法重名
 
 * 父类的静态方法，可以被子类继承
 
-如：class Foo {
-	  static classMethod() {
-	    return 'hello';
-	  }
-	}
-	
-	class Bar extends Foo {
-	}
-	
-	Bar.classMethod() // 'hello'
+	如：class Foo {
+		  static classMethod() {
+		    return 'hello';
+		  }
+		}
+		
+		class Bar extends Foo {
+		}
+		
+		Bar.classMethod() // 'hello'
 
 * 静态方法也是可以从super对象上调用的
-如：class Foo {
-	  static classMethod() {
-	    return 'hello';
-	  }
-	}
-	
-	class Bar extends Foo {
-	  static classMethod() {
-	    return super.classMethod() + ', too';
-	  }
-	}
-	
-	Bar.classMethod() // "hello, too"
+
+	如：class Foo {
+		  static classMethod() {
+		    return 'hello';
+		  }
+		}
+		
+		class Bar extends Foo {
+		  static classMethod() {
+		    return super.classMethod() + ', too';
+		  }
+		}
+		
+		Bar.classMethod() // "hello, too"
 
 (9)静态属性
 
@@ -924,7 +927,7 @@ Foo类的classMethod方法前有static关键字，表明该方法是一个静态
 * es6的继承机制是先将父类实例对象的属性和方法，加到this上面（所以必须先调用super方法），然后再用子类的构造函数修改this
 * es5的继承机制是先创造子类的实例对象this，然后再将父类的方法添加到this上面（Parent.apply(this)）
 * 子类必须在constructor方法中调用super方法，否则新建实例时会报错。这是因为子类自己的this对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，加上子类自己的实例属性和方法。如果不调用super方法，子类就得不到this对象。
-* 如果子类没有没有定义constructor方法，这个方法会被默认添加
+* 如果子类没有定义constructor方法，这个方法会被默认添加
 
 	如：class ColorPoint extends Point {
 	   }
@@ -946,6 +949,7 @@ Foo类的classMethod方法前有static关键字，表明该方法是一个静态
 (3)super关键字
 
 * 作为函数调用：
+
       * super作为函数调用时，代表父类的构造函数，但是返回的是子类B的实例，即super内部的this指的是B的实例，因此super()在这里相当于A.prototype.constructor.call(this)
         
         如：class A {
@@ -972,7 +976,9 @@ Foo类的classMethod方法前有static关键字，表明该方法是一个静态
 			  }
 			}
 
+
 * 作为对象调用
+
       * 在普通方法中，super对象指向父类的原型对象
       
        如：class A {
@@ -1058,23 +1064,23 @@ Foo类的classMethod方法前有static关键字，表明该方法是一个静态
      * 在静态方法中，super对象指向父类
      
       如：class Parent {
-		  static myMethod(msg) {
-		    console.log('static', msg);
-		  }
-		
-		  myMethod(msg) {
-		    console.log('instance', msg);
-		  }
+			  static myMethod(msg) {
+			    console.log('static', msg);
+			  }
+			
+			  myMethod(msg) {
+			    console.log('instance', msg);
+			  }
 		}
 		
 		class Child extends Parent {
-		  static myMethod(msg) {
-		    super.myMethod(msg);
-		  }
-		
-		  myMethod(msg) {
-		    super.myMethod(msg);
-		  }
+			  static myMethod(msg) {
+			    super.myMethod(msg);
+			  }
+			
+			  myMethod(msg) {
+			    super.myMethod(msg);
+			  }
 		}
 		
 		Child.myMethod(1); // static 1
