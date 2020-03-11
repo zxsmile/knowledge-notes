@@ -9,6 +9,30 @@
       - CommonJS规范加载模块是同步的 
       - CommonJS模块的加载机制是，输入的是被输出的值的拷贝。也就是说，一旦输出一个值，模块内部的变化就影响不到这个值
 
+                // a.js
+
+                var foo="baz"
+                module.exports={
+                    foo:foo
+                }
+
+                setTimeout(()=>{
+                    foo = 'nn'
+                },500)
+
+                // b.js
+
+                var m = require('./a.js')
+
+                console.log(m.foo) //baz
+
+                setTimeout(()=>{
+                    console.log(m.foo)  //baz
+                },1000)
+
+
+
+
    2. CommonJS的特点
 
       - 所有代码都运行在模块作用域，不会污染全局变量
@@ -184,19 +208,12 @@
 
                                exports.done = true;
 
-    
-
-
- 
-
-
-
-
-         
-         
-         
-         
-         
-         
 */
 
+import { foo } from './es6模块.js'
+
+console.log(foo)
+
+// setTimeout(()=>{
+//     console.log(foo)
+// },1000)
