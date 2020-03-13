@@ -11,30 +11,27 @@
         
        
 
-        function sum(...a){
-    if(arguments.length===1){
-        var catche = [...a][0]
-        function s(b){
-            catche= catche+b
-            return s
-       }
+function flatMap(arr,fn){
 
-        s.toString=function(){
-            return catche
-        }
+var newArr=arr.map((x)=>{
+    return fn(x)
+})
 
-        return s
-    }else{
-        var s=0
-        for(var i=0;i<arguments.length;i++){
-             s = s+arguments[i]
-        }
-        return s
-    }
-    
+var newArr1 = newArr.flat()
+
+return newArr1
+
 }
 
-alert(sum(1)(2)(3)(4))
+var arr=[1,2,3]
+var fn = function(x){
+return x=[x*2]
+
+}
+var newArr =flatMap(arr,fn)
+console.log(newArr)
+
+
     </script>
 </body>
 </html>
