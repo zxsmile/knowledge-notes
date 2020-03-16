@@ -7,30 +7,28 @@
     <title>Document</title>
 </head>
 <body>
+
+        <div id="app">
+                <input type="text" id="txt">
+                <p id="show"></p>
+            </div>
     <script>
         
        
 
-function flatMap(arr,fn){
-
-var newArr=arr.map((x)=>{
-    return fn(x)
-})
-
-var newArr1 = newArr.flat()
-
-return newArr1
-
-}
-
-var arr=[1,2,3]
-var fn = function(x){
-return x=[x*2]
-
-}
-var newArr =flatMap(arr,fn)
-console.log(newArr)
-
+        var obj = {}
+    Object.defineProperty(obj, 'txt', {
+        get: function () {
+            return obj
+        },
+        set: function (newValue) {
+            document.getElementById('txt').value = newValue
+            document.getElementById('show').innerHTML = newValue
+        }
+    })
+    document.addEventListener('keyup', function (e) {
+        obj.txt = e.target.value
+    })
 
     </script>
 </body>
