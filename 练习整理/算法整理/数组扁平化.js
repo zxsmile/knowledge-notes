@@ -5,7 +5,6 @@
     function flatArray(arr){
 
         for(var i=0;i<arr.length;i++){
-            console.log(i)
             if(Array.isArray(arr[i])){
                 flatArray(arr[i])
             }else{
