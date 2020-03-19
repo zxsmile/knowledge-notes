@@ -129,6 +129,11 @@ https://www.jb51.net/article/157550.htm
 						 这些都会带上cookie
       - SamesiteCookie目前有一个致命的缺陷：不支持子域。例如，种在topic.a.com下的Cookie，并不能使用a.com下种植的SamesiteCookie。这就导致了当我们网站有多个子域名时，不能使用SamesiteCookie在主域名存储用户登录信息。每个子域名都需要用户重新登录一次
          
+(3)CSRF token
+
+     - 服务器发送给客户端一个token
+     - 客户端提交的表单中带着这个token
+     - 如果这个 token 不合法，那么服务器拒绝这个请求
 
 7.防止网站被利用
 
