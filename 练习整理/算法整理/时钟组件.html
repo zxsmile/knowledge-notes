@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src='./vue.js'></script>
+    <title>时钟组件</title>
+</head>
+<body>
+    <div id="root">
+        <div>{{time}}</div>
+    </div>
+
+    <script>
+
+        var vm = new Vue({
+            el:'#root',
+            data:{
+                time:''
+            },
+            mounted() {
+                  
+                setInterval(()=>{
+
+                    var times = new Date()
+                    var  hours = times.getHours()
+                    var  minute = times.getMinutes()
+                    var  second = times.getSeconds()
+                    if(minute<10){
+                        minute='0'+minute
+
+                    }
+
+                    if(second<10){
+                        second='0'+second
+
+                    }
+                    
+                    this.time =`${hours}:${minute}:${second}`
+                  },1000)
+            }
+        })
+        
+    </script>
+</body>
+</html>
