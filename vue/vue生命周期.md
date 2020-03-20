@@ -78,6 +78,12 @@
 5.DOM渲染在那个周期中就已经完成？
 
   答：Mounted
+
+6.keep-alive的生命周期？
+
+(1)activated:页面第一次进入的时候，钩子触发的顺序是：created->mounted->activated
+
+(2)deactivated:页面退出的时候会触发deactivated,当再次进入页面只会触发activated
     
 
      
