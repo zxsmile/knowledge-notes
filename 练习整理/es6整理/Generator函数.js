@@ -218,27 +218,3 @@
         f.c // 3
 */
 
-class Parent{
-    
-
-    constructor() {
-        this.a = 1
-    }
-   
-
-}
-
-Parent.a=3
-
-class Child extends Parent{
-    constructor() {
-        super()
-        this.a = 2
-        super.b=3
-        console.log(super.a)
-    }
-}
-
-var child = new Child()
-
-console.log(child.b)

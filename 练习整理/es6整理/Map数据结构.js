@@ -147,7 +147,7 @@
 
             - 对象转换为Map
 
-                - 对象没有iterator接口，不能直接待入Map中
+                - 对象没有iterator接口，不能直接代入Map中
                 - 可以使用Object.entries():Object.entries()方法返回一个给定对象自身可枚举属性的键值对数组
 
                     let obj ={

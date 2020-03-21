@@ -52,3 +52,7 @@ const deepClone = function(obj) {
   };
   
   deepClone.weakMap = new WeakMap();
+
+
+
+  
