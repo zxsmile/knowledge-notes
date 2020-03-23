@@ -1,6 +1,6 @@
 CSS3中有三个关于动画的样式属性transform、transition和animation
 
-一、transform
+一、transform(转变)
 
 * transform可以用来设置元素的形状改变，主要有以下几种变形：rotate（旋转）、scale（缩放）、skew（扭曲）、translate（移动）和matrix（矩阵变形）
 
@@ -149,7 +149,7 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 
 https://www.tuicool.com/articles/na6jy2
 
-二、transition
+二、transition(过渡)
 
 * transition是用来设置样式的属性值是如何从从一种状态变平滑过渡到另外一种状态
 
@@ -216,7 +216,7 @@ https://www.tuicool.com/articles/na6jy2
 
 * 它有6种形式的速率:
 
-      * ase：逐渐变慢（默认），等同于贝塞尔曲线(0.25, 0.1, 0.25, 1.0)
+      * ease：逐渐变慢（默认），等同于贝塞尔曲线(0.25, 0.1, 0.25, 1.0)
       * linear：匀速，等同于贝塞尔曲线(0.0, 0.0, 1.0, 1.0)
       * ease-in：加速，等同于贝塞尔曲线(0.42, 0, 1.0, 1.0)
       * ease-out：减速，等同于贝塞尔曲线(0, 0, 0.58, 1.0)
@@ -305,7 +305,7 @@ https://www.tuicool.com/articles/na6jy2
 	上面的演示规则中，opacity的变化过程将会持续2秒，而left值的变化过程将会持续4秒
 
 
-三、animation
+三、animation(动画)
 
 * animation比较类似于 flash 中的逐帧动画，逐帧动画就像电影的播放一样，表现非常细腻并且有非常大的灵活性
 
@@ -439,5 +439,5 @@ https://www.tuicool.com/articles/na6jy2
 
 四、总结
 
-关于 CSS3 的动画的三个属性transform、transition、animation我们都介绍完了，让我们回顾一下。transform我们可以理解为元素的几何变形，它是有规律可寻的，这种变形并不会产生动画效果仅仅是原有形状的改变；transition和animation它们很像 flash 中的补间动画和逐帧动画；transition是从一个状态变化到另外一种状态，当变化有了平滑的效果后就产生了动画，它是一个公式化的变化，在比较规则的动画效果中我们可以使用，例如：旋转的风车、行驶的汽车、颜色的渐变等等；animation的动画效果更加灵活，可以实现像影片一样的复杂无规则的动画。
+关于 CSS3 的动画的三个属性transform、transition、animation我们都介绍完了，让我们回顾一下。transform我们可以理解为元素的几何变形，它是有规律可寻的，这种变形并不会产生动画效果仅仅是原有形状的改变；transition和animation它们很像 flash 中的补间动画和逐帧动画；transition是从一个状态变化到另外一种状态，当变化有了平滑的效果后就产生了动画，它是一个公式化的变化，在比较规则的动画效果中我们可以使用，例如：旋转的风车、行驶的汽车、颜色的渐变等等；transition只能定义开始状态和结束状态，不能定义中间状态，也就是说只有两个状态；animation的动画效果更加灵活，可以实现像影片一样的复杂无规则的动画。
 
