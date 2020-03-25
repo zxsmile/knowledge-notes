@@ -41,7 +41,7 @@
 		
 		</body>
 
-father和son的上边距重合，值取决于它们俩中上边距的最大值，当两个的margin-top都为20px的时候，一起向下一20px,将子元素的margin-top修改为40px，父元素和子元素一起向下移20px
+father和son的上边距重合，值取决于它们俩中上边距的最大值，当两个的margin-top都为20px的时候，一起向下移20px,将子元素的margin-top修改为40px，父元素和子元素一起向下移40px
 
 3.解决方法
 
