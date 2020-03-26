@@ -16,7 +16,7 @@
 
 */
 
-/* 2.toString
+/* 2.toString + map
 
    toString() 在把数组转换成字符串时，首先要将数组的每个元素都转换为字符串。
    当每个元素都被转换为字符串时，才使用逗号进行分隔，以列表的形式输出这些字符串
@@ -30,7 +30,7 @@
 
 */
 
-/* 3.reduce
+/* 3.reduce + concat
 
    function flatArr(arr){
         return arr.reduce(function(prev, next){
@@ -43,7 +43,7 @@
 
 */
 
-/* 4.rest运算符
+/* 4.rest运算符 + some + concat
 
    function flatArr(arr){
         while (arr.some(item => Array.isArray(item))) {
@@ -55,7 +55,7 @@
 
 */
 
-/* 5.apply()
+/* 5.apply() + some + concat
 
     function flatArr(arr){
         while (arr.some(item => Array.isArray(item))) {
@@ -65,4 +65,3 @@
             return arr;
       }
 */
-

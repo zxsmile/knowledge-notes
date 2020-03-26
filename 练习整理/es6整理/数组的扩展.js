@@ -157,7 +157,7 @@
 
                      [NaN].includes(NaN) //true
               
-        (4)Map和Set数据结构有一个has方法，需要域includes方法区别
+        (4)Map和Set数据结构有一个has方法，需要与includes方法区别
          
                 - Map 结构的has方法，是用来查找键名的，比如Map.prototype.has(key)、WeakMap.prototype.has(key)、Reflect.has(target, propertyKey)。
                 - Set 结构的has方法，是用来查找值的，比如Set.prototype.has(value)、WeakSet.prototype.has(value)。
