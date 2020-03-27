@@ -1,9 +1,10 @@
 function newOperator(ctor){
  
-    if(!ctor instanceof Function){
+    if(! ctor instanceof Function){
         throw 'newOperator function the first param must be a function'
     }
 
+    //如果是使用new调用构造函数，那么new.target属性指向构造函数，否则返回undefined
     newOperator.target = ctor
 
     // 1.创建一个全新的对象，
@@ -31,7 +32,7 @@ function newOperator(ctor){
 }
 
 function Student(name){
-    console.log(new.target)
+    console.log(newOperator.target)
     this.name = name;
  
      return null
