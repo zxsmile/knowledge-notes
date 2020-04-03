@@ -6,18 +6,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-       .box{
+		.box{
+		    height: 300px;
+			width:100%;
+			background-color: brown;
+			display:flex;
+			flex-direction: row;
+			justify-content: space-between;
+		
+		}
+       .box1{
 		   width:100px;
 		   height:100px;
 		   background-color: red;
-		   margin:0 auto;
+		   flex-basis: 500px;
+		   flex-shrink: 1;
+		   
+	   }
+	   .box2{
+		   width:100px;
+		   height:100px;
+		   background-color: gold;
+		   
 	   }
       
 			
     </style>
 </head>
 <body>
-     
-        <div class='box'></div>
+       <div class='box'>
+			<div class='box1' style="font-size: 12px;"></div>
+			<div class='box2' style="font-size: 20px;"></div>
+			<div class='box1' style="font-size: 24px;"></div>
+			<div class='box2' style="font-size: 30px;"></div>
+			<div class='box1' style="font-size: 50px;"></div>
+		</div>
+		
 </body>
 </html>
