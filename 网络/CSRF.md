@@ -24,7 +24,7 @@
 
          - 仅仅须要一个HTTP请求。就能够构造一次简单的CSRF
          
-               如:银行站点A：它以GET请求来完毕银行转账的操作，如：http://www.mybank.com/Transfer.php?toBankId=11&money=1000 
+               如:银行站点A：它以GET请求来完成银行转账的操作，如：http://www.mybank.com/Transfer.php?toBankId=11&money=1000 
                   危急站点B：它里面有一段HTML的代码例如以下：
                   <img src=http://www.mybank.com/Transfer.php?toBankId=11&money=1000>
 
@@ -117,7 +117,7 @@ https://www.jb51.net/article/157550.htm
 	
           - SameSite 有两种模式，Lax跟Strict模式，默认启用Strict模式，可以自己指定模式：
 	
-	          Set-Cookie: session_id=esdfas32e5; SameSite=StrictSet-Cookie: foo=bar; SameSite=Lax
+	          Set-Cookie: session_id=esdfas32e5; SameSite=Strict Set-Cookie: foo=bar; SameSite=Lax
  
                - Strict模式:规定 cookie 只允许相同的域使用，不应该在任何的跨域请求被加上去。即a标签、form表单和XMLHttpRequest提交的内容，只要是提交到不同的域去，就不会带上cookie
                - Lax模式比 Strict 放宽了点限制：假如这个请求是这种请求（改变了当前页面或者打开了新页面）且同时是个GET请求，则这个Cookie可以作为第三方Cookie
