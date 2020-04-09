@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <input type='button' value='提交' name='btn' />
+    <script>
+        var btn = document.querySelector('input') 
+        btn.onclick=function(){
+            var socket = new WebSocket('ws://localhost:3000')
+            socket.onopen=function(){
+                socket.send('lalala')
+            }
+
+            socket.onmessage=function(e){
+               
+                alert(e.data)
+                socket.close() //关闭连接
+            }
+
+            //关闭连接后的回调函数
+            socket.onclose=function(){
+                alert('client关闭连接')
+            }
+         
+            socket.onerror=function(err){
+                alert('出错了')
+            }
+        }
+    </script>
+</body>
+</html>
