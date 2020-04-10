@@ -62,8 +62,9 @@
         这三个值都为数值，如果不是则会自动转为数值
 
          var array=[1,2,3,4,5,6]
-         var newArray = array.copyWithin(0,3) // [4,5,6,4,5,6]
-         console.log(newArray)
+         var newArray = array.copyWithin(0,3) 
+         console.log(newArray) // [4,5,6,4,5,6]
+         console.log(array)  // [4,5,6,4,5,6]
 
 */
 
@@ -283,3 +284,6 @@
         由于空位的处理规则非常不统一，所以建议避免出现空位。
 
 */
+var array=[1,2,3,4,5,6]
+         var newArray = array.copyWithin(0,3) // [4,5,6,4,5,6]
+         console.log(array)
