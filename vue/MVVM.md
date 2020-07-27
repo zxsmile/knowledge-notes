@@ -1,6 +1,6 @@
 一、什么是MVVM？
 
-  - MVVM是Module-View-ViewModule的缩写，Module层代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑；View 代表UI 组件，它负责将数据模型转化成UI 展现出来，ViewModel 负责监听 Model 中数据的改变并且控制视图的更新，处理用户交互操作
+  - MVVM是Module-View-ViewModule的缩写，Module层代表数据模型，也可以在Model中定义数据修改和操作的业务逻辑；View 代表UI 组件，它负责将数据模型转化成UI展现出来，ViewModel 负责监听 Model 中数据的改变并且控制视图的更新，处理用户交互操作
   - Module和View并无直接联系，而是通过ViewModule来联系的，Module和ViewModule是双向数据绑定关系，因此当Module层的数据发生改变时会触发View层刷新，View 中由于用户交互操作而改变的数据也会在 Model 中同步
   - 这种模式实现了 Model 和 View 的数据自动同步，因此开发者只需要专注对数据的维护操作即可，而不需要自己操作 dom
 

@@ -27,48 +27,11 @@ var quickSort = function(arr) {
   };
 
   var arr =[6,5,9,7,8,12,4,5,56,14,45]
- // console.log(quickSort(arr))
-
-// 法二
-// https://blog.csdn.net/elma_tww/article/details/86164674
-
-   function quickSort(arr,from,to){
-        
-       var i = from
-       var j = to
-       var key = arr[from]
-
-      if(i>=j){
-          return
-      }
-       while(i<j){
-         
-         while(i<j&&arr[j]>key){
-             j++
-         }
-   
-        arr[i] = arr[j]
-         while(i<j && arr[i]<=key){
-             i++
-         }
-
-          arr[j] = arr[i]
-        
-       }
-
-       arr[i] = key
-       quickSort(arr,from,i-1)
-       quickSort(arr,i+1,to)
-
-      
-   }
+ console.log(quickSort(arr))
 
 
-var arr =[6,5,9,75,8,1,4,5,56,14,45]
-console.log(quickSort(arr,0,arr.length-1))
 
-
-/* 法三*/
+/* 法二*/
 
 function quick_sort(arr,from,to){
 	var i = from; //哨兵i
@@ -92,14 +55,14 @@ function quick_sort(arr,from,to){
 			arr[i] = arr[j];
 			arr[j] = temp;
 
-		}
+    }
 	}
 	arr[from] = arr[i] //
-	arr[i] = key;
-    quick_sort(arr,from,i-1);
+  arr[i] = key;
+  quick_sort(arr,from,i-1);
 	quick_sort(arr,i+1,to);
 }
 
-var arr = [3,3,-5,6,0,2,-1,-1,3];
+var arr = [3,9,-5,6,0,2,-1,-1,1,8];
 quick_sort(arr,0,arr.length-1);
 console.log(arr);

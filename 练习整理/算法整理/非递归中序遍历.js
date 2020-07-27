@@ -9,7 +9,7 @@ var inorderTraversal = function(root){
              p=p.left
           }
 
-          p=p.pop()
+          p=s.pop()
           res.push(p.val)
           p=p.right
         } 
@@ -17,3 +17,5 @@ var inorderTraversal = function(root){
         return res
       }
       
+
+     
