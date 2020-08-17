@@ -9,7 +9,7 @@
           
          
 
-          @keyframes tanqiu{
+          /* @keyframes tanqiu{
 
               10%{
                   margin-top:600px
@@ -37,14 +37,26 @@
               90%{
                   margin-top:600px;
               }
-          }
+          } */
 
     </style>
 </head>
 <body>
-
-    <div class = 'box'></div>
+   <div class = 'box' id='box'>lalal</div>
    
-
+    <script>
+       var appdiv=document.getElementById('box')
+        window.addEventListener('hashchange',function(e){
+            console.log(appdiv)
+            switch(location.hash){
+			  	case '#/login':
+			  	appdiv.innerHTML='我是登录页面';
+			  	break;
+			  	case '#/register':
+			  	appdiv.innerHTML='我是注册页面';
+			  	break;
+			  }
+        })
+    </script>
 </body>
 </html>
