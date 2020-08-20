@@ -7,7 +7,7 @@ const deepClone = function(obj) {
       if(typeof obj === 'function') {
         let fn;
         let fnStr = obj.toString();
-  
+        console.log(fnStr)
         if(fnStr !== `function ${obj.name}() { [native code] }`) {
           eval(`fn = ${fnStr}`);
           return fn;
@@ -53,6 +53,12 @@ const deepClone = function(obj) {
   
   deepClone.weakMap = new WeakMap();
 
+let obj={
+foo:function(){
+  let a=2
+}
+}
 
+deepClone(obj)
 
   
