@@ -45,18 +45,35 @@
    <div class = 'box' id='box'>lalal</div>
    
     <script>
-       var appdiv=document.getElementById('box')
-        window.addEventListener('hashchange',function(e){
-            console.log(appdiv)
-            switch(location.hash){
-			  	case '#/login':
-			  	appdiv.innerHTML='我是登录页面';
-			  	break;
-			  	case '#/register':
-			  	appdiv.innerHTML='我是注册页面';
-			  	break;
-			  }
+    //    var appdiv=document.getElementById('box')
+    //     window.addEventListener('hashchange',function(e){
+    //         console.log(appdiv)
+    //         switch(location.hash){
+	// 		  	case '#/login':
+	// 		  	appdiv.innerHTML='我是登录页面';
+	// 		  	break;
+	// 		  	case '#/register':
+	// 		  	appdiv.innerHTML='我是注册页面';
+	// 		  	break;
+	// 		  }
+    //     })
+    function getTags() {
+    var set=new Set()
+    function getTag(node){
+        if(node.nodeType===1){
+            set.add(node.nodeName.toLowerCase())
+        }
+        var children = node.childNodes
+        children.forEach((item)=>{
+            getTag(item)
         })
+        console.log(set)
+    }
+    getTag(document)
+    var res = [...set]
+    return res
+}
+console.log(getTags())
     </script>
 </body>
 </html>
