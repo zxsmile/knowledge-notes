@@ -40,12 +40,11 @@ var obj = {
 }
 
 function fn(name,age){
-    console.log(this)
     this.name = name
     this.m = 3
 }
 
 var fnBind = fn.bindFn(obj,'milk',18)
 var ch = new fnBind(12)
-// console.log(ch.__proto__)
+ console.log(ch.__proto__)
 // console.log(ch.m)

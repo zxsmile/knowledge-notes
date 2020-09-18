@@ -7,7 +7,6 @@ const deepClone = function(obj) {
       if(typeof obj === 'function') {
         let fn;
         let fnStr = obj.toString();
-        console.log(fnStr)
         if(fnStr !== `function ${obj.name}() { [native code] }`) {
           eval(`fn = ${fnStr}`);
           return fn;
