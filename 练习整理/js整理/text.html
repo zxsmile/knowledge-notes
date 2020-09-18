@@ -5,37 +5,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<style>
-		.box{
-			width:100px;
-			height:100px;
-			background-color: aqua;
-		}
-
-		.outer{
-			width:200px;
-			height:200px;
+		.box1{
+			/* display:inline-block; */
 			background-color: red;
 		}
 	</style>
 </head>
 <body>
-	  <div class = 'outer' id='outer'>
+	  <!-- <div class = 'outer' id='outer'>
 		  <div class='box' id='box'></div>
-	  </div>   
+	  </div>    -->
+	  <span class='box1'>111</span><span class='box1'>222</span>
+	  
     <script>
-        document.getElementById('box').addEventListener('click',function(){
-			console.log('我是box')
-			return false
-		},false)
-		document.getElementById('outer').addEventListener('click',function(event){
-			console.log('我是outer')
+        // document.getElementById('box').addEventListener('click',function(){
+		// 	console.log('我是box')
+		// 	return false
+		// },false)
+		// document.getElementById('outer').addEventListener('click',function(event){
+		// 	console.log('我是outer')
 			
-		},false)
+		// },false)
 
-		console.log(Date.now())
-		console.log(new Date().valueOf())
-		console.log(new Date().getTime())
-		console.log(Date.parse(new Date()))
+		// console.log(Date.now())
+		// console.log(new Date().valueOf())
+		// console.log(new Date().getTime())
+		// console.log(Date.parse(new Date()))
 	</script>
 </body>
 </html>
