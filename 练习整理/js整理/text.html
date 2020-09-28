@@ -5,17 +5,36 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
 	<style>
+		.box{
+			border: 1px solid gold;
+		    width:200px;
+		}
 		.box1{
-			/* display:inline-block; */
-			background-color: red;
+			
+			background-color:burlywood;
+			width:200px;
+			height: 200px;
+			margin: 0;
+			float: left;
+		}
+		.box2{
+			background-color: hotpink;
+			width: 100px;
+			height: 100px;
+			float:left
+		}
+		.box:after{
+			content: '';
+			display: block;
+			clear:both;
 		}
 	</style>
 </head>
 <body>
-	  <!-- <div class = 'outer' id='outer'>
-		  <div class='box' id='box'></div>
-	  </div>    -->
-	  <span class='box1'>111</span><span class='box1'>222</span>
+	  <div class='box'>
+		  <div class = 'box2'></div>
+		  <div class='box1'></div>
+	  </div>
 	  
     <script>
         // document.getElementById('box').addEventListener('click',function(){

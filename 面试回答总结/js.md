@@ -30,7 +30,7 @@ return Math.abs(a-b)<Number.EPSILON;
    - IE实现了和DOM中类似的两个方法attachEvent和detachEvent,这两个方法接收相同的两个参数，事件名称(注意是onclick)和事件处理程序函数（btn.attachEvent('onclick',handler)）。由于IE8及更早的版本只支持事件冒泡，所以通过attachEvent添加的事件都会被添加到冒泡阶段。attachEvent和addEventListener一样都可以为同一个元素添加相同的事件，不过它俩不同的是，attachEvent添加的事件处理程序不是以添加的顺序执行的，而是以相反的顺序执行的。
 
 
-   - IE中的attachEvent和DOM中的方法的只要区别还在于，事件处理程序的作用域不同，使用DOM级方法的情况下，事件处理程序会在其所属元素的作用域运行，this执行该元素。使用attachEvent情况下，事件处理程序会在全局作用域中运行，因此this等于window
+   - IE中的attachEvent和DOM中的方法的主要区别还在于，事件处理程序的作用域不同，使用DOM级方法的情况下，事件处理程序会在其所属元素的作用域运行，this执行该元素。使用attachEvent情况下，事件处理程序会在全局作用域中运行，因此this等于window
 
  2.事件委托（事件代理）
 
@@ -57,7 +57,7 @@ return Math.abs(a-b)<Number.EPSILON;
 
              return function(){
               var curTime = new Date()
-              var remaining = dalay-(curTime - startTime)
+              var remaining = delay-(curTime - startTime)
               var context = this
               var arg = arguments
               clearTimeout(timer)
@@ -82,7 +82,7 @@ return Math.abs(a-b)<Number.EPSILON;
 
 2.防抖
 
-   - 持续触发事件时，一定时间段内没有再次触发事件，时间处理函数才会执行一次，如果设定的时间到来之前，又一次触发了事件，就重新开始延时
+   - 持续触发事件时，一定时间段内没有再次触发事件，事件处理函数才会执行一次，如果设定的时间到来之前，又一次触发了事件，就重新开始延时
    - 应用场景:search搜索联想，用户在不断输入值时，用防抖来节约请求资源
 
       function debounce(fn, delay){

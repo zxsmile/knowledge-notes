@@ -274,7 +274,7 @@ https://www.tuicool.com/articles/na6jy2
 * transition需要事件触发，所以没法在网页加载时自动发生
 
    * 可触发的方式有：
-       * :hoever 
+       * :hover 
        * :focus 
        * :checked 
        * 媒体查询触发 

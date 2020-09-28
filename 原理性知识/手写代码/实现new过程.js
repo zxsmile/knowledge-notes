@@ -1,6 +1,6 @@
 function newOperator(ctor){
  
-    if(! ctor instanceof Function){
+    if(! (ctor instanceof Function)){
         throw 'newOperator function the first param must be a function'
     }
 
@@ -15,6 +15,7 @@ function newOperator(ctor){
     // ES5 arguments转成数组 当然也可以用ES6 [...arguments], Aarry.from(arguments);
     // 除去ctor构造函数的其余参数
     var argsArr = Array.prototype.slice.call(arguments, 1);
+    //var argsArr = Array.from(arguments).slice(1)
 
     // 3.生成的新对象会绑定到函数调用的`this`。
     // 获取到ctor函数返回结果
@@ -34,11 +35,8 @@ function newOperator(ctor){
 function Student(name){
     console.log(newOperator.target)
     this.name = name;
- 
-     return null
 }
 
 
 var student=newOperator(Student,'milk')
-
 console.log(student.name)
