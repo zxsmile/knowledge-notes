@@ -15,7 +15,6 @@ var spiralOrder = function(matrix) {
   
       //从上往下遍历
       if(start<endY){
-          console.log()
            for(var i=start+1;i<=endY;i++){
             res.push(matrix[i][endX])
           }

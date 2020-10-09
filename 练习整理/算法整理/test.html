@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <a href='#/'>green</a>
+        <a href='#/blue'>blue</a>
+        <a href='#/red'>red</a>
+    </div>
+    <button onclick = 'router.backOff()'>back</button>
+    <script>
+        class Routers {
+            constructor() {
+                this.routes = {};
+                this.currentUrl = '';
+                this.refresh = this.refresh.bind(this);
+                this.history = [];
+                // 作为指针,默认指向this.history的末尾,根据后退前进指向history中不同的hash
+                this.currentIndex = this.history.length - 1;
+                this.isBack = false
+                this.backOff = this.backOff.bind(this);
+                window.addEventListener('load', this.refresh, false);
+                window.addEventListener('hashchange', this.refresh, false);
+            }
+
+            route(path, callback) {
+                this.routes[path] = callback || function() {};
+            }
+
+            refresh() {
+                this.currentUrl = location.hash.slice(1) || '/';
+                if(!this.isBack){
+                this.routes[this.currentUrl]();
+                }
+                this.history.push(this.currentUrl)
+                this.currentIndex++
+                console.log(this.history)
+            }
+            backOff() {
+                this.currentIndex = this.currentIndex<=0 ? 0:this.currentIndex-1
+                location.hash = `#${this.history[this.currentIndex]}`
+                this.refresh()
+                
+            }
+        }
+
+        let router = new Routers()
+        router.route('/',function(){
+             document.getElementsByTagName('div')[0].style.backgroundColor='green'
+        })
+        
+        router.route('/blue',function(){
+             document.getElementsByTagName('div')[0].style.backgroundColor='blue'
+        })
+        
+        router.route('/red',function(){
+             document.getElementsByTagName('div')[0].style.backgroundColor='red'
+        })
+        //window.addEventListener('click',router.backOff,false)
+        console.log(location.hash)
+    </script>
+</body>
+</html>

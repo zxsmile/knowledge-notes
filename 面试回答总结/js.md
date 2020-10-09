@@ -110,6 +110,15 @@ return Math.abs(a-b)<Number.EPSILON;
 
   - 浏览器请求服务器的时候，服务器将浏览器的信息和一个只有服务器知道的密钥一起使用算法生成一个签名，然后将这个签名和浏览器的信息一起作为一个token给浏览器，浏览器将它存储（cookie或者localstroage）起来，以后每次请求服务器都要带着这个token，然后服务器会验证这个token是否正确来决定是否要可以访问
 
+四、直接使用字面量的方法定义一个对象即就是let obj = {}和使用Object.create(null)定义一个对象有什莫区别？
+
+  - 先了解一下Object.create(proto,propertiesObject)这个方法
+
+      - Object.create(proto,propertiesObject)是指使用指定的原型对象proto和属性propertiesObject去创建一个新的对象，创建出来的对象的__proto__属性指向proto
+      
+  - Object.create(null)就是指创建的对象完全是一个空对象，没有原型对象，也没有继承Object.prototype上的方法（如hasOwnProperty(),toString()）
+  - 而我们使用字面量或者new Object()来生成一个对象的时候，默认它的原型对象就是Object.prototype了，所以他会继承Object.prototype上的属性和方法
+
 
 
 

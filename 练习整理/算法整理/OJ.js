@@ -44,26 +44,14 @@
 // console.log(c[n][p]) 
 
 
-
-
-function myCreate(proto,properties={}){
-    if(typeof proto !=='object' && typeof proto !=='function'){
-        throw 'proto must be an object or null'
+let obarr = []
+const arrayProto = Array.prototype
+const arrayMethods = Object.create(arrayProto)	
+Object.defineProperty(arrayMethods,'push',{
+    value:function mutator(){
+    	console.log('obarr.push会走这里')
     }
+})
+obarr.__proto__ = arrayMethods
 
-    let fn = function(){}
-    fn.prototype = proto
-    let res = new fn()
-    Object.defineProperties(res,properties)
-    return res
-}
-
-let s = function(){
-    console.log('333')
-}
-
-let a = {}
-let res = myCreate(null)
-console.log(res.__proto__)
-
-
+obarr.push(1)

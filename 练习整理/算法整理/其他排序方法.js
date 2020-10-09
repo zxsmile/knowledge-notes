@@ -58,8 +58,11 @@ var arr = [1,6,5,8,2,3,8,9,12]
         while(j>=0&&key<arr[j]){
             arr[j+1] = arr[j]
         }
-
-        arr[j+1] = key
+        
+        for(var j=i;j>k+1;j--){
+            arr[j] = arr[j-1]
+        }
+        arr[k+1] = key
     }
 
     return arr

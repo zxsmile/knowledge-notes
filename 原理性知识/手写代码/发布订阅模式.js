@@ -1,6 +1,6 @@
 class event {
     constructor() {
-        this.subs = []
+        this.subs = {}
     }
 
     on(key,fn) {
