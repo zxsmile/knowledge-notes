@@ -1,20 +1,54 @@
-function fn(arr,target){
-    if(arr.length===0){
-        return -1
+function fn(strs,str){
+    if (str === null || strs.length===0) {
+        return -1;
     }
-    let left = 0
-    let right = arr.length-1
-    while(left<=right){
-        let mid = Math.floor((left+right)/2)
-        if(arr[mid]===target){
-            return mid
+    let start = 0;
+    let end = strs.length - 1;
+    while (start <= end) {
+        let mid = Math.floor((start + end) / 2);
+        let m = mid;
+        let res = -1;
+        while (m >= start) {
+            if (strs[m] !== null) {
+                if (strs[m] === str) {
+                    res = m;
+                    m--;
+                } else if (strs[m] > str) {
+                    end = m - 1;
+                    break;
+                } else {
+                    if (res !== -1) {
+                    return res;
+                   }
+                    start = mid + 1;
+                    break;
+                }
+            } else {
+               m--;
+            }
         }
-        if(arr[mid]<target){
-            left = mid+1
-        }else if(arr[mid]>target){
-            right = mid-1
+        if (m === start-1) {
+            if (res !== -1) {
+               return res;
+            }else{
+                start = mid+1
+            }
         }
     }
-
-    return -1
+        // if (strs[start] === null) {
+        //     return -1;
+        // } else {
+        //     if (str === strs[start]) {
+        //        return start;
+        //     } else {
+        //        return -1;
+        //     }
+        // }
+       return -1 
 }
+
+let arr =[null,null,'a','b',"a","a",null,"ac"]
+let str = "a"
+
+console.log(fn(arr,str))
+

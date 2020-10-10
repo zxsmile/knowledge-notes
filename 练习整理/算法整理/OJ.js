@@ -44,14 +44,29 @@
 // console.log(c[n][p]) 
 
 
-let obarr = []
 const arrayProto = Array.prototype
-const arrayMethods = Object.create(arrayProto)	
-Object.defineProperty(arrayMethods,'push',{
-    value:function mutator(){
-    	console.log('obarr.push会走这里')
-    }
-})
-obarr.__proto__ = arrayMethods
-
-obarr.push(1)
+	const arrayMethods = Object.create(arrayProto)
+	;[
+	  'push',
+	  'pop',
+	  'shift',
+	  'unshift',
+	  'splice',
+	  'sort',
+	  'reverse'
+	].forEach(item=>{
+		Object.defineProperty(arrayMethods,item,{
+		    value:function mutator(){
+		    	//缓存原生方法，之后调用
+		    	const original = arrayProto[item]	
+		    	let args = Array.from(arguments)
+			    original.apply(this,args)
+		    },
+		})
+	})
+	function protoAugment (target,src) {
+	  target.__proto__ = src
+	}
+	// 调用
+	let obarr = []
+	protoAugment(obarr, arrayMethods)
