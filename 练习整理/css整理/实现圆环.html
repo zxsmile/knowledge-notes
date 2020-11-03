@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box{
+            width:100px;
+            height:100px;
+            background-color: red;
+            border-radius: 50%;
+            border:25px solid salmon;
+            box-shadow: 0 0 0 25px seagreen;  /*X-offset:是指阴影水平偏移量，正值表示阴影在对象的右边，负值表示阴影在对象的左边
+                                                  Y-offset:是指阴影垂直偏移量，正值表示阴影在对象的底部，负值表示阴影在对象的顶部
+                                                  阴影模糊半径：只能为正值，值为零表示阴影不具有模糊效果，值越大阴影的边缘越模糊
+                                                  阴影扩展半径：正值表示整个阴影都扩大，反之则缩小
+                                                  阴影颜色：不设定任何颜色时，浏览器会取默认色，但各浏览器默认色不一样，
+                                                  特别是在webkit内核下的safari和chrome浏览器将无色，也就是透明，建议不要省略此参数。
+                                                  insert：可选值，不设置为外投影，设置为内投影
+                                               */
+            position: relative;
+            top: 300px;
+            left: 500px;
+        }
+        .box:after{
+            content: "";
+            display: block;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background-color:steelblue;
+            position: relative;
+            top: -10px;
+            left: 37.5px;
+        }
+        .box:before{
+            content: "";
+            display: block;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color:thistle;
+            position: relative;
+            top: 25px;
+            left: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class = 'box'></div>
+</body>
+</html>

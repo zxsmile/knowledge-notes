@@ -35,15 +35,6 @@ function fn(strs,str){
             }
         }
     }
-        // if (strs[start] === null) {
-        //     return -1;
-        // } else {
-        //     if (str === strs[start]) {
-        //        return start;
-        //     } else {
-        //        return -1;
-        //     }
-        // }
        return -1 
 }
 

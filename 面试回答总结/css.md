@@ -159,7 +159,23 @@
 
 五、css3动画
 
-  - css动画主要有transform，translation，animation，transform可以理解为元素的几何变形，它不会产生动画效果。translation和animation都可以实现过渡动画，不同的是translation只能定义开始状态和结束状态，不能定义中间状态，并且translation动画是需要事件触发的（：hover,:focus,js触发），不能在网页加载时自动执行，并且动画是不能循环的。
+  - css动画主要有transform，translation，animation。transform可以理解为元素的几何变形，它不会产生动画效果。translation和animation都可以实现过渡动画，不同的是translation只能定义开始状态和结束状态，不能定义中间状态，并且translation动画是需要事件触发的（：hover,:focus,js触发），不能在网页加载时自动执行，并且动画是不能循环的。
+
+六、box-sizing
+
+  - box-sizing 是用于告诉浏览器如何计算一个元素是总宽度和总高度
+  - 标准盒模型 box-sizing: content-box
+
+       - width = content width
+       - height = content height
+
+  - IE盒模型 box-sizing: border-box
+
+       - width = border + padding + content width
+       - heigth = border + padding + content heigth
+
+
+
 
 
        

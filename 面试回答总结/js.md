@@ -119,6 +119,18 @@ return Math.abs(a-b)<Number.EPSILON;
   - Object.create(null)就是指创建的对象完全是一个空对象，没有原型对象，也没有继承Object.prototype上的方法（如hasOwnProperty(),toString()）
   - 而我们使用字面量或者new Object()来生成一个对象的时候，默认它的原型对象就是Object.prototype了，所以他会继承Object.prototype上的属性和方法
 
+五、js异步编程方案
+
+  1.回调函数
+
+      - 回调函数嵌套层级太高，可读性和可维护性都比较差，还有一个很严重的错误就是，因为每次任务都可能失败，需要在回调函数里对每个任务的失败情况进行处理，增加了代码的混乱程度
+
+  2.promise
+
+      - promise很好的解决了回调地狱的问题，并且合并了错误处理，大大方便了异步编程
+
+
+
 
 
 
