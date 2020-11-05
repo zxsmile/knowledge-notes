@@ -17,44 +17,27 @@
             console.log('666')
         }
 
-        function debounce(func,delay,immediate){
-    let timeout
-    let debounced = function(){
+    let throttle =function(func,delay){
+    let preTime = +new Date()
+    console.log(preTime)
+    return function(){
         let context = this
         let args = arguments
-        if(timeout){
-            clearTimeout(timeout)
-        }
-        if(immediate){
-            //用callNow变量来判断要在immediate为true并且离上一次执行之后已经超过了delay时间才会立即执行func
-            let callNow = !timeout
-            timeout = setTimeout(function(){
-                timeout = null
-            },delay)
-            if(callNow){
-                func.apply(context,args)
-            }
-        }else{
-            timeout = setTimeout(function(){
-                func.apply(context,args)
-            },delay)
+        let nowTime = +new Date() 
+        console.log(nowTime - preTime)     
+        if(nowTime - preTime>delay){
+           func.apply(context,args)
+           preTime = nowTime
         }
     }
-
-    debounced.concel=function(){
-        clearTimeout(timeout);
-        timeout = null;
-    }
-    
-    return debounced
 }
 
         let btn = document.getElementsByTagName('button')[0]
-        var setUseAction = debounce(btnClick,5000,true)
+        var setUseAction = throttle(btnClick,5000)
         btn.onclick=setUseAction
-        let btn1 = document.getElementsByTagName('button')[1]
-        console.log(setUseAction.concel)
-        btn1.onclick=setUseAction.concel
+        // let btn1 = document.getElementsByTagName('button')[1]
+        // console.log(setUseAction.concel)
+        // btn1.onclick=setUseAction.concel
     </script>
 </body>
 </html>
