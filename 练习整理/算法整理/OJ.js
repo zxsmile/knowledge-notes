@@ -116,8 +116,30 @@
 
 // console.log(merge(obj))
 
-function fn(...arg){
-	console.log(arg)
+Function.prototype.myCall = function(newThis){
+    newThis = newThis?Object(newThis):window
+    newThis.fn = this
+    let result
+    let args = [...arguments].slice(1)
+    result = newThis.fn(...args)
+    delete newThis.fn
+    return result
+}
+function fn(name,age){
+	this.name = name
+	this.age = age
+	console.log(this.name)
+	//console.log(this.age)
+	return this.name
+}
+var obj ={
+	name:'milk'
 }
 
-fn(1,2,3)
+function l(){
+	let res = fn.myCall(obj)
+	console.log(typeof res)
+}
+
+l(6,2,3)
+
