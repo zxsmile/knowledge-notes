@@ -5,39 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
+        .img{
+            height: 300px;
+            width:300px;
+        }
+        .box{
+            background-color: cadetblue;
+            width: 200px;
+            height: 200px;
+            padding:10px;
+        }
+        .inner{
+            background-color: cornsilk;
+            width: 200px;
+            height: 300px;
+        }
     </style>
 </head>
 <body>
+    <!-- <div class='box'>
+        <div class='inner'></div>
+    </div> -->
 
-    <button>点击</button>
-    <button>取消</button>
+    <div>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
+    <div>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
+    <div>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
+    <div>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
+    <div id='box'>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
+    <div>
+        <img src='./psb1.jpg' class='img'></img>
+    </div>
     <script>
-        let btnClick=function(){
-            console.log('666')
-        }
-
-    let throttle =function(func,delay){
-    let preTime = +new Date()
-    console.log(preTime)
-    return function(){
-        let context = this
-        let args = arguments
-        let nowTime = +new Date() 
-        console.log(nowTime - preTime)     
-        if(nowTime - preTime>delay){
-           func.apply(context,args)
-           preTime = nowTime
-        }
-    }
-}
-
-        let btn = document.getElementsByTagName('button')[0]
-        var setUseAction = throttle(btnClick,5000)
-        btn.onclick=setUseAction
-        // let btn1 = document.getElementsByTagName('button')[1]
-        // console.log(setUseAction.concel)
-        // btn1.onclick=setUseAction.concel
+        let imgs = document.getElementsByTagName('img')
+        let div = document.getElementById('box')
+        let scroll = document.documentElement.offsetHeight
+        let client = document.documentElement.clientHeight
+        console.log(scroll)
+        console.log(client)
+        console.log(document.documentElement.scrollHeight)
+        // let div1 = document.querySelector('.box')
+        // let inner = document.querySelector('.inner')
+        // console.log(div1.offsetHeight)
     </script>
 </body>
 </html>

@@ -72,8 +72,52 @@
 // 	protoAugment(obarr, arrayMethods)
 
 
-obj={
-	name:'milk'
+// let obj = {
+// 	name:'milk',
+// 	age:'18',
+// 	child:[
+// 		{
+// 			name:"jone",
+// 			age:'22'   
+// 		},
+// 		{
+// 			name:'lalla',
+// 			age:'18',
+// 			child:[
+// 				{
+// 					name:'xiao',
+// 					age:'12'
+// 				}
+// 			]
+// 		}
+// 	]
+// }
+
+// function merge(obj){
+// 	let res = []
+// 	function fn(obj){
+// 		if(obj){
+// 			res.push({})
+// 		}
+// 		for(var key in obj){
+// 			if(key !== 'child'){
+// 				res[res.length-1][key]=obj[key]
+// 			}else{
+// 				for(var i=0;i<obj[key].length;i++){
+// 					fn(obj[key][i])
+// 				}
+// 			}
+// 		}
+		
+// 	}
+// 	fn(obj)
+// 	return res
+// }
+
+// console.log(merge(obj))
+
+function fn(...arg){
+	console.log(arg)
 }
 
-console.log(obj.age) 
+fn(1,2,3)
