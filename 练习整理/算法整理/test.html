@@ -9,53 +9,71 @@
             height: 300px;
             width:300px;
         }
-        .box{
-            background-color: cadetblue;
-            width: 200px;
-            height: 200px;
-            padding:10px;
-        }
-        .inner{
-            background-color: cornsilk;
-            width: 200px;
-            height: 300px;
-        }
     </style>
 </head>
 <body>
-    <!-- <div class='box'>
-        <div class='inner'></div>
-    </div> -->
-
     <div>
-        <img src='./psb1.jpg' class='img'></img>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
     </div>
     <div>
-        <img src='./psb1.jpg' class='img'></img>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
     </div>
     <div>
-        <img src='./psb1.jpg' class='img'></img>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
     </div>
     <div>
-        <img src='./psb1.jpg' class='img'></img>
-    </div>
-    <div id='box'>
-        <img src='./psb1.jpg' class='img'></img>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
     </div>
     <div>
-        <img src='./psb1.jpg' class='img'></img>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
+    </div>
+    <div>
+        <img src='##' class='img' data-src="./psb1.jpg"></img>
     </div>
     <script>
-        let imgs = document.getElementsByTagName('img')
-        let div = document.getElementById('box')
-        let scroll = document.documentElement.offsetHeight
-        let client = document.documentElement.clientHeight
-        console.log(scroll)
-        console.log(client)
-        console.log(document.documentElement.scrollHeight)
-        // let div1 = document.querySelector('.box')
-        // let inner = document.querySelector('.inner')
-        // console.log(div1.offsetHeight)
+       (function(){
+            var len = 0
+            loadImg()
+            function loadImg(){
+                    var imgs = document.getElementsByTagName('img')
+                            
+                            //top=滚动条滚动的高度+可视区域的高度
+
+                        var top = document.documentElement.scrollTop +document.documentElement.clientHeight
+                        
+                        for(var i=len;i<imgs.length;i++){
+                            if(imgs[i].offsetTop <= top){
+                                imgs[i].src =imgs[i].getAttribute('data-src')
+
+                                //记录加载到图片的位置
+                                len = i+1      
+                            }
+                        }
+                    }
+                    
+                    let throttle = function(func,delay){
+                        let timeout
+                        let startTime = +new Date()
+                        return function(){
+                            let nowTime = +new Date()
+                            let timing = delay-(nowTime-startTime)
+                            let context = this
+                            let args = arguments
+                            clearTimeout(timeout)
+                            if(timing<=0){
+                                func.apply(context,args)
+                                startTime = nowTime 
+                            }else{
+                                timeout = setTimeout(function(){
+                                    func.apply(context,args)
+                                },timing)
+                            }
+                        }
+                    }
+                    
+                    window.onscroll =  throttle(loadImg,1000)
+        })()
+        
     </script>
 </body>
 </html>

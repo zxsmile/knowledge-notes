@@ -125,6 +125,8 @@
 三、vue数组的双向绑定原理
 
     - 我们所知道的利用Object.defineProperty方法可以将对象的属性改为getter/setter,但对于数组就无能为力了，所以对于数组，vue内部利用数组的属性实现了一组观察数组的变异的方法，例如：push,pop,shift
+
+    - 数组其实还是利用了object
     
     - 下面先看push的实现
  

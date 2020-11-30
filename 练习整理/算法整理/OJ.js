@@ -116,30 +116,72 @@
 
 // console.log(merge(obj))
 
-Function.prototype.myCall = function(newThis){
-    newThis = newThis?Object(newThis):window
-    newThis.fn = this
-    let result
-    let args = [...arguments].slice(1)
-    result = newThis.fn(...args)
-    delete newThis.fn
-    return result
-}
-function fn(name,age){
-	this.name = name
-	this.age = age
-	console.log(this.name)
-	//console.log(this.age)
-	return this.name
-}
-var obj ={
-	name:'milk'
-}
+// Function.prototype.myCall = function(newThis){
+//     newThis = newThis?Object(newThis):window
+//     newThis.fn = this
+//     let result
+//     let args = [...arguments].slice(1)
+//     result = newThis.fn(...args)
+//     delete newThis.fn
+//     return result
+// }
+// function fn(name,age){
+// 	this.name = name
+// 	this.age = age
+// 	console.log(this.name)
+// 	//console.log(this.age)
+// 	return this.name
+// }
+// var obj ={
+// 	name:'milk'
+// }
 
-function l(){
-	let res = fn.myCall(obj)
-	console.log(typeof res)
-}
+// function l(){
+// 	let res = fn.myCall(obj)
+// 	console.log(typeof res)
+// }
 
-l(6,2,3)
+// l(6,2,3)
+var MAP =  {
 
+	onclick: function () {
+  
+  
+	},
+  
+	onmouseover: function (val) {
+  
+	  return function (z) {
+  
+		  return val++ + z
+  
+	  }
+  
+	}
+  
+  }
+  
+  
+  var getInfo = function (val) {
+  
+	  return MAP[val]
+  
+  }
+  
+  var fn = getInfo('onmouseover')
+  
+  
+  var a = fn(100)
+  
+  
+  console.log(a(200))
+  
+  
+  console.log(a(300))
+  
+  
+  console.log(fn(100)(200))
+  
+  
+  console.log(getInfo('onmouseover')(100)(300))
+  
