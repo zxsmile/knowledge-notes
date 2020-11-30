@@ -22,4 +22,5 @@
 
  3.scrollWidth = 元素内容的总宽度
    scrollHeight = 元素内容的总高度
-   scrollTop = 
+   scrollLeft = 水平滚动条滚动的距离
+   scrollTop = 垂直滚动条滚动的距离
