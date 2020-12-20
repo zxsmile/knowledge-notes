@@ -126,7 +126,7 @@
 
     - 我们所知道的利用Object.defineProperty方法可以将对象的属性改为getter/setter,但对于数组就无能为力了，所以对于数组，vue内部利用数组的属性实现了一组观察数组的变异的方法，例如：push,pop,shift
 
-    - 数组其实还是利用了object
+    - 数组其实还是利用了object.defineProperty属性
     
     - 下面先看push的实现
  
@@ -176,7 +176,7 @@
         Object.defineProperty(arrayMethods,'push',{
             value:function mutator(){
                   //缓存原生方法，之后调用
-                 let original = Array,prototype.push
+                 let original = Array.prototype.push
                  let args = Array.from(arguments)
                  original.apply(this,args)
             }

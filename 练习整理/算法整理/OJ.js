@@ -142,46 +142,29 @@
 // }
 
 // l(6,2,3)
-var MAP =  {
 
-	onclick: function () {
-  
-  
-	},
-  
-	onmouseover: function (val) {
-  
-	  return function (z) {
-  
-		  return val++ + z
-  
-	  }
-  
-	}
-  
+function solve( nums ) {
+  if(nums.length===0|| nums[0]==='0'){
+      return 0
   }
-  
-  
-  var getInfo = function (val) {
-  
-	  return MAP[val]
-  
+  let dp = []
+  dp[0]=1
+  for(var i=1;i<nums.length;i++){
+      let pre = nums[i-1]
+      let cur = nums[i]
+      if(cur ==='0' && pre !=='1' && pre !=='2'){
+          return 0
+      }
+      if(cur==='0'){
+          dp[i]=i>1?dp[i-2]:1
+      }else if(pre ==='1' || pre ==='2' && parseInt(cur)<=6){
+          dp[i]=i>1?dp[i-2]+dp[i-1]:2
+      }else{
+          dp[i]=dp[i-1]
+      }
   }
-  
-  var fn = getInfo('onmouseover')
-  
-  
-  var a = fn(100)
-  
-  
-  console.log(a(200))
-  
-  
-  console.log(a(300))
-  
-  
-  console.log(fn(100)(200))
-  
-  
-  console.log(getInfo('onmouseover')(100)(300))
+  return dp[nums.length-1]
+}
+
+solve()
   

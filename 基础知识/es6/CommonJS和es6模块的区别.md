@@ -1,3 +1,4 @@
+https://www.cnblogs.com/unclekeith/p/7679503.html
 一、CommonJS
 
   - 对于基本数据类型，属于复制。即会被模块缓存。同时，在另一个模块可以对该模块输出的变量重新赋值。
