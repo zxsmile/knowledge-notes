@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .fatherBox{
+            /* border:1px solid black; */
+            /* overflow: hidden; */
+            position: relative;
+        }
+        .left{
+            width:100px;
+            height: 100px;
+            background-color:cornflowerblue;
+           float: left;
+            left: 0;
+        }
+        .mid{
+            height: 100px;
+            background-color: red;
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        .right{
+            width:100px;
+            height: 100px;
+            background-color:chartreuse;
+            float:right;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class='fatherBox'>
+        <div class='left'></div>
+        <div class='right'></div>
+        <div class='mid'></div>
+    </div>
+</body>
+</html>

@@ -169,3 +169,4 @@
 // solve()
   
 
+console.log(typeof(typeof null))

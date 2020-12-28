@@ -96,7 +96,7 @@
 
 (3)所以本质上就是进程和线程的区别，SharedWorker由独立的进程管理，WebWorker只是属于render进程下的一个线程
 
-# 三、JavaScript时间循环机制
+# 三、JavaScript事件循环机制
 
 1.js分为同步任务和异步任务
 
