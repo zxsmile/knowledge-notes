@@ -37,7 +37,8 @@
         - (2)导入css样式表文件
 
               <style type="text/css">
-					@import url('index.css') //css样式表的路径
+					法一：@import url(index.css) //css样式表的路径
+                    法二：@import "index.css" //css样式表的路径
 			  </style>
 
         - 两种引入css样式表的区别：
@@ -45,7 +46,54 @@
              - 链接引入属于html的标签语法，在加载页面时，就会同时加载css样式表
              - 导入css样式表，属于css中的语法，在加载页面时，加载页面完成之后才会加载css样式表
 
-二、css样式引入的优先级
+
+二、引入样式方式比较
+
+   类别                    引入方法                      位置                               加载
+
+ 行内样式                开始标签内style               html文件内                            同时
+
+ 内部样式              <head>中的<style>内            html文件内                             同时
+
+ 链入外部样式          <head>中的<link>引用       css样式文件与html文件分离           页面加载时，同时加载css样式
+
+ 导入式@import           样式代码最开始处         css样式文件与html文件分离             在读取完html文件之后加载
+
+
+
+三、css样式引入的优先级
+
+  行内样式 > 内部样式 > 外部样式
+
+说明：- 链入外部样式表与内部样式表之间的优先级取决于所处位置的先后
+
+          <link></link>           <style></style>
+          <style></style>         <link></link>
+ 
+     - 最后定义的优先级最高（就近原则）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    - 
             
