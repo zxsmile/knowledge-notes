@@ -5,38 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .fatherBox{
-            /* border:1px solid black; */
-            /* overflow: hidden; */
-            position: relative;
+        .box1 .box2 .box3 .box4 .box5 .box6 .box7 .box8 .box9 .box0 .fatherBox{
+           width: 100px;
+           height: 100px;
+           background-color: chocolate;
         }
-        .left{
-            width:100px;
-            height: 100px;
-            background-color:cornflowerblue;
-           float: left;
-            left: 0;
+        
+        #box{
+            background-color: crimson;
         }
-        .mid{
-            height: 100px;
-            background-color: red;
-            margin-left: 100px;
-            margin-right: 100px;
-        }
-        .right{
-            width:100px;
-            height: 100px;
-            background-color:chartreuse;
-            float:right;
-            right: 0;
-        }
+       
     </style>
 </head>
 <body>
-    <div class='fatherBox'>
-        <div class='left'></div>
-        <div class='right'></div>
-        <div class='mid'></div>
+    <div class = 'box1'>
+        <div class = 'box2'>
+           <div class = 'box3'>  
+               <div class = 'box4'>
+                   <div class = 'box5'>
+                       <div class = 'box6'>
+                           <div class = 'box7'>
+                               <div class = 'box8'>
+                                   <div class = 'box9'>
+                                       <div class = 'box0'>
+                                        <div id='box' class='fatherBox'>
+                                        </div> 
+                                       </div>
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+        </div>
     </div>
 </body>
 </html>

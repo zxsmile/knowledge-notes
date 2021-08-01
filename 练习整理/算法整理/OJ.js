@@ -169,4 +169,32 @@
 // solve()
   
 
-console.log(typeof(typeof null))
+
+
+
+//实现一个算法，判断： 111111、121212、123123 、321321、这种类型的弱密码
+
+function check(string){
+
+    for(var i=0;i<string.length;i++){
+        let s = string.slice(0,i+1)
+        let res = string.slice(i+1)
+        let len = s.length
+         if(res.indexOf(s)===-1){
+             return false
+         }
+
+         if(res%len!==0){
+             continue;
+         }
+         let reg = new RegExp(s,"g")
+         let arr = res.match(reg)
+         if(arr.length===(res.length/len)){
+              break;
+         }
+    }
+
+    return true
+}
+
+console.log(check('112311'))
