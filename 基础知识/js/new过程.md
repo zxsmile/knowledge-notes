@@ -61,7 +61,7 @@
         var newObj = Object.create(ctor.prototype)
 	      
 	    // ES5 arguments转成数组 当然也可以用ES6 [...arguments], Aarry.from(arguments);
-	    // 除去ctor构造函数的其余参数
+	    // 除去ctor构造函数，获取传入的其他参数
 
 	    var argsArr = Array.prototype.slice.call(arguments, 1);
 	
