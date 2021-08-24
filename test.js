@@ -1,51 +1,6 @@
-/**
- * @param {number[]} nums
- * @return {number[][]}
- */
-var threeSum = function(nums) {
-  let res = []
-  if(nums.length<3){
-      return []
-  }
-  let newNums = nums.sort((a,b)=>{
-      return a-b
-  })
-
-  for(var i=0;i<newNums.length-2;i++){
-      console.log(i)
-      if(newNums[i]>0){
-          return res
-      }
-      if(i>0&&newNums[i]===newNums[i-1]){
-          continue;
-      }
-      let L = i+1
-      let R = nums.length-1
-       while(L<R){
-          let sum = newNums[i]+newNums[L]+newNums[R]
-          if(sum===0){
-            console.log(L,R,newNums[i],newNums[L],newNums[R],sum,L<R)
-               res.push([newNums[i],newNums[L],newNums[R]])
-               console.log(res)
-               while(L<R&&newNums[L]==newNums[L+1]){
-                   L=L+1
-               }
-               while(L<R&&newNums[R]==newNums[R-1]){
-                   R=R-1
-               }
-               L=L+1
-               R=R-1
-          }else if(sum<0){
-              console.log(L,R,newNums[i],newNums[L],newNums[R],sum,L<R)
-               L=L+1
-          }else{
-              R=R-1
-          }
-       }
-
-  }
-  return res
-};
-
-
-console.log(threeSum([-4,-2,1,-5,-4,-4,4,-2,0,4,0,-2,3,1,-5,0]))
+let map = new Map()
+map.set('123',true)
+if(!map.get('123')){
+    map.set('123',6)
+}
+console.log([...map.keys()])
