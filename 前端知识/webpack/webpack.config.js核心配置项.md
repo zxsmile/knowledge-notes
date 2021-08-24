@@ -136,14 +136,14 @@
                     //单个loader写法
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        loader：'css-loader'
                      }
 
                     //多个loader写法
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        use:['style-loader','css-loader'] //从右到左匹配
                      }
                  ]
@@ -160,7 +160,7 @@
       
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        use:['style-loader','css-loader'，'less-loader'] //从右到左匹配
                      }
                  ]
@@ -193,7 +193,7 @@
                  rules:[
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        use:[MiriCssExtractPlugin.loader,'css-loader'] //从右到左匹配
                      }
                  ]
@@ -205,7 +205,7 @@
                  rules:[
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        use:[MiriCssExtractPlugin.loader,'css-loader'，'less-loader'] //从右到左匹配
                      }
                  ]
@@ -224,7 +224,7 @@
                  rules:[
 
                      {
-                       text:/\.css$/，
+                       test:/\.css$/，
                        use:[MiriCssExtractPlugin.loader,'css-loader'，'postcss-loader'] //从右到左匹配
                      }
                   ]
@@ -264,3 +264,24 @@
                    ]
 
                5. less和sass兼容同理
+
+# 八、压缩css #
+
+     - 使用插件optimize-css-asssts-webpack-plugin插件压缩css内容
+
+          1. 下载并引入optimize-css-asssts-webpack-plugin插件
+
+              const OptimizeCssAssstsWebpackPlugin = require('optimize-css-asssts-webpack-plugin')
+
+           2. 使用插件
+
+              plugins:[
+ 
+                  new OptimizeCssAssstsWebpackPlugin()
+              ]
+
+# 九、webpack打包图片资源 #
+
+     ## 1.图片在css中使用 ##
+
+          

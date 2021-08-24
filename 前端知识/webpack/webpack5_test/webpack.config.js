@@ -1,5 +1,5 @@
 let {resolve} = require('path')
-
+let HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports={
     /* 1.entry：入口（entry）指示webpack以哪个文件作为入口起点开始打包，分析构建内部依赖图*/
@@ -42,12 +42,19 @@ module.exports={
     /* 3.loader：oader让webpack能够去处理那些非JavaScript资源如css、img等，将他们处理成webpack能够识别的资源，可以理解成一个
     翻译的过程，webpack自身只能理解js和json */
     module:{
-        rules:[]
+        rules:[
+            {test:/\.css$/,use:['style-loader','css-loader']},
+            {test:/\.(jpg|png|gif|jpeg)$/,loader:'url-loader'}
+        ]
     },
 
     /* 4.plugins：插件（plugins）可用于执行范围更广的任务，插件的范围包括，从打包优化和压缩，一直到重新定义范围中的变量等*/
-    plugins:[],
+    plugins:[
+        new HtmlWebpackPlugin({
+            template:'./src/index.html'
+        })
+    ],
 
     /* 5.mode：模式（mode）指示webpack使用相应模式的配置*/
-    mode:'development'
+    mode:'production'
 }
