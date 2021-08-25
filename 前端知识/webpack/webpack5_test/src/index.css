@@ -1,7 +1,10 @@
 #box{
     color:red
 }
-#box1{
-    background-image: url(./test.jpg);
+/* #box1{
+    background-image: url(/test.jpg);
     background-repeat: no-repeat;
-}
+    width:100px;
+    height:200px;
+    background-size: 100% 100%;
+} */

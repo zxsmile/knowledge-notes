@@ -284,4 +284,77 @@
 
      ## 1.图片在css中使用 ##
 
-          
+          #box1{
+		    background-image: url(/test.jpg);
+		    background-repeat: no-repeat;
+		    width:100px;
+		    height:200px;
+		    background-size: 100% 100%;
+		   }
+
+            - 这种使用方式，file-loader和url-loader都可以打包
+
+                 - file-loader
+
+                       - 如果我们希望在页面引入图片（包括img的src和background的url）。当我们基于webpack进行开发时，引入图片会遇到一些问题。其中一个就是引用路径的问题。拿background样式用url引入背景图来说，我们都知道，webpack最终会将各个模块打包成一个文件，因此我们样式中的url路径是相对入口html页面的，而不是相对于原始css文件所在的路径的。这就会导致图片引入失败。这个问题是用file-loader解决的，file-loader可以解析项目中的url引入（不仅限于css），根据我们的配置，将图片拷贝到相应的路径，再根据我们的配置，修改打包后文件引用路径，使之指向正确的文件
+                       module:{
+				        rules:[
+				            {test:/\.css$/,use:['style-loader','css-loader']},
+				            {
+                             test:/\.(jpg|png|gif|jpeg)$/,
+                             loader:'file-loader',
+				        ]
+				    },
+
+                 - url-loader
+
+                      - 如果图片较多，会发很多http请求，会降低页面性能。url-loader把图片编码成base64格式写进页面，从而减少服务器请求。相当于把图片数据翻译成一串字符。再把这串字符打包到文件中，最终只需要引入这个文件就能访问图片了。当然，如果图片较大，编码会消耗性能。因此url-loader提供了一个limit参数，小于limit字节的文件会被转为DataURl，大于limit的还会使用file-loader进行copy。
+
+                      module:{
+				        rules:[
+				            {test:/\.css$/,use:['style-loader','css-loader']},
+				            {
+                             test:/\.(jpg|png|gif|jpeg)$/,
+                             loader:'url-loader',
+                             options:{
+                                      //图片大小小于8kb，就会被base64处理
+                                      //优点：减少服务器请求数量（减轻服务器压力）
+                                      //缺点：图片体积会更大
+
+                                      limit:8*1024，
+                                      
+                                      //给图片进行重命名
+                                      //[hash:10]:取图片的hash的前十位
+                                      //[ext]:取文件原来扩展名
+                                      name:'[hash:10].[ext]'
+                                     }
+				        ]
+				    },
+
+                 -  url-loader和file-loader是什么关系呢？
+
+                      - 简答地说，url-loader封装了file-loader。url-loader不依赖于file-loader，即使用url-loader时，只需要安装url-loader即可，不需要安装file-loader，因为url-loader内置了file-loader。
+
+                      - 通过上面的介绍，我们可以看到，url-loader工作分两种情况：
+
+                            - 1.文件大小小于limit参数，url-loader将会把文件转为DataURL；
+                            - 2.文件大小大于limit，url-loader会调用file-loader进行处理，参数也会直接传给file-loader。因此我们只需要安装url-loader即可。
+
+   ## 2.图片在HTML中使用 ##
+
+         <img src='./test.jpg' alt='图片' />
+
+          - 这种方式使用，html-loader进行打包
+ 
+            module:{
+				        rules:[
+				            {test:/\.css$/,use:['style-loader','css-loader']},
+				            {
+                             test:/\.html$/,
+                             //处理html文件中的img图片（负责引入img，从而能被url-loader处理）
+                             loader:'html-loader',
+				        ]
+				    },
+
+
+

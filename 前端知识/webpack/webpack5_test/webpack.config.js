@@ -44,7 +44,8 @@ module.exports={
     module:{
         rules:[
             {test:/\.css$/,use:['style-loader','css-loader']},
-            {test:/\.(jpg|png|gif|jpeg)$/,loader:'url-loader'}
+            //{test:/\.(jpg|png|gif|jpeg)$/,loader:'url-loader',options:{limit:8*1024}},
+            {test:/\.html$/,loader:'html-loader'}
         ]
     },
 
