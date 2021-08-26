@@ -151,17 +151,17 @@
 				    word-spacing: 0;
 				}
 
-四、清除浮动（https://blog.csdn.net/u012207345/article/details/78279961）
+三、清除浮动（https://blog.csdn.net/u012207345/article/details/78279961）
 
   - 清除浮动的方法主要分为两类，一类是使用clear属性，一类是使用BFC
   - clear属性只能影响使用该属性的元素本身，不能影响其他元素。clear属性规定元素盒子的边不能和浮动元素相邻，所以我们使用clear清除浮动的原理就是，在父元素的最后加一个具有clear属性的块级元素，由于该块级元素不能和浮动元素相邻，而浮动元素的位置我们已经确定了，所以为了满足该元素的需求，将该元素渲染在了浮动元素的下面，由于该元素在父元素的边界内，所以父元素必须增加高度将它包含在内，这样就达到了清除浮动的目的
   - BFC原理是由于开启了BFC的元素在计算其高度时，是要包含浮动元素的，所以给父元素开启BFC就能清除浮动
 
-五、css3动画
+四、css3动画
 
   - css动画主要有transform，translation，animation。transform可以理解为元素的几何变形，它不会产生动画效果。translation和animation都可以实现过渡动画，不同的是translation只能定义开始状态和结束状态，不能定义中间状态，并且translation动画是需要事件触发的（：hover,:focus,js触发），不能在网页加载时自动执行，并且动画是不能循环的。
 
-六、box-sizing
+五、box-sizing
 
   - box-sizing 是用于告诉浏览器如何计算一个元素是总宽度和总高度
   - 标准盒模型 box-sizing: content-box
