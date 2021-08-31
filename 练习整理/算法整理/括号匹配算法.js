@@ -12,7 +12,6 @@ function check(str){
    }
 
    
-   
    for(var i=0;i<arr.length;i++){
 
     //判断括号在aStr中的位置，如果index小于3，说明是左括号入栈
