@@ -1,1 +1,3 @@
-console.log(1%3)
+let a = 2
+let b = a
+(function(){})()
