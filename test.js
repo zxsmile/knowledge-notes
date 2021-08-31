@@ -1,19 +1,7 @@
-function Foo() {
-    this[10000] = 'test-100'
-    this[1] = 'test-1'
-    this["B"] = 'bar-B'
-    this[50] = 'test-50'
-    this[9] =  'test-9'
-    this[8] = 'test-8'
-    this[3] = 'test-3'
-    this[5] = 'test-5'
-    this["A"] = 'bar-A'
-    this["C"] = 'bar-C'
-}
+function Foo(){}
 var bar = new Foo()
 
-for(key in bar){
-    console.log(`index:${key}  value:${bar[key]}`)
+for(var i=0;i<10;i++){
+    bar[i]='bar'+bar[i]
+    console.log(bar[i])
 }
-
-console.log(bar)

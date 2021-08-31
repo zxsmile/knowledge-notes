@@ -73,25 +73,14 @@
                     
     //                 window.onscroll =  throttle(loadImg,1000)
     //     })()
-    function Foo() {
-    this[1000] = 'test-1000'
-    this[1] = 'test-1'
-    this["B"] = 'bar-B'
-    this[50] = 'test-50'
-    this[9] =  'test-9'
-    this[8] = 'test-8'
-    this[3] = 'test-3'
-    this[5] = 'test-5'
-    this["A"] = 'bar-A'
-    this["C"] = 'bar-C'
-}
+    function Foo(){}
 var bar = new Foo()
 
-for(key in bar){
-    console.log(`index:${key}  value:${bar[key]}`)
+for(var i=0;i<10;i++){
+    bar[i]='bar'+i
+    console.log(bar[i])
 }
-
-console.log(bar)   
+bar[1111] = 'bar1111'
     </script>
 </body>
 </html>
