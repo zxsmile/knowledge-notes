@@ -73,14 +73,28 @@
                     
     //                 window.onscroll =  throttle(loadImg,1000)
     //     })()
-    function Foo(){}
-var bar = new Foo()
+    async function async1(){
+    await async2()
+    console.log('async1 end')
+} 
 
-for(var i=0;i<10;i++){
-    bar[i]='bar'+i
-    console.log(bar[i])
+async function async2(){
+    console.log('async2 end')
+    return new Promise(reslove=>{
+        reslove()
+    })
 }
-bar[1111] = 'bar1111'
+async1()
+
+setTimeout(()=>{
+   console.log('setTimeout')
+},0)
+
+new Promise(reslove=>{
+    reslove()
+}).then(()=>{
+    console.log('promise')
+})
     </script>
 </body>
 </html>

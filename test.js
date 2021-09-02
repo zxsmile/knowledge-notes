@@ -1,7 +1,19 @@
-function Foo(){}
-var bar = new Foo()
+async function async1(){
+    await async2()
+    console.log('async1 end')
+} 
 
-for(var i=0;i<10;i++){
-    bar[i]='bar'+bar[i]
-    console.log(bar[i])
+function async2(){
+    console.log('async2 end')
 }
+async1()
+
+setTimeout(()=>{
+   console.log('setTimeout')
+},0)
+
+new Promise(reslove=>{
+    reslove()
+}).then(()=>{
+    console.log('promise')
+})
