@@ -1,5 +1,7 @@
 #### 一、浏览器事件循环 ####
 
+1. 事件循环概念
+
 - js分为同步任务和异步任务，同步任务都在主线程上执行形成一个执行栈，主线程之外存在一个回调队列
 - 同步任务在执行的时候会调用浏览器的API，此时会产生一些异步任务
 - 异步任务会在有了结果（比如被监听的事件发生时）后，将异步任务以及关联的回调函数放入回调队列中。
@@ -7,6 +9,91 @@
 - 上述过程会不断重复，这就是 JavaScript 的运行机制，称为事件循环机制（Event Loop）。
 
 - 回调队列可分为宏任务和微任务
+
+2. async/await
+
+- async 函数会返回一个 Promise 对象，如果在函数中 return 一个直接量（普通变量），async 会把这个直接量通过 Promise.resolve() 封装成 Promise 对象。如果你返回了promise那就以你返回的promise为准。
+- await 是在等待，等待运行的结果也就是返回值。await后面通常是一个异步操作（promise），但是这不代表 await 后面只能跟异步操作 await 后面实际是可以接普通函数调用或者常量的。
+
+   - 如果不是 promise , await会阻塞后面的代码，先执行async外面的同步代码，同步代码执行完，再回到async内部，把这个非promise的东西，作为 await表达式的结果
+   - 如果它等到的是一个 promise 对象，await 也会暂停async后面的代码，先执行async外面的同步代码，等着 Promise 对象 fulfilled，然后把 resolve 的参数作为 await 表达式的运算结果。
+
+		async function async1(){
+		    await async2()
+		    console.log('async1 end')
+		} 
+		
+		  function async2(){
+		    console.log('async2 end')
+		}
+		  async1()
+		
+		setTimeout(()=>{
+		   console.log('setTimeout')
+		},0)
+		
+		new Promise(reslove=>{
+		    reslove()
+		}).then(()=>{
+		    console.log('promise')
+		})
+
+			async2 end
+			async1 end
+			promise
+			setTimeout
+
+ - 上面代码中，调用async1函数，里边await后面跟着async2函数，所以执行async2函数输出async2 end，async2是一个同步函数，所以await后面的语句相当于在.then函数里边，所以会被注册成微任务，继续执行遇到setTimeout加入宏任务队列，遇到Promise.then是微任务，加入微任务列队，第一个宏任务执行完，执行微任务队列的微任务，输出async1 end，promise，执行第二个宏任务输出setTimeout
+
+ - 将上面async2函数改一下
+
+		 async function async1(){
+		    await async2()
+		    console.log('async1 end')
+		} 
+		
+		async function async2(){
+		    console.log('async2 end')
+		    return new Promise(reslove=>{
+		        reslove()
+		    }).then((res)=>{
+		        console.log('async2.then end')
+		    })
+		}
+		async1()
+		
+		setTimeout(()=>{
+		   console.log('setTimeout')
+		},0)
+		
+		new Promise(reslove=>{
+		    reslove()
+		}).then(()=>{
+		    console.log('promise')
+		})
+
+		async2 end
+		async2.then end
+		promise
+		async1 end
+		setTimeout
+
+- 输出变了，async1 end在promise之后了，这是因为await后面的函数返回一个promise，那么
+
+     await async2
+     console.log(async1 end)
+
+     相当于
+      new Promise(reslove=>{
+		        reslove()
+		    }).then((res)=>{
+		        console.log('async2.then end')
+		    }).then(()=>{
+                console.log('async1.then end')
+            })
+
+- 所以是输出async2.then end的then函数先被注册为微任务，然后是下面的promise.then被注册微任务，执行async2.then end的then函数是又产生了一个输出async1 end的then函数微任务，添加到promis后面，所以async1 end在promise之后了
+     
 
 #### 二、node事件循环 ####
 

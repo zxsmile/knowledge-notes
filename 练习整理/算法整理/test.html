@@ -73,18 +73,17 @@
                     
     //                 window.onscroll =  throttle(loadImg,1000)
     //     })()
-    async function async1(){
-    await async2()
+async function async1(){
+    let s =await async2()
     console.log('async1 end')
+    console.log(s)
 } 
 
 async function async2(){
     console.log('async2 end')
-    return new Promise(reslove=>{
-        reslove()
-    })
+    return 2
 }
-async1()
+let s1=async1()
 
 setTimeout(()=>{
    console.log('setTimeout')
@@ -95,6 +94,7 @@ new Promise(reslove=>{
 }).then(()=>{
     console.log('promise')
 })
+console.log('s1:',s1)
     </script>
 </body>
 </html>
