@@ -17,10 +17,43 @@
 // }).then(()=>{
 //     console.log('promise')
 // })
-let s1 = function(){
-    return 123
+class Subject{
+    constructor() {
+      this.subs = []
+    }
+
+    add(sub) {
+        this.subs.push(sub)
+    }
+
+    remove(sub) {
+        this.subs.filter(item=>{
+            return item!==sub
+        })
+    }
+    
+    notify() {
+        this.subs.forEach(sub=>{
+            sub.update.apply(sub)
+        })
+    }
 }
-let s2 = async function(){
-    return 123
+
+class Observer{
+    constructor(name) {
+        this.name = name
+    }
+    update() {
+        console.log(this.name)
+    }
 }
-console.log(s1(),s2())
+
+let sub = new Subject()
+let obj1 = new Observer('小明')
+let obj2 = new Observer('小红')
+obj2.update=function(){
+    console.log('666')
+}
+sub.add(obj1)
+sub.add(obj2)
+sub.notify()
