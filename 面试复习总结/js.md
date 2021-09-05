@@ -1298,18 +1298,18 @@ return Math.abs(a-b)<Number.EPSILON;
     - node11版本之前：当事件循环进入给定的阶段时，它将执行特定于该阶段的任何操作，然后执行该阶段队列中的回调，**直到队列用尽或最大回调数已执行**。当该队列已用尽或达到回调限制，执行该阶段产生的微任务，然后事件循环移动到下一阶段。
     - node11版本之后：一旦执行一个阶段里的一个宏任务(setTimeout,setInterval和setImmediate)就立刻执行对应的微任务队列
 
-		setTimeout(()=>{
-		    console.log('timer1')
-		    Promise.resolve().then(function() {
-		        console.log('promise1')
-		    })
-		}, 0)
-		setTimeout(()=>{
-		    console.log('timer2')
-		    Promise.resolve().then(function() {
-		        console.log('promise2')
-		    })
-		}, 0)
+			setTimeout(()=>{
+			    console.log('timer1')
+			    Promise.resolve().then(function() {
+			        console.log('promise1')
+			    })
+			}, 0)
+			setTimeout(()=>{
+			    console.log('timer2')
+			    Promise.resolve().then(function() {
+			        console.log('promise2')
+			    })
+			}, 0)
 		
 		
         - 如果是 node11 版本一旦执行一个阶段里的一个宏任务(setTimeout,setInterval和setImmediate)就立刻执行微任务队列，这就跟浏览器端运行一致，最后的结果为timer1=>promise1=>timer2=>promise2
