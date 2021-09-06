@@ -3,7 +3,7 @@
 		var TemplateEngine = function(tpl, data) {
 		    // magic here ...
 		}
-		var template = '<p>Hello, my name is {{name}}. I\'m {{age}} years old.</p>';
+		var template = '<p>Hello, my name is <%name%>. I\'m <%age%> years old.</p>';
 		console.log(TemplateEngine(template, {
 		    name: "Krasimir",
 		    age: 29
@@ -17,7 +17,7 @@
 
 - 模板字符串->tokens->tokens和数据结合->解析dom字符串
 
-    例：模板字符串： <h1>我买了一个{{thing}}，好{{mood}}啊</h1>
+    例：模板字符串： <h1>我买了一个<%thing%>，好<%mood%>啊</h1>
 
        转成tokens为：
 
@@ -33,36 +33,36 @@
 
 - 模板引擎函数实现的本质，就是将模板中HTML结构与JavaScript语句、变量分离，通过Function构造函数 + apply(call)动态生成具有数据性的HTML代码。
 
-      模板字符串： <h1>我买了一个{{thing}}，好{{mood}}啊</h1>，obj={thing:'灯泡',mood:'亮'}
+      模板字符串： <h1>我买了一个<%thing%>，好<%mood%>啊</h1>，obj={thing:'灯泡',mood:'亮'}
       转换成：new Function('<h1>我买了一个thing，好mood啊</h1>').apply(obj)
       上面代码相当于：function fn(){
                       <h1>我买了一个thing，好mood啊</h1>
                      }.apply(obj)
 
-1. 首先要找出所有花括号
+1. 首先要找出所有需要替换的变量
 
-      const re = /{{([^}}]+)?}}/g;
+      const re = /<%([^%>]+)?%>/g;
 
-      正则式的 [^}}]。这是一个反向字符集，说明是不能匹配到中括号里面的}}。这个正是我们上面写的模板字符串动态区域的。
-      (xx)? 是非贪婪匹配，这样就不会出现匹配到 {{foo}} barzzz {{bar}}
+      正则式的 [^%>]。这是一个反向字符集，说明是不能匹配到中括号里面的%>。这个正是我们上面写的模板字符串动态区域的。
+      (xx)? 是非贪婪匹配，这样就不会出现匹配到 <%foo%> barzzz <%bar%>
 
    - re.exec(str)会返回一个数组
    
-      let str = '<h1>我买了一个{{thing}}，好{{mood}}啊</h1>'
+      let str = '<h1>我买了一个<%thing%>，好<%mood%>啊</h1>'
       let match = re.exec(str)
       match:[
-		    "{{thing}}",
+		    "<%thing%>",
 		    " thing", 
 		    index:9,
-		    input: "<h1>我买了一个{{thing}}，好{{mood}}啊</h1>"
+		    input: "<h1>我买了一个<%thing%>，好<%mood%>啊</h1>"
 		   ]
 
     这样可以循环找完所有的花括号
 
-2. 以花括号为临界点，将字符串分为很多段存入一个数组里，最后再将数组用join方法拼接起来
+2. 以变量部分为临界点，将字符串分为很多段存入一个数组里，最后再将数组用join方法拼接起来
 
 		var TemplateEngine = function(tpl, data) {
-		    var re = /{{([^}}]+)?}}/g,
+		    var re =  /<%([^%>]+)?%>/g,
 		        code = 'var r=[];\n',
 		        cursor = 0, 
 		        match;
@@ -75,7 +75,7 @@
 		        cursor = match.index + match[0].length;
 		    }
 		    add(tpl.substr(cursor, tpl.length - cursor));
-		    code += 'return r.join("");'; // <-- return the result
+		    code += 'return r.join("");';
 		    console.log(code);
 		    return tpl;
 		}
@@ -94,6 +94,8 @@
         r.push("啊</h1>")
 		return r.join("");
 
+- 这里add函数中有line.replace(/"/g, '\\"')，是因为我们向数组中添加字符串的时候用的双引号，如果字符串里面包含双引号，js就会报错，所以将字符串中的双引号全部转义
+
 3. 发现一个问题，变量是不能带双引号的，不然会被解析成字符串
 
 		var add = function(line, js) {
@@ -109,7 +111,7 @@
 
 4. 这个是简单的，如果想要实现复杂的，比如for、if
 
-		var re = /{{([^}}]+)?}}/g;,
+		var re = /<%([^%>]+)?%>/g;,
 		    reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,
 		    code = 'var r=[];\n',
 		    cursor = 0;

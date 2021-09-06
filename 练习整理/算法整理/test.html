@@ -4,97 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        .img{
-            height: 300px;
-            width:300px;
-        }
-    </style>
 </head>
 <body>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <div>
-        <img src='##' class='img' data-src="./psb1.jpg"></img>
-    </div>
-    <script>
-    //    (function(){
-    //         var len = 0
-    //         loadImg()
-    //         function loadImg(){
-    //                 var imgs = document.getElementsByTagName('img')
-                            
-    //                         //top=滚动条滚动的高度+可视区域的高度
-
-    //                     var top = document.documentElement.scrollTop +document.documentElement.clientHeight
-                        
-    //                     for(var i=len;i<imgs.length;i++){
-    //                         if(imgs[i].offsetTop <= top){
-    //                             imgs[i].src =imgs[i].getAttribute('data-src')
-
-    //                             //记录加载到图片的位置
-    //                             len = i+1      
-    //                         }
-    //                     }
-    //                 }
-                    
-    //                 let throttle = function(func,delay){
-    //                     let timeout
-    //                     let startTime = +new Date()
-    //                     return function(){
-    //                         let nowTime = +new Date()
-    //                         let timing = delay-(nowTime-startTime)
-    //                         let context = this
-    //                         let args = arguments
-    //                         clearTimeout(timeout)
-    //                         if(timing<=0){
-    //                             func.apply(context,args)
-    //                             startTime = nowTime 
-    //                         }else{
-    //                             timeout = setTimeout(function(){
-    //                                 func.apply(context,args)
-    //                             },timing)
-    //                         }
-    //                     }
-    //                 }
-                    
-    //                 window.onscroll =  throttle(loadImg,1000)
-    //     })()
-async function async1(){
-    let s =await async2()
-    console.log('async1 end')
-    console.log(s)
-} 
-
-async function async2(){
-    console.log('async2 end')
-    return 2
-}
-let s1=async1()
-
-setTimeout(()=>{
-   console.log('setTimeout')
-},0)
-
-new Promise(reslove=>{
-    reslove()
-}).then(()=>{
-    console.log('promise')
-})
-console.log('s1:',s1)
+    <template>
+        <p>前端</p>
+    </template>
+    <script type='text/template'>
+        <ul>
+            <li>1<li>
+            <li>1<li>
+        </ul>
     </script>
 </body>
 </html>
