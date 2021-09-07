@@ -1,38 +1,13 @@
-function myPromiseAllSettled(promiseArr) {
-    return new Promise((resolve,reject)=>{
-        if(!Array.isArray(promiseArr)){
-            return 
-        }
-        if(promiseArr.length===0){
-            resolve([])
-        }
-        let result = []
-        let count = 0
-        promiseArr.forEach((promise,index)=>{
-            if(!(promise instanceof Promise)){
-                promise = Promise.resolve(promise)
-            }
-            promise.then(res=>{
-                   result[index] = { status: 'fulfilled', value: res }
-                   count++
-                   if(count===promiseArr.length){
-                    resolve(result)
-                   }
-            },err=>{
-                count++
-                result[index] = { status: 'rejected', reason: err }
-                if(count===promiseArr.length){
-                    resolve(result)
-                }
-            })
-        })
+function myReject(val){
+    return new Promise((reslove,reject)=>{
+        reject(val)
     })
- }
+}
+ 
+ 
 
  let promise1 = 1
  let promise2 = new Promise((res,rej)=>{res(2)})
  let promise3 = new Promise((res,rej)=>{rej(2)})
 
- myPromiseAllSettled([promise1,promise2,promise3]).then(res=>{
-     console.log(res)
- })
+ console.log(Promise.reject(promise2))
