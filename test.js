@@ -1,13 +1,20 @@
-function myReject(val){
-    return new Promise((reslove,reject)=>{
-        reject(val)
+function run(gen){
+    return new Promise((resolve,reject)=>{
+        var g = gen()
+
+      function _next(val){
+        try{
+          let res = g.next(val)
+        }catch(err){
+          return reject(err)
+        }
+        
+        if(res.done) return res.value
+        Promise.resolve(res.value).then(val=>{
+            _next(val)
+        })
+    }
+
+    _next()
     })
 }
- 
- 
-
- let promise1 = 1
- let promise2 = new Promise((res,rej)=>{res(2)})
- let promise3 = new Promise((res,rej)=>{rej(2)})
-
- console.log(Promise.reject(promise2))
