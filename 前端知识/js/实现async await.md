@@ -1,3 +1,220 @@
+#### 一、async ####
+
+- async是异步函数的标识符，说明该函数是个异步函数，返回值是个promise对象。
+
+		function fn1() {
+		  return 1
+		}
+		console.log(fn1()) //1
+		
+		async function fn2() {
+		  return 1
+		}
+		console.log(fn2()) // Promise{<fulfilled>:1}
+
+- 从上面例子可以看到，async函数的返回值是一个promise对象，既然是一个promise对象，那就自然可以使用其原型上的属性，比如then、catch等等。
+
+		fn2()
+		.then(r => {
+		  console.log(r) // 1
+		})
+
+- fn2报错也能被then的第二个回调函数或者catch捕获
+
+        fn2()
+        .then(res=>{
+          console.log(res)
+        },err=>{
+          console.log(err)
+        }).catch(err=>{
+          console.log(err)
+        })
+
+
+#### 二、await ####
+
+1. 理解
+
+- await是async wait的缩写，它等待返回的是一个表达式，不管是不是promise对象都可以，只是说如果返回的是promise对象执行的状态不一样而已，需要注意的是await只能在async函数中使用，看下面例子：
+
+		function sync() {
+		  setTimeout(() => {
+		    console.log(666)
+		  }, 3000)
+
+		}
+
+
+	   async function test(){
+		  await sync() //undefined
+		  console.log(888)
+	   }
+		
+       test() 
+       // 888
+       // 666
+       
+
+		async function async1(){
+		  return new Promise(resolve => {
+		    setTimeout(() => {
+              console.log('666')
+		      resolve()
+		    }, 2000)
+		  })
+		}
+		
+		async function test2() {
+		  await async1()
+		  console.log(888)
+		}
+		
+		test2()
+        //666
+        //888
+
+- 可以看出上面例子中，如果await等来的是一个promise对象，它会"阻塞"后面的代码，直到这个promise对象有返回结果，不管这个结果是成功还是失败。如果不是一个promise对象，那await后的表达式就是要等待的东西。
+- 就算不是promise对象那么await后面的内容还是相当于在then执行，跟promise的区别在于如果等待的是一个promise对象，那么要等待这个对象解析完成，如果没有resolve或者reject那么后面的内容就不会执行
+
+		// eg1
+		
+		function fn1() {
+		  return new Promise(()=> {
+		  
+		  })
+		}
+		
+		async function fn2() {
+		  await fn1()
+		  console.log('wait fn1') // 这里的值永远也不会打印，因为函数fn1这个promise对象的状态没有改变
+		}
+		fn2()
+
+
+		// eg2
+		
+		async function fn2() {
+		    await 2
+		    console.log(24) 
+		}
+		
+		fn2()
+		console.log('this') 
+		
+		//等同于
+		 async function fn2() {
+		    Promise.resolve(2)
+		    .then(r => {
+		      console.log(24)
+		    })
+		 }
+		 fn2()
+		 console.log('this')
+		
+		//this
+		//24
+
+2. 关于await返回值
+
+- await后是一个promise对象，如果是resolve状态，值就是resolve参数。如果是reject状态，会将错误抛出
+
+		// resolve
+		let p = await Promise.resolve(3)
+		console.log(p) // 3
+
+		// reject
+		let p = await Promise.reject('error')
+		console.log(p) // 控制台报错
+
+- await后不是promise对象，则返回值就是该值的本身
+
+		let p = await 3
+		console.log(p) // 3
+
+        let p = await function fn(){}
+        console.log(p) // [Function: fn]
+
+
+#### 三、错误捕获 ####
+
+1. await后面如果跟的是promise
+
+   - 可以使用await后面promise的reject或者catch捕获
+
+		async function fn2() {
+		    await Promise.reject(2).catch(e=>{
+		        console.log(666)
+		    })
+		    .then(res=>{
+		        
+		    },e=>{
+		       console.log(777)
+		   })
+		}
+		
+		
+		
+		  fn2().then(res=>{
+		      console.log(888)
+		  },e=>{
+		      console.log(999)
+		  }).catch(err=>{
+		      console.log('555')
+		      //console.log(err)
+		  })
+
+         //666
+         //888 
+         //因为错误被内部的promise捕获了，所以fn2进入了成功的回调
+
+2. await后面无论跟的是promise还是其他值
+
+   - 可以使用try...catch...
+
+		async function fn2() {
+		    try{
+		        await a
+		    }catch(e){
+		        console.log(666)
+		    }
+		    
+		}
+		
+		
+		
+		  fn2().then(res=>{
+		      console.log(888)
+		  },e=>{
+		      console.log(999)
+		  }).catch(err=>{
+		      console.log('555')
+		  })
+
+         //666
+         //888
+         //因为错误被try...catch...捕获了，所以fn2进入了成功的回调
+
+    - 可以使用fn2()的then第二个参数或者catch
+
+       async function fn2() {
+		   
+		        await a
+		    
+		}
+		
+		
+		
+		  fn2().then(res=>{
+		      console.log(888)
+		  },e=>{
+		      console.log(999)
+		  }).catch(err=>{
+		      console.log('555')
+		  })
+
+         //999
+         //因为错误没被内部捕获，所以进入fn2的then的第二个回调
+         
 #### 一、实现async/await ####
 
 - async/await实际上是对Generator（生成器）的封装，是一个语法糖
