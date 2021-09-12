@@ -10,7 +10,10 @@ function myAsync(gen){
          var g = gen()
         function run(val){
           try{
-           var res = g.next(val) 
+           var res = g.next(val)  //next里面传的值就是上一个next表达式的返回值，所以相当于await后面跟的值（不是promise）
+                                  //就是await表达式的返回值,如果为promise，如果是resolve状态，值就是resolve参数。
+                                  //如果是reject状态，会将错误抛出
+
           }catch(err){
             return reject(err) // 抛出错误
           }
