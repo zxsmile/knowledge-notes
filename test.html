@@ -18,41 +18,19 @@
 <body>
     <div class='box'></div>
     <script>
-       function myPromiseAny(promiseArr) {
-        return new Promise((reslove,reject)=>{
-            let count = 0
-            if(!Array.isArray(promiseArr)){
-                return 
-            }
-            if(promiseArr.length===0){
-                    console.log('555')
-                    reject(new AggregateError('All promises was resolved'))
-           }
-            promiseArr.forEach((promise)=>{
-                if(!(promise instanceof Promise)){
-                    promise = Promise.resolve(promise)
-                }
-                promise.then(res=>{
-                    reslove(res)
-                },err=>{
-                    count++
-                    if(count===promiseArr.length){
-                        reject(new AggregateError('All promises was resolved'))
-                    }
-                })
-            })
-        })
- }
+    try{
+       setTimeout(res=>{
+        a
+      },1000)
+ 
+    }catch(e){
 
- let promise1 = new Promise((res,rej)=>{res(2)})
- let promise2 = new Promise((res,rej)=>{rej(2)})
- let promise3 = new Promise((res,rej)=>{rej(2)})
+    }
+      
 
- myPromiseAny([promise1,promise2,promise3]).then(res=>{
-     console.log(res)
- },err=>{
-     console.log(err)
- })
+// window.onerror=function(err){
+//     console.log('捕获到错误了')
+// }
     </script>
 </body>
 </html>
