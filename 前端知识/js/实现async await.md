@@ -215,7 +215,7 @@
          //999
          //因为错误没被内部捕获，所以进入fn2的then的第二个回调
          
-#### 一、实现async/await ####
+#### 四、实现async/await ####
 
 - async/await实际上是对Generator（生成器）的封装，是一个语法糖
 
