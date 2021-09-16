@@ -2839,13 +2839,13 @@ return Math.abs(a-b)<Number.EPSILON;
 - 解决方案：
     1. 可以将try...catch...写到异步里面
 
-        setTimeout(res=>{
-		  try{
-		      a
-		  }catch(e){
-		      console.log('捕获到错误了')
-		  }
-		},1000)
+	        setTimeout(res=>{
+			  try{
+			     a
+			  }catch(e){
+			     console.log('捕获到错误了')
+			  }
+			},1000)
 
     
 
