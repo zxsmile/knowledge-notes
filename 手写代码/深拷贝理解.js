@@ -16,7 +16,7 @@ https://juejin.cn/post/6844903929705136141#heading-4
        - 由于可能会发生循环引用，所以要用map结构来缓存存过的值
 */
 
-let deepClone = function(obj,map=new Map()){
+function deepClone(obj,map=new Map()){
    if(typeof obj!=='object' || obj===null){
       if(typeof obj ==='function'){
          let fn
@@ -40,32 +40,30 @@ let deepClone = function(obj,map=new Map()){
    map.set(obj,newObj)
    
    if(obj.constructor===Set){
-      obj.forEach( value => newObj.add(deepCopy(value,map)) )
+      obj.forEach( value => newObj.add(deepClone(value,map)) )
 
    }else if( obj.constructor===Map ){
       // 如果对应的key是对象，也要考虑复制的话，可以对key也使用deepClone()
-      obj.forEach( (key,value)=>newObj.set(key,deepCopy(value,map)) )
+      obj.forEach( (value,key)=>newObj.set(deepClone(key,map),deepClone(value,map)) )
 
    }else if(obj.constructor===Array){
-      obj.forEach((item,index)=>newObj[index]=deepCopy(item,map))
+      obj.forEach((item,index)=>newObj[index]=deepClone(item,map))
 
    }else{
-      Object.keys(obj).forEach(key=>newObj[key]=deepCopy(obj[key],map))
+      Object.keys(obj).forEach(key=>newObj[key]=deepClone(obj[key],map))
    }
 
    return newObj
 }
 
 let obj={
-   a:undefined,
-   b:null,
-   c:2,
-   d:{foo:3},
-   f:new Set([4,2]),
-   e:new Date()
+   foo:new Map().set({foo:{a:2}},2)
    }
-   obj.g = obj
-   
-   console.log(deepClone(obj))
+let b = deepClone(obj)
+    b.foo.forEach((value,key)=>{
+      key.foo=3
+      console.log(key.foo)
+    })
+   console.log(obj,b.foo.get({foo:{a:2}}))
    
    
