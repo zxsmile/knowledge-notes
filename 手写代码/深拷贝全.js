@@ -53,11 +53,10 @@ const deepClone = function(obj) {
   deepClone.weakMap = new WeakMap();
 
 let obj={
-foo:function(){
-  let a=2
-}
+foo:Symbol()
 }
 
-deepClone(obj)
+
+console.log(deepClone(obj))
 
   
