@@ -18,4 +18,21 @@ var inorderTraversal = function(root){
       }
       
 
-     
+// 递归
+
+var inorderTraversal = function(root) {
+  if(!root){
+    return[]
+  }
+  let res = []
+  deep(root,res)
+  return res
+  function deep(root,res){
+    if(!root){
+      return
+    }
+    deep(root.left,res)
+    res.push(root.val)
+    deep(root.right,res)
+  }
+}

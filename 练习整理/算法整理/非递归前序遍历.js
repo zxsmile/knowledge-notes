@@ -17,3 +17,22 @@ var preorderTraversal = function(root) {
       return res
 };
 
+//递归
+
+var preorderTraversal = function(root) {
+  if(!root){
+      return []
+  }
+  let res = []
+  deep(root,res)
+  return res
+  function deep(root,res){
+      if(!root){
+          return
+      }
+      res.push(root.val)
+      deep(root.left,res)
+      deep(root.right,res)
+  }
+};
+
