@@ -4193,7 +4193,7 @@ https://juejin.cn/post/6994959998283907102
 
             - 比较结果：oldS 和 newE 相等，需要把节点a移动到newE所对应的位置，也就是末尾，同时oldS++，newE--
 
-   ![](./images/diff7.jpg)
+   ![](./images/diff6.jpg)
 
          - 第二步
 

@@ -277,7 +277,7 @@ https://juejin.cn/post/6994959998283907102
 
        - 分析之前，请大家记住一点，最终的渲染结果都要以newVDOM为准，这也解释了为什么之后的节点移动需要移动到newVDOM所对应的位置
 
-   https://knowledge-notes/面试复习总结/images/diff6.jpg
+   ![](./images/diff6.jpg)
 
           - 第一步
 
