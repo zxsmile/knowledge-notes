@@ -10,52 +10,7 @@
   <div style='height:600px;width:600px'></div>
   <script>
     let myEcharts = echarts.init(document.querySelector('div'))
-    myEcharts.setOption({
-       title:{
-        text:'成绩表'
-       },
-       tooltip:{
-         trigger:'axis',
-         triggerOn:'click',
-         formatter(arg) {
-           console.log(arg)
-           return arg[0].name+'的'+arg[0].seriesName+'成绩是'+arg[0].data
-         }
-       },
-       toolbox:{
-         feature:{
-           saveAsImage:{},
-           dataView:{},
-           restore:{},
-           dataZoom:{},
-           magicType:{
-             type:['bar','line']
-           }
-         }
-       },
-       legend:{
-         data:['语文','数学']
-       },
-       xAxis:{
-         type:'category',
-         data:['小明','小红','小蓝']
-       },
-       yAxis:{
-          type:'value'
-       },
-       series:[
-         {
-           name:'语文',
-           type:'bar',
-           data:[70,98,62]
-         },
-         {
-           name:'数学',
-           type:'bar',
-           data:[92,86,70]
-         }
-       ]
-    })
+    
 </script>
 </body>
 </html>
