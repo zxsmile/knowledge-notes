@@ -31,6 +31,7 @@ var generateParenthesis = function(n) {
     function dfs(n,left,right,str){
         if(left==n && right==n){
            res.push(str)
+           console.log(res)
            return
         }
         if(left<n){
