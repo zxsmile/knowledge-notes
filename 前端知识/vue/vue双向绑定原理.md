@@ -232,16 +232,16 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 	 * 把一个对象的每一项都转化成可观测对象
 	 */
 
-	function observable (obj) {
-		if (!obj || typeof obj !== 'object') {
-        	return;
-    	}
-		let keys = Object.keys(obj);
-		keys.forEach((key) =>{
-			defineReactive(obj,key,obj[key])
-		})
-		return obj;
-	}
+			function observable (obj) {
+				if (!obj || typeof obj !== 'object') {
+		        	return;
+		    	}
+				let keys = Object.keys(obj);
+				keys.forEach((key) =>{
+					defineReactive(obj,key,obj[key])
+				})
+				return obj;
+			}
 
 	/**
 	 * 使一个对象转化成可观测对象
@@ -250,73 +250,73 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 	 * @param { Any } val 对象的某个key的值
 	 */
 
-	function defineReactive (obj,key,val) {
-		let dep = new Dep();
-		Object.defineProperty(obj, key, {
-			get(){
-				dep.depend();
-				console.log(`${key}属性被读取了`);
-				return val;
-			},
-			set(newVal){
-				val = newVal;
-				console.log(`${key}属性被修改了`);
-				dep.notify()                    //数据变化通知所有订阅者
+			function defineReactive (obj,key,val) {
+				let dep = new Dep();
+				Object.defineProperty(obj, key, {
+					get(){
+						dep.depend();
+						console.log(`${key}属性被读取了`);
+						return val;
+					},
+					set(newVal){
+						val = newVal;
+						console.log(`${key}属性被修改了`);
+						dep.notify()                    //数据变化通知所有订阅者
+					}
+				})
 			}
-		})
-	}
-
-	class Dep {
 		
-		constructor(){
-			this.subs = []
-		}
-		//增加订阅者
-		addSub(sub){
-			this.subs.push(sub);
-		}
-        //判断是否增加订阅者
-		depend () {
-		    if (Dep.target) {
-		     	this.addSub(Dep.target)
-		    }
-		}
-
-		//通知订阅者更新
-		notify(){
-			this.subs.forEach((sub) =>{
-				sub.update()
-			})
-		}
+			class Dep {
+				
+				constructor(){
+					this.subs = []
+				}
+				//增加订阅者
+				addSub(sub){
+					this.subs.push(sub);
+				}
+		        //判断是否增加订阅者
+				depend () {
+				    if (Dep.target) {
+				     	this.addSub(Dep.target)
+				    }
+				}
 		
-	}
-
-	Dep.target = null;
+				//通知订阅者更新
+				notify(){
+					this.subs.forEach((sub) =>{
+						sub.update()
+					})
+				}
+				
+			}
+		
+			Dep.target = null;
 
    - watcher.js
 
-    class Watcher {
-		constructor(vm,exp,cb){
-		    this.vm = vm;
-		    this.exp = exp;
-		    this.cb = cb;
-		    this.value = this.get();  // 将自己添加到订阅器的操作
-		}
-		get(){
-			Dep.target = this;  // 缓存自己
-        	let value = this.vm.data[this.exp]  // 强制执行监听器里的get函数
-        	Dep.target = null;  // 释放自己
-        	return value;
-		}
-		update(){
-			let value = this.vm.data[this.exp];
-        	let oldVal = this.value;
-        	if (value !== oldVal) {
-                this.value = value;
-                this.cb.call(this.vm, value, oldVal);
-			}
-	    }
-     }
+		    class Watcher {
+				constructor(vm,exp,cb){
+				    this.vm = vm;
+				    this.exp = exp;
+				    this.cb = cb;
+				    this.value = this.get();  // 将自己添加到订阅器的操作
+				}
+				get(){
+					Dep.target = this;  // 缓存自己
+		        	let value = this.vm.data[this.exp]  // 强制执行监听器里的get函数
+		        	Dep.target = null;  // 释放自己
+		        	return value;
+				}
+				update(){
+					let value = this.vm.data[this.exp];
+		        	let oldVal = this.value;
+		        	if (value !== oldVal) {
+		                this.value = value;
+		                this.cb.call(this.vm, value, oldVal);
+					}
+			    }
+		     }
 
 
    7. 还有一个细节问题就是我们在赋值的时候是这样的，myVue.data.name = "难凉热血"，而我们的理想形式是myVue.name = '难凉热血'，为了实现这样的形式，我们需要在new SelfVue的时候做一个代理处理，让访问selfVue的属性代理为访问selfVue.data的属性，实现原理还是使用Object.defineProperty( )对属性值再包一层：
