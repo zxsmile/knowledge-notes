@@ -228,9 +228,8 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
     - observer.js
 
-    /**
-	 * 把一个对象的每一项都转化成可观测对象
-	 */
+       - 把一个对象的每一项都转化成可观测对象
+	
 
 			function observable (obj) {
 				if (!obj || typeof obj !== 'object') {
@@ -243,12 +242,8 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 				return obj;
 			}
 
-	/**
-	 * 使一个对象转化成可观测对象
-	 * @param { Object } obj 对象
-	 * @param { String } key 对象的key
-	 * @param { Any } val 对象的某个key的值
-	 */
+	
+      - 使一个对象转化成可观测对象
 
 			function defineReactive (obj,key,val) {
 				let dep = new Dep();
