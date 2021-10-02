@@ -124,7 +124,7 @@ https://www.cnblogs.com/canfoo/p/6891868.html
                set(newVal) {
                  val=newVal
                  console.log(`${key}属性被修改了`);
-                 this.notify() //数据变化通知所有的订阅者
+                 dep.notify() //数据变化通知所有的订阅者
                }
            })
         }
@@ -179,7 +179,7 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
              因为当前vm的数据依赖收集已经完成，那么对应的渲染Dep.target 也需要改变。
 
-			 而update()函数是用来当数据发生变化时调用Watcher自身的更新函数进行更新的操作。先通过let value = this.vm.dat[this.exp];获取到最新的数据,然后将其与之前get()获得的旧数据进行比较，如果不一样，则调用更新函数cb进行更新。
+			 而update()函数是用来当数据发生变化时调用Watcher自身的更新函数进行更新的操作。先通过let value = this.vm.data[this.exp];获取到最新的数据,然后将其与之前get()获得的旧数据进行比较，如果不一样，则调用更新函数cb进行更新。
 			
     5. 将Observer和Watcher关联起来
 
