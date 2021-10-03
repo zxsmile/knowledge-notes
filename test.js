@@ -1,12 +1,9 @@
-var a = 1
-
-function bar(){
+var a = 10
+function test(a) {
+  a = a + 10
   console.log(a)
 }
 
-function fn(){
-  var a = 2
-  bar()
-}
 
-fn()
+test(a)
+console.log(a); 
