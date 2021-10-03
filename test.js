@@ -1,63 +1,53 @@
-// 1.参数字符串，布尔，数值会报错
-// 2.参数为undefined，null，除了arguments的对象会返回undefined
-// 3.所以用arguments的属性callee（返回正在执行的函数）来区分arguments对象和别的对象
+ 
+Function.prototype.bindFn = function(thisArg){
 
-Function.prototype.myApply = function(newThis,argArr){
-	//this指的是调用apply的函数
-    if(typeof this !== 'function'){
-        throw new TypeError(this + ' is not a function');
-    }
-    newThis = newThis ? Object(newThis) : window
-	//newThis.fn = this
-	//使用Symbol()
-  let fn = Symbol()
-  newThis[fn] = this
-	//使用缓存
-	// let originalVal = newThis.fn;
-    // let hasOriginalVal = newThis.hasOwnProperty(fn);
-	// newThis.fn = this
-	
-	let result
+  if(typeof this !== 'function'){
+      throw 'this必须是函数'
+  }
+
+  var self = this
+  var args = Array.from(arguments).slice(1)
+  var bound = function(){
+      var newArges = args.concat(Array.from(arguments))
+        //也可以用this instanceof bound判断
+        if(this instanceof bound){
+             //bound函数用作构造函数,绑定的this会失效，函数中的this指向实例对象
+             var result = self.apply(this,newArges)
+             var isObject = typeof result==='object'&&result!==null
+             var isFunction = typeof result === 'function'
+             if(isObject||isFunction){
+                 return result
+             }
+             return this
+           
+        }else{
+
+           return self.apply(thisArg,newArges)
+        }
+  }
+
+   if(self.prototype){
         
-    if(argArr){
-		let errArr = ['string','boolean','number']
-		let argRes = typeof argArr
-		if(errArr.includes(argRes)){
-			throw '参数有误'
-		}
-		let objErrArr = ['undefined','null','function']
-		if((argRes==='object'&& !argArr.callee) || objErrArr.includes(argRes)){
-			return undefined
-		}
-		//使用symbol()
-		result = newThis[fn](...argArr)
-		//使用缓存
-		//result = newThis.fn(...argArr)
-	}else{
-		//使用symbol()
-		result = newThis[fn]()
-		//使用缓存
-		//result = newThis.fn()
-	}
-	//使用symbol()
-	delete newThis[fn]
-	//使用缓存
-	//delete newThis.fn
-	// if(hasOriginalVal){
-    //     newThis.fn = originalVal
-    // }
-	return result     
+       //生成的实例拥有构造函数上的属性和方法        
+
+        function Empty(){}
+       Empty.prototype = self.prototype;
+       bound.prototype = new Empty();
+ }
+
+  return bound
 }
 
-let obj = {
-    name:'milk',
-    fn:5
-  }
-  
-  function bar(){
-    console.log(this.name)
-    return 6
-  }
-  
-  console.log(bar.myApply(obj,null))
-  console.log(obj.fn)
+var obj = {
+ name:'join'
+}
+
+function fn(name,age){
+ this.name = name
+ this.m = 3
+}
+
+var fnBind = fn.bindFn(obj,'milk',18)
+var ch = new fnBind(12)
+console.log(ch.name)
+// console.log(ch.m)
