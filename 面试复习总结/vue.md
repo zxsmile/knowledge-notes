@@ -188,7 +188,7 @@
 
 	const arrayProto = Array.prototype
 	const arrayMethods = Object.create(arrayProto)
-	;[
+	[
 	  'push',
 	  'pop',
 	  'shift',
@@ -196,13 +196,34 @@
 	  'splice',
 	  'sort',
 	  'reverse'
-	].forEach(item=>{
-		Object.defineProperty(arrayMethods,item,{
+	].forEach(method=>{
+		Object.defineProperty(arrayMethods,method,{
 		    value:function mutator(){
 		    	//缓存原生方法，之后调用
-		    	const original = arrayProto[item]	
+		    	const original = arrayProto[method]	
 		    	let args = Array.from(arguments)
-			    original.apply(this,args)
+			    let result = original.apply(this,args)
+                // ob就是observe实例
+			    const ob = this.__ob__
+			    let inserted
+			    switch (method) {
+			      // 为什么对push和unshift单独处理？
+			      // 这2中方法会增加数组的索引，但是新增的索引位需要手动observe的
+			      case 'push':
+			      case 'unshift':
+			        inserted = args
+			        break
+			      // 同理，splice的第三个参数，为新增的值，也需要手动observe
+			      case 'splice':
+			        inserted = args.slice(2)
+			        break
+			    }
+			    // 其余的方法都是在原有的索引上更新，初始化的时候已经observe过了
+			    if (inserted) ob.observeArray(inserted)
+			    // notify change
+			    // 然后通知所有的订阅者触发回调
+			    ob.dep.notify()
+			    return result
 		    },
 		})
 	})
