@@ -331,13 +331,20 @@
 
 - 当 getter 执行完之后，把当前的计算属性 watcher 弹出活动的 watcher 栈，同时通过修改 Dep.target 为当前栈里的第一个 watcher。最后返回取到的计算属性结果。
 - 现在我们再回到上边计算属性的 getter 函数，，watcher.evaluate()执行完毕之后，就会判断Dep.target 是不是true，如果有就代表还有渲染watcher，就执行watcher.depend()，然后让watcher里面的deps都收集渲染watcher，这就是双向保存的优势。
-- 比如说name收集了computed watcher 和 渲染watcher。那么设置name的时候都会去更新执行watcher.update()，在watcher.update()里如果this.lazy为true，也就是该属性为计算属性，执行this.dirty = true，因为name改变了，则计算属性也改变了会触发计算属性的setter，则因为this.dirty为true，所以会执行watcher.evaluate()重新计算值
+- 比如说name收集了computed watcher 和 渲染watcher。那么设置name的时候都会去更新执行watcher.update()，update 方法会先判断当前的 watcher 是否是延迟执行的或者说是惰性的。那么对于 computed watcher 来说，在创建 watcher 的时候通过传入的 computedWatcherOptions 对象就定义了 computed watcher 是惰性的。那么当 data 被修改，通知 computed watcher 更新的时候，其实只是修改了 computed watcher 的 dirty 属性为 true，告诉计算属性，你已经“变脏”了，下次被访问会出发getter，dirty为true会执行watcher.evaluate()重新计算值
 
-      update(){
-		    if (this.lazy) {
-		      this.dirty = true
-		    } else {
-		      this.get()
-		    }
+      update () {
+ 
+	  if (this.lazy) {
+	    this.dirty = true
+	  } else if (this.sync) {
+	    this.run()
+	  } else {
+	    queueWatcher(this)
 	  }
+	}
+
+- data 被修改，通知 computed watcher 更新以后，会继续通知其他的 watcher，比如访问过计算属性的 render watcher，那么 render watcher 就会执行更新，再次访问 computed，上边 computed 已经被标记为“变脏”了，所以这一次 computed 会重新计算获取新值。
+
+- 总结一下，计算属性的缓存值特性是通过 watcher 的 dirty 属性来决定的，当计算属性依赖的 data 更新时，会修改计算属性 watcher 的 dirty 为 true，当计算属性再次被访问，就会去重新求值，反之，计算属性会直接返回之前保存的值。另外，computed watcher 在 update 时，并不会直接求值，而是当计算属性再次被访问是才会去重新求值。
 
