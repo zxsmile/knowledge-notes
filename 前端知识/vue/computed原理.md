@@ -1,5 +1,6 @@
 - https://juejin.cn/post/6897934019942744077
 - https://juejin.cn/post/6974293549135167495#heading-22
+- https://juejin.cn/post/6844903873925087239#heading-0
 #### 一、vue构造函数 ####
 
 		import { initMixin } from './init'
@@ -230,7 +231,7 @@
 
 
 
-- 从上面这句this.value = this.lazy ? undefined : this.get()代码可以看到，computed创建watcher的时候是不会指向this.get的。只有在render函数里面有才执行。render的时候，读取页面上的变量会触发get,现在render函数还不能读取到值，因为我们还没有挂载到vm上面，上面defineComputed(vm, key, userDef)这个函数功能就是让computed挂载到vm上面。下面我们实现一下。
+- 从上面这句this.value = this.lazy ? undefined : this.get()代码可以看到，computed创建watcher的时候是不会指向this.get的。假设html模板中用到了computed中的值。在Vue实例init的最后，会调用vm.$mount方法，进而执行到mountComponent函数，mountComponent会生成一个渲染watcher实例。当render watcher执行时，会访问到计算属性的值，进而会触发计算属性的get。计算属性的get在defineComputed中已经定义过了，上面defineComputed(vm, key, userDef)这个函数功能就是让computed挂载到vm上面。下面我们实现一下。
 
 
 		function defineComputed(vm, key, userDef) {
@@ -329,22 +330,43 @@
 		    }
 		  } 
 
-- 当 getter 执行完之后，把当前的计算属性 watcher 弹出活动的 watcher 栈，同时通过修改 Dep.target 为当前栈里的第一个 watcher。最后返回取到的计算属性结果。
-- 现在我们再回到上边计算属性的 getter 函数，，watcher.evaluate()执行完毕之后，就会判断Dep.target 是不是true，如果有就代表还有渲染watcher，就执行watcher.depend()，然后让watcher里面的deps都收集渲染watcher，这就是双向保存的优势。
-- 比如说name收集了computed watcher 和 渲染watcher。那么设置name的时候都会去更新执行watcher.update()，update 方法会先判断当前的 watcher 是否是延迟执行的或者说是惰性的。那么对于 computed watcher 来说，在创建 watcher 的时候通过传入的 computedWatcherOptions 对象就定义了 computed watcher 是惰性的。那么当 data 被修改，通知 computed watcher 更新的时候，其实只是修改了 computed watcher 的 dirty 属性为 true，告诉计算属性，你已经“变脏”了，下次被访问会出发getter，dirty为true会执行watcher.evaluate()重新计算值
+- 当 getter 执行完之后，把当前的计算属性 watcher 弹出活动的 watcher 栈，同时通过修改 Dep.target 为当前栈里的第一个 watcher。当computed watcher的evaluate执行完后，Dep.target会变成render watcher
+- 现在我们再回到上边计算属性的 getter 函数，，watcher.evaluate()执行完毕之后，就会判断Dep.target 是不是true，如果有就代表还有render watcher，就执行watcher.depend()
 
+		  depend () {
+		    let i = this.deps.length
+		    while (i--) {
+		      this.deps[i].depend()
+		    }
+		  }
+
+- watcher.depend 方法其实很简单，遍历存储的 dep，分别执行每个 dep 的 depend 方法，源码（源码位置）如下：
+
+			depend () {
+			  if (Dep.target) {
+			    Dep.target.addDep(this)
+			  }
+			}
+ 
+- 这个Dep.target指的是render watcher，这段代码就是把刚才computed watcher添加的deps也添加到render watcher中去，使得vm[a]的dep和render watcher也能互相添加到彼此。这样，当vm[a]发生变化时，render watcher也会执行。
+- 当watcher.depend执行完后，返回watcher.value。此时，computed watcher就完成了一次计算过程。
+
+- 当vm[a]发生变化时，会触发其dep的set。进而触发dep.notify。此时，dep.subs中有两个watcher实例。一个是computed watcher，另一个是render watcher。首先执行computed watcher的update，然后执行render watcher的update。
       update () {
  
 	  if (this.lazy) {
+        // computed watcher会走到这里
 	    this.dirty = true
 	  } else if (this.sync) {
 	    this.run()
 	  } else {
+        // render watcher会走到这里
 	    queueWatcher(this)
 	  }
 	}
 
-- data 被修改，通知 computed watcher 更新以后，会继续通知其他的 watcher，比如访问过计算属性的 render watcher，那么 render watcher 就会执行更新，再次访问 computed，上边 computed 已经被标记为“变脏”了，所以这一次 computed 会重新计算获取新值。
+- computed watcher的update只是简单地把dirty置为了true，以便在下次访问到计算属性时，通过执行evaluate来计算最新的值。
+- render watcher会被放入执行队列中。将当前主线程代码执行完毕后，在下一次事件循环中执行。
+- 最终，随着render watcher.get的执行，计算属性会被重新获取，进而触发计算属性的getter，然后通过执行computed watcher的evaluate重新获取计算属性的最新值并返回。
 
-- 总结一下，计算属性的缓存值特性是通过 watcher 的 dirty 属性来决定的，当计算属性依赖的 data 更新时，会修改计算属性 watcher 的 dirty 为 true，当计算属性再次被访问，就会去重新求值，反之，计算属性会直接返回之前保存的值。另外，computed watcher 在 update 时，并不会直接求值，而是当计算属性再次被访问是才会去重新求值。
 
