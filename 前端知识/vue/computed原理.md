@@ -222,9 +222,9 @@
 		  }
 		  // 所有的属性收集当前的watcer
 		  depend() {
-		    let i = this.deps.length
+		    let i = this.deps.length //  deps内是计算属性内能访问到的响应式数据的dep的数组集合
 		    while(i--) {
-		      this.deps[i].depend()
+		      this.deps[i].depend() // 
 		    }
 		  }
 		}
@@ -257,9 +257,9 @@
 		      if (watcher.dirty) {// 给computed的属性添加订阅watchers
 		        watcher.evaluate()
 		      }
-		      // 把渲染watcher 添加到属性的订阅里面去，这很关键
-		      if (Dep.target) {
-		        watcher.depend()
+		      
+		      if (Dep.target) {  //执行完watcher.evaluate()后，这里的Dep.target指的是render watcher
+		        watcher.depend()  
 		      }
 		      return watcher.value
 		    }

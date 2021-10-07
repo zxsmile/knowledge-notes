@@ -5,14 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+   #menu #list {
+    max-height: 0;
+    transition: max-height 0.15s ease-out;
+    overflow: hidden;
+    background: #d5d5d5;
+  }
+
+  #menu:hover #list {
+    max-height: 500px;
+    transition: max-height 5s ease-in;
+  }
+    
   </style>
 </head>
 <body>
     
-  <div class='box'>
-    <form>
-      <input type='' />
-    </form>
-  </div>
+  
+  
+<div id="menu">
+  <a>菜单</a>
+  <ul id="list">
+    <li>item</li>
+    <li>item</li>
+  </ul>
+</div>
+
+  
 </body>
 </html>
