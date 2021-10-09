@@ -7,7 +7,7 @@ var server = express()
 server.use("/",function(req,res){
    
     // 读取ajax.html
-    fs.readFile('.'+req.url,function(err,data){
+    fs.readFile('..'+req.url,function(err,data){
         if(err){
             res.write('404')
         }else{

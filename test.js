@@ -1,21 +1,19 @@
-function quick(arr){
-  if(arr.length<=1){
-    return arr
-  }
-  let mid = Math.floor(arr.length/2)
-  let target  = arr.splice(mid,1)[0]
-  let left  = []
-  let right = []
+let express = require('express')
+let fs = require('fs')
 
-  for(var i=0;i<arr.length;i++){
-    if(arr[i]<=target){
-      left.push(arr[i])
-    }else{
-      right.push(arr[i])
-    }
-  }
+let http = express()
 
-  return quick(left).concat(target,quick(right))
-}
-var arr =[6,5,9,7,8,12,4,5,56,14,45]
- console.log(quick(arr))
+http.use('/',(req,res) => {
+    fs.readFile('.'+req.url,(err,data) => {
+ 
+       if(err){
+         res.write('404')
+       }else{
+         res.write(data)
+       }
+
+       res.send()
+    })
+})
+
+http.listen(8080)
