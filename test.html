@@ -5,31 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-   #test{
-     width:100px;
-     height:100px;
-     background-color: lightcoral;
-   }
+   
 
   </style>
 </head>
 <body>
-<div id='test'></div>
+<div>
+<span>lalla
+<span>lllll
+</div>
 <script>
-   let test = document.querySelector('#test')
-   let i=0
-   let requestId = null
-   function animation(){
-     test.style.marginLeft = i+'px'
-     console.log(i)
-     i++
-     requestId = window.requestAnimationFrame(animation)
-     if(i>300){
-      cancelAnimationFrame(requestId);
-     }
-   }
-
-   animation()
+   
 </script>
   
 </body>
