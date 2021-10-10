@@ -5,25 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
- 
+ div::before{
+   content:'before';
+   color: lawngreen;
+ }
+
+ div::after{
+   content:'after'
+ }
+div::first-line{
+  content:'line'
+}
+
   </style>
 </head>
 <body>
     
   
-  <div>
-    <img src='https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg95.699pic.com%2Fphoto%2F40164%2F5628.gif_wh300.gif%21%2Fgifto%2Ftrue&refer=http%3A%2F%2Fimg95.699pic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1636356456&t=d5e01d226de302309007b485b5a5e227' />
-  </div>
+  <div>div</div>
+
+  
+  
 <script>
-  var oAppCache = window.applicationCache; 
-  console.log(oAppCache)
-  // oAppCache.addEventListener('checking', function fn(){
-  //   console.log('lll')
-  // }, false); 
-  //   //在检查描述文件发现文件无变化时触发
-  //   oAppCache.addEventListener('noupdate', function fn(){
-  //   console.log('lll')
-  // }, false); 
+  
 </script>
   
 </body>
