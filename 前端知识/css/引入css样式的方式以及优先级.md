@@ -41,10 +41,12 @@
 	                    法二：@import "index.css" //css样式表的路径
 				  </style>
 
-       - 两种引入css样式表的区别：
+       - link和@import的区别：
 
-          - 链接引入属于html的标签语法，在加载页面时，就会同时加载css样式表
-          - 导入css样式表，属于css中的语法，在加载页面时，加载页面完成之后才会加载css样式表
+          - link是html的标签，不仅可以加载 CSS 文件，还可以定义 RSS、rel 连接属性等；而@import是css的语法，只有导入样式表的作用。
+          - link引入属于html的标签语法，在加载页面时，就会同时加载css样式表。@import导入css样式表，属于css中的语法，在加载页面时，加载页面完成之后才会加载css样式表
+          - 兼容性：@import是 CSS2.1 才有的语法，所以只能在 IE5以上 才能识别；而link是 HTML 标签，所以不存在兼容性问题。
+          - DOM：javascript只能控制dom去改变link标签引入的样式，而@import的样式不是dom可以控制的。
 
 
 #### 二、引入样式方式比较 ####
