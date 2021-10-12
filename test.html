@@ -5,22 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-     div{
-       width:100px;
-       height:100px;
-       background-color: lightcoral;
-       padding: 10px;
-       border:10px red solid;
-       box-sizing:border-box;
+     #box [class= 'box']{
+       color:red;
      }
-
+     #box .box{
+       color:darkblue;
+     }
   </style>
 </head>
 <body>
-<div></div>
+<div id='box'>
+   <div class='box' >666</div>
+</div>
 <script>
-   let div = document.getElementsByTagName('div')[0]
-   console.log(div.style.width)
+   
 </script>
   
 </body>
