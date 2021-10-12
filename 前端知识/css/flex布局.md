@@ -134,3 +134,12 @@
 				.item {
 				  align-self: auto | flex-start | flex-end | center | baseline | stretch;
 				}
+
+
+#### 三、回答 ####
+
+- flex是css3新增的一种布局方式，我们可以通过将一个元素的display属性设置为flex从而使它成为一个flex容器，它的所有子元素都会成为它的项目。容器默认有两条轴，一条是水平的主轴，一条是与主轴垂直的交叉轴
+- 容器的属性有：flex-direction(指定主轴方向)、flex-wrap(指定是否换行)、flex-flow(前面两个的缩写)、justify-content(指定主轴的如何排列)、align-items(指定交叉轴如何排列)、align-content(多根轴线对齐方式)
+- 项目的属性有：order(指定项目的排列顺序)、flex-grow(放大比例)、flex-shrink(缩小比例)、flex-basis(分配空间之前所占比例)、flex(前面三个的缩写)、align-self(设置单个项目的对齐方式)
+
+            
