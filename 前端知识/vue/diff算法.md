@@ -398,7 +398,7 @@ https://juejin.cn/post/6994959998283907102
 
 ![](./images/diff13.jpg)
 
-- 上图中，没有key值时，在a、b、c的c前面加了一个z，新旧节点的a进行sameVnode（key都为undefined相同）返回true，然后进行pathVnode，新旧虚拟节点是同一个对象，直接return。b同a一样判断。重点看下c和z进行sameVnode（key都为undefined相同，标签什么都相同）返回true，然后进行pathVnode，只有text不相同，所以只是将真实DOM的text的c改为z。然后，新建一个节点c插入。
+- 上图中，没有key值时，在a、b、c的c后面加了一个z，新旧节点的a进行sameVnode（key都为undefined相同）返回true，然后进行pathVnode，新旧虚拟节点是同一个对象，直接return。b同a一样判断。重点看下c和z进行sameVnode（key都为undefined相同，标签什么都相同）返回true，然后进行pathVnode，只有text不相同，所以只是将真实DOM的text的c改为z。然后，新建一个节点c插入。
 
 - 上图中，有key值时，每个节点都有自己的key值，则c和z进行sameVnode返回false，则新节点c又继续和旧节点c比较返回true，最后只需要新建一个z节点插入。
 
