@@ -7,7 +7,7 @@
       -Object.is方法和严格相等运算符行为基本一致，并且改正了严格相等运算符的缺点
 
        Object.is(NaN,NaN) // true
-       Object.is(+0,-0)   // false
+       Object.is(+0,-0)   // false  
     
 */
 

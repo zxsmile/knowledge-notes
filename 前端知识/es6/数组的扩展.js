@@ -10,7 +10,7 @@
 */
      
  
-/* 2.Array.from()
+/* 2.Array.from()  
 
      (1)Array.from方法用于将两类对象转为真正的数组：
       
