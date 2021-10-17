@@ -43,10 +43,10 @@
 
   - Path
 
-  * path表示cookie所在页面，**如果没有设置path值，则默认为该页面的path（不包含子页面），如果设置了path，则包含子页面**
-  * 要想同域名下的所有页面都可以访问到cookie值，则可以将path设置为'/'
-  * 比如path值设为'/E:/Demo/'，则在'/E:/Demo/'下的所有页面都可以访问到该cookie
-  * 比如path值设为'/E:/Demo/dir'，则在'/E:/Demo/dir'下的所有页面都可以访问到该cookie,而'/E:/Demo/'下的页面不能访问
+    * path表示cookie所在页面，**如果没有设置path值，则默认为该页面的path（不包含子页面），如果设置了path，则包含子页面**
+    * 要想同域名下的所有页面都可以访问到cookie值，则可以将path设置为'/'
+    * 比如path值设为'/E:/Demo/'，则在'/E:/Demo/'下的所有页面都可以访问到该cookie
+    * 比如path值设为'/E:/Demo/dir'，则在'/E:/Demo/dir'下的所有页面都可以访问到该cookie,而'/E:/Demo/'下的页面不能访问
 
   - secure
 
