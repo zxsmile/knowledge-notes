@@ -16,3 +16,18 @@ function myInstanceof(A,B){
    return false
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
