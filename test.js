@@ -1,49 +1,63 @@
-const obj = {
-   a: {
-          b: 1,
-          c: 2,
-          d: {e: 5}
-      },
-   b: [1, 3, {a: 2, b: 3}],
-   c: 3
-  }
-  
-  console.log(flatten(obj) )
-  // {
-  //  'a.b': 1,
-  //  'a.c': 2,
-  //  'a.d.e': 5,
-  //  'b[0]': 1,
-  //  'b[1]': 3,
-  //  'b[2].a': 2,
-  //  'b[2].b': 3
-  //   c: 3
-  // }
-  
-  function isObject(val) {
-   return typeof val === "object" && val !== null;
- }
-  function flatten(obj){
-     if(!isObject(obj)){
-        return
-     }
-     let res = {}
-     let dfs = (obj,str) =>{
-         if(isObject(obj)){
-            if(Array.isArray(obj)){
-               obj.forEach((item,index) => {
-               dfs(item,`${str}[${index}]`)
-               })
-            }else{
-               Object.keys(obj).forEach(key => {
-                  dfs(obj[key],`${str}${str?'.':''}${key}`)
-               })
-            }
-         }else{
-            res[str] = obj
-         }
-     }
+// 1.参数字符串，布尔，数值会报错
+// 2.参数为undefined，null，除了arguments的对象会返回undefined
+// 3.所以用arguments的属性callee（返回正在执行的函数）来区分arguments对象和别的对象
 
-     dfs(obj,'')
-     return res
+Function.prototype.myApply = function(newThis,argArr){
+	//this指的是调用apply的函数
+    if(typeof this !== 'function'){
+        throw new TypeError(this + ' is not a function');
+    }
+    newThis = newThis ? Object(newThis) : window
+	//newThis.fn = this
+	//使用Symbol()
+  let fn = Symbol()
+  newThis[fn] = this
+	//使用缓存
+	// let originalVal = newThis.fn;
+    // let hasOriginalVal = newThis.hasOwnProperty(fn);
+	// newThis.fn = this
+	
+	let result
+        
+    if(argArr){
+		let errArr = ['string','boolean','number']
+		let argRes = typeof argArr
+		if(errArr.includes(argRes)){
+			throw '参数有误'
+		}
+		let objErrArr = ['undefined','null','function']
+		if((argRes==='object'&& !argArr.callee) || objErrArr.includes(argRes)){
+			return undefined
+		}
+		//使用symbol()
+		result = newThis[fn](...argArr)
+		//使用缓存
+		//result = newThis.fn(...argArr)
+	}else{
+		//使用symbol()
+		result = newThis[fn]()
+		//使用缓存
+		//result = newThis.fn()
+	}
+	//使用symbol()
+	delete newThis[fn]
+	//使用缓存
+	//delete newThis.fn
+	// if(hasOriginalVal){
+    //     newThis.fn = originalVal
+    // }
+	return result     
+}
+
+let obj = {
+    name:'milk',
+    fn:5
   }
+  
+  function bar(){
+    console.log(this.name)
+    return 6
+  }
+  
+  console.log(bar.apply(obj,undefined))
+  //console.log(obj.fn)
