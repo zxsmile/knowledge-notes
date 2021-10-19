@@ -1,18 +1,25 @@
-function add(...arg){
-   let a = [...arg]
- 
-   let _add=function(...newArg){
-      if(newArg.length){
-         a.push(...newArg)
-         return _add
-      }else{
-        return a.reduce((x,y)=>{
-           return x+y
-        })
+Array.prototype.MyEvery = function(callback){
+   if(typeof callback !== 'function'){
+      throw new Error(`${callback} is not a function`)
+   }
+
+   let len =  this.length
+   for(var i=0;i<len;i++){
+      let res = callback(this[i],i,this)
+      if(!res){
+         return false
       }
    }
- 
-   return _add
- }
 
- console.log(add(1,5)())    // 6
+   return true
+     
+}
+
+let arr = [1,2,3,4,5,6]
+
+let s = arr.MyEvery(item => {
+   return item > 0
+})
+console.log(s)
+
+//console.log(s)
