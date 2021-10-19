@@ -1,25 +1,18 @@
-Array.prototype.MyEvery = function(callback){
-   if(typeof callback !== 'function'){
-      throw new Error(`${callback} is not a function`)
-   }
-
-   let len =  this.length
-   for(var i=0;i<len;i++){
-      let res = callback(this[i],i,this)
-      if(!res){
-         return false
-      }
-   }
-
-   return true
-     
+Object.prototype.MyCreate = function(proto,properties){
+    if(! (proto instanceof Object) && typeof proto !== 'object'){
+       throw 'error'
+    }
+    
+    function F(){}
+    F.prototype = proto
+    let obj = new F()
+    if(properties){
+       Object.defineProperty(obj,properties)
+    }
+    if(proto === null){
+       obj.__proto__ = null
+    }
+    return obj
 }
 
-let arr = [1,2,3,4,5,6]
-
-let s = arr.MyEvery(item => {
-   return item > 0
-})
-console.log(s)
-
-//console.log(s)
+console.log(Object.MyCreate({555:666}).__proto__)
