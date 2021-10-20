@@ -1,18 +1,17 @@
-Object.prototype.MyAssign = function(target,...src){
-    if(target === null || target === undefined){
-       throw 'error'
-    }
-    
-     // Object.assign()目标对象是原始类型时，会包装成对象，这里使用Object(..)就可以了
-     target = Object(target)
-     for(var i=0;i<src.length;i++){
-           for(key in src[i]){
-              if(src[i].hasOwnProperty(key)){
-                  target[key] = src[i][key]
-              }
-           }
+
+function flatter(arr){
+   let res = []
+  for(var i=0;i<arr.length;i++){
+     if(Array.isArray(arr[i])){
+        res = res.concat(flatter(arr[i]))
+     }else{
+        res.push(arr[i])
      }
-     return target
+  }
+  return res
 }
 
-console.log(Object.MyAssign({},{1:6}))
+
+
+let arr = [1,[2,3],[5,[6]]]
+console.log(flatter(arr))
