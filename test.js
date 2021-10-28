@@ -1,21 +1,17 @@
-let arr1 = [1,6,7,8,9,25]
-let arr2 = [2,3,5,6,10,12,13,31]
-console.log(fn(arr1,arr2))
-function fn(arr1,arr2){
-   if(arr1[0]>arr2[arr2.length-1]){
-      return arr2.concat(arr1)
-   }
-   if(arr2[0]>arr1[arr1.length-1]){
-      return arr1.concat(arr2)
-   }
-   let res = []
-  while(arr1.length&&arr2.length){
-      if(arr1[0]<arr2[0]){
-         res.push(arr1.shift())
-      }else{
-         res.push(arr2.shift())
-      }
-   }
-   res = res.concat(arr1,arr2)
-   return res
+let arr = []
+function fn(arr){
+    let result = []
+  for(var i=0;i<arr.length;i++){
+     let newArr = arr.slice(i+1)
+     let max = newArr.sort((a,b)=>{
+        return b-a
+     })[0]
+      result.push(max-arr[i])
+  }
+
+  result.sort((a,b) => {
+     return b-a
+  })
+
+  return result[0]
 }

@@ -6,34 +6,35 @@
   <title>Document</title>
   <style>
      .box{
-       width:200px;
-       border:black 1px solid;
-       display:-webkit-box;
-       -webkit-box-orient: vertical;
-       -webkit-line-clamp: 2;
-       overflow: hidden;
       
+     }
+
+     .center{
+        background-color: aqua;
+        position: absolute;
+        left:100px;
+        right: 100px;
+     }
+     .left{
+        width:100px;
+        background-color: rgb(102, 87, 116);
+        position: absolute;
+        left:0;
+     }
+     .right{
+        width:100px;
+        background-color: brown;
+        position: absolute;
+        right:0;
      }
   </style>
 </head>
 <body>
-  <div class="box">
-    我经济数据呕心沥血老奶奶这些拟南芥就杀就杀卡卡不出半年时间明朝初年电脑桌面
-  </div>
-  <script>
-var a=1
- function fn(){
-    var a=2
-   
-    bar()
- }
- function bar(){
-    //var a = 3
-    console.log(a)
- }
- fn()
-  </script>
-
+ <div class='box'>
+    <div class='left'>left</div>
+    <div class='center'>center</div>
+    <div class='right'>right</div>
+ </div>
   
 </body>
 </html>
