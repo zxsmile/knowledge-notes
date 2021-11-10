@@ -43,92 +43,92 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
         1. 实现一个Observer，使数据对象变得可观测
 
-           function defineReactive（obj,key,val）{
-                 
-               Object.definePrototype(obj,key,{
- 
-                  enumerable: true,
-                  configurable: true,
-
-                  get() {
-                    console.log(`${key}属性被读取了`)
-                    return val    
-                  },
-
-                  set(newVal) {
-                     console.log(`我监测到${key}属性被修改了`)
-                     val = newVal
-                  }
-
-                })
-             }
-
-
-           function observable(obj){
-               if(!obj || typeof obj !== 'object'){
-                  return
-               }
-               
-               Object.keys(obj).forEach((key)=>{
-                   defineReactive(obj,key,obj[key])
-               })
-               
-               return obj
-           }
+		           function defineReactive（obj,key,val）{
+		                 
+		               Object.definePrototype(obj,key,{
+		 
+		                  enumerable: true,
+		                  configurable: true,
+		
+		                  get() {
+		                    console.log(`${key}属性被读取了`)
+		                    return val    
+		                  },
+		
+		                  set(newVal) {
+		                     console.log(`我监测到${key}属性被修改了`)
+		                     val = newVal
+		                  }
+		
+		                })
+		             }
+		
+		
+		           function observable(obj){
+		               if(!obj || typeof obj !== 'object'){
+		                  return
+		               }
+		               
+		               Object.keys(obj).forEach((key)=>{
+		                   defineReactive(obj,key,obj[key])
+		               })
+		               
+		               return obj
+		           }
 
 
        2. 创建消息订阅器Dep
       
        - 完成了数据的'可观测'，即我们知道了数据在什么时候被读或写了，那么，我们就可以在数据被读或写的时候通知那些依赖该数据的视图更新了，为了方便，我们需要先将所有依赖收集起来，一旦数据发生变化，就统一通知更新。其实，这就是典型的“发布订阅者”模式，数据变化为“发布者”，依赖对象为“订阅者”。现在，我们需要创建一个依赖收集容器，也就是消息订阅器Dep，用来容纳所有的“订阅者”。订阅器Dep主要负责收集订阅者，然后当数据变化的时候后执行对应订阅者的更新函数。
 
-         class Dep{
-
-           constructor() {
-              this.subs=[]
-            },
-
-           addSub(sub) {
-             this.subs.push(sub) 
-           }
-
-           depend() {
-             if(Dep.target){
-                this.addSub(Dep.target) //保证初始化时，添加订阅者（我们只要在订阅者Watcher初始化的时候才需要添加订阅者，所以需要
-                                                                 做一个判断操作，所以这里的Dep.target指的就是订阅者Watcher）
-             }
-           }
-
-           notify() {
-            this.subs.forEach(sub)=>{
-               sub.update()              //遍历所有订阅者，去执行更新函数(每个订阅者都有一个update函数)
-            })
-           }
-         }
-
-         Dep.target=null
+		         class Dep{
+		
+		           constructor() {
+		              this.subs=[]
+		            },
+		
+		           addSub(sub) {
+		             this.subs.push(sub) 
+		           }
+		
+		           depend() {
+		             if(Dep.target){
+		                this.addSub(Dep.target) //保证初始化时，添加订阅者（我们只要在订阅者Watcher初始化的时候才需要添加订阅者，所以需要
+		                                                                 做一个判断操作，所以这里的Dep.target指的就是订阅者Watcher）
+		             }
+		           }
+		
+		           notify() {
+		            this.subs.forEach(sub)=>{
+		               sub.update()              //遍历所有订阅者，去执行更新函数(每个订阅者都有一个update函数)
+		            })
+		           }
+		         }
+		
+		         Dep.target=null
 
     3. 有了订阅器之后再改造一下defineReactive函数，在defineReactive函数里边加入订阅器
 
-        function defineReactive(obj,key,val){
-            dep=new Dep()
-           Object.definePrototype(obj,key,{
-               enumerable: true,
-               configurable: true,
-
-               get() {
-                 dep.depend()
-                 console.log(`${key}属性被读取了`);
-                 return val
-               }
-
-               set(newVal) {
-                 val=newVal
-                 console.log(`${key}属性被修改了`);
-                 dep.notify() //数据变化通知所有的订阅者
-               }
-           })
-        }
-
+		        function defineReactive(obj,key,val){
+		            dep=new Dep()
+		           Object.definePrototype(obj,key,{
+		               enumerable: true,
+		               configurable: true,
+		
+		               get() {
+		                 dep.depend()
+		                 console.log(`${key}属性被读取了`);
+		                 return val
+		               }
+		
+		               set(newVal) {
+		                 val=newVal
+		                 console.log(`${key}属性被修改了`);
+		                 dep.notify() //数据变化通知所有的订阅者
+		               }
+		           })
+		        }
+		
 
    4. 订阅者Watcher
 
@@ -137,31 +137,31 @@ https://www.cnblogs.com/canfoo/p/6891868.html
         - 我们知道上面我们的监听器Observer是在get函数中执行了，添加订阅者Watcher的操作的，所以我们只需要在初始化vue实例的时候，去执行get方法就好了，而执行get方法就是去获取属性值就好了
         - 我们只要在订阅者Watcher初始化的时候才需要添加订阅者，所以需要做一个判断操作，因此可以在订阅器上做一下手脚：在Dep.target上缓存下订阅者，添加成功后再将其去掉就可以了
 
-            class Watcher{
-              constructor(vm,exp.cb){
-                this.vm = vm   // vue实例
-                this.exp = exp // 是node节点的v-model或v-on：click等指令的属性值。如v-model="name"，exp就是name
-                this.cb = cb   // 是Watcher绑定的更新函数;
-                this.value = this.get() //执行自己的get方法，在get方法中会将自己缓存在Dep.target中，并获取vm的属性值，从而触
-                                           发监听器Observer的get方法，从而达到将自己添加到订阅器的目的
-              },
-              
-              update() {
-               let value = this.vm.data[this.exp] //修改属性值的时候，触发监听器中的set函数,然后执行该方法，获取修改之后的新值
-               let oldVal = this.value  //该this.value值是在初始化实例的时候，在get方法中获取到的
-               if(value !== oldVal){
-                 this.value = value
-                 this.cb.call(this.vm,value,oldVal)
-               }
-              },
-              
-              get() {
-                Dep.target=this //缓存自己
-                let value = this.vm.data[this.exp] //获取vm中的属性值，执行Observer中的get函数，把自己添加到订阅器
-                Dep.target = null //添加完之后，释放自己
-                return value
-              }
-            }
+		            class Watcher{
+		              constructor(vm,exp.cb){
+		                this.vm = vm   // vue实例
+		                this.exp = exp // 是node节点的v-model或v-on：click等指令的属性值。如v-model="name"，exp就是name
+		                this.cb = cb   // 是Watcher绑定的更新函数;
+		                this.value = this.get() //执行自己的get方法，在get方法中会将自己缓存在Dep.target中，并获取vm的属性值，从而触
+		                                           发监听器Observer的get方法，从而达到将自己添加到订阅器的目的
+		              },
+		              
+		              update() {
+		               let value = this.vm.data[this.exp] //修改属性值的时候，触发监听器中的set函数,然后执行该方法，获取修改之后的新值
+		               let oldVal = this.value  //该this.value值是在初始化实例的时候，在get方法中获取到的
+		               if(value !== oldVal){
+		                 this.value = value
+		                 this.cb.call(this.vm,value,oldVal)
+		               }
+		              },
+		              
+		              get() {
+		                Dep.target=this //缓存自己
+		                let value = this.vm.data[this.exp] //获取vm中的属性值，执行Observer中的get函数，把自己添加到订阅器
+		                Dep.target = null //添加完之后，释放自己
+		                return value
+		              }
+		            }
 
 
     过程分析：当我们去实例化一个构造函数时(new Watcher),会发生new的四个过程，其中一步是执行我们的构造函数的逻辑，所以我们就会执行它
@@ -183,46 +183,46 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 			
     5. 将Observer和Watcher关联起来
 
-         function myVue(data,el,exp){
-            this.data=data
-            observable(data) //将数据变得可观测
-            el.innerHtml = this.data[exp] //初始化模板数据的值
-            new Watcher(this,exp,function(value){
-                 el.innerHtml = value
-           })                        //初始化将订阅者添加到订阅器
-
-           return this
-         }
+		         function myVue(data,el,exp){
+		            this.data=data
+		            observable(data) //将数据变得可观测
+		            el.innerHtml = this.data[exp] //初始化模板数据的值
+		            new Watcher(this,exp,function(value){
+		                 el.innerHtml = value
+		           })                        //初始化将订阅者添加到订阅器
+		
+		           return this
+		         }
 
 
     6. 测试使用
 
-       <body>
-		<h1 id="name"></h1>
-		<input type="text">
-		<input type="button" value="改变data内容" onclick="changeInput()">
-		
-		<script src="observer.js"></script>
-		<script src="watcher.js"></script>
-		<script>
-			var ele = document.querySelector('#name');
-			var input = document.querySelector('input');
-			
-		    var myVue = new myVue({
-				name: 'hello world'
-			}, ele, 'name');
-		 	
-			//改变输入框内容
-		    input.oninput = function (e) {
-		    	myVue.data.name = e.target.value
-		    }
-			//改变data内容
-			function changeInput(){
-				myVue.data.name = "难凉热血"
-			
-			}
-		</script>
-	</body>
+		       <body>
+				<h1 id="name"></h1>
+				<input type="text">
+				<input type="button" value="改变data内容" onclick="changeInput()">
+				
+				<script src="observer.js"></script>
+				<script src="watcher.js"></script>
+				<script>
+					var ele = document.querySelector('#name');
+					var input = document.querySelector('input');
+					
+				    var myVue = new myVue({
+						name: 'hello world'
+					}, ele, 'name');
+				 	
+					//改变输入框内容
+				    input.oninput = function (e) {
+				    	myVue.data.name = e.target.value
+				    }
+					//改变data内容
+					function changeInput(){
+						myVue.data.name = "难凉热血"
+					
+					}
+				</script>
+			</body>
 
 
 
@@ -231,62 +231,62 @@ https://www.cnblogs.com/canfoo/p/6891868.html
        - 把一个对象的每一项都转化成可观测对象
 	
 
-			function observable (obj) {
-				if (!obj || typeof obj !== 'object') {
-		        	return;
-		    	}
-				let keys = Object.keys(obj);
-				keys.forEach((key) =>{
-					defineReactive(obj,key,obj[key])
-				})
-				return obj;
-			}
+				function observable (obj) {
+					if (!obj || typeof obj !== 'object') {
+			        	return;
+			    	}
+					let keys = Object.keys(obj);
+					keys.forEach((key) =>{
+						defineReactive(obj,key,obj[key])
+					})
+					return obj;
+				}
 
 	
       - 使一个对象转化成可观测对象
 
-			function defineReactive (obj,key,val) {
-				let dep = new Dep();
-				Object.defineProperty(obj, key, {
-					get(){
-						dep.depend();
-						console.log(`${key}属性被读取了`);
-						return val;
-					},
-					set(newVal){
-						val = newVal;
-						console.log(`${key}属性被修改了`);
-						dep.notify()                    //数据变化通知所有订阅者
-					}
-				})
-			}
-		
-			class Dep {
-				
-				constructor(){
-					this.subs = []
-				}
-				//增加订阅者
-				addSub(sub){
-					this.subs.push(sub);
-				}
-		        //判断是否增加订阅者
-				depend () {
-				    if (Dep.target) {
-				     	this.addSub(Dep.target)
-				    }
-				}
-		
-				//通知订阅者更新
-				notify(){
-					this.subs.forEach((sub) =>{
-						sub.update()
+				function defineReactive (obj,key,val) {
+					let dep = new Dep();
+					Object.defineProperty(obj, key, {
+						get(){
+							dep.depend();
+							console.log(`${key}属性被读取了`);
+							return val;
+						},
+						set(newVal){
+							val = newVal;
+							console.log(`${key}属性被修改了`);
+							dep.notify()                    //数据变化通知所有订阅者
+						}
 					})
 				}
-				
-			}
-		
-			Dep.target = null;
+			
+				class Dep {
+					
+					constructor(){
+						this.subs = []
+					}
+					//增加订阅者
+					addSub(sub){
+						this.subs.push(sub);
+					}
+			        //判断是否增加订阅者
+					depend () {
+					    if (Dep.target) {
+					     	this.addSub(Dep.target)
+					    }
+					}
+			
+					//通知订阅者更新
+					notify(){
+						this.subs.forEach((sub) =>{
+							sub.update()
+						})
+					}
+					
+				}
+			
+				Dep.target = null;
 
    - watcher.js
 
@@ -316,37 +316,37 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
    7. 还有一个细节问题就是我们在赋值的时候是这样的，myVue.data.name = "难凉热血"，而我们的理想形式是myVue.name = '难凉热血'，为了实现这样的形式，我们需要在new SelfVue的时候做一个代理处理，让访问selfVue的属性代理为访问selfVue.data的属性，实现原理还是使用Object.defineProperty( )对属性值再包一层：
 
-        function myVue (data, el, exp) {
-		    var self = this;
-		    this.data = data;
-		 
-		    Object.keys(data).forEach(function(key) {
-		        self.proxyKeys(key);  // 绑定代理属性
-		    });
-		 
-		    observe(data);
-		    el.innerHTML = this.data[exp];  // 初始化模板数据的值
-		    new Watcher(this, exp, function (value) {
-		        el.innerHTML = value;
-		    });
-		    return this;
-		}
-		 
-		myVue.prototype = {
-		    proxyKeys: function (key) {
-		        var self = this;
-		        Object.defineProperty(this, key, {
-		            enumerable: false,
-		            configurable: true,
-		            get: function proxyGetter() {
-		                return self.data[key];
-		            },
-		            set: function proxySetter(newVal) {
-		                self.data[key] = newVal;
-		            }
-		        });
-		    }
-		}
+		        function myVue (data, el, exp) {
+				    var self = this;
+				    this.data = data;
+				 
+				    Object.keys(data).forEach(function(key) {
+				        self.proxyKeys(key);  // 绑定代理属性
+				    });
+				 
+				    observe(data);
+				    el.innerHTML = this.data[exp];  // 初始化模板数据的值
+				    new Watcher(this, exp, function (value) {
+				        el.innerHTML = value;
+				    });
+				    return this;
+				}
+				 
+				myVue.prototype = {
+				    proxyKeys: function (key) {
+				        var self = this;
+				        Object.defineProperty(this, key, {
+				            enumerable: false,
+				            configurable: true,
+				            get: function proxyGetter() {
+				                return self.data[key];
+				            },
+				            set: function proxySetter(newVal) {
+				                self.data[key] = newVal;
+				            }
+				        });
+				    }
+				}
 
      这下我们就可以直接通过myVue.name = '难凉热血'改变属性值了
 
