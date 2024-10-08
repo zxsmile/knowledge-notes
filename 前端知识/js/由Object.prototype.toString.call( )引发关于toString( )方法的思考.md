@@ -346,3 +346,182 @@
 **我们可以发现，当我们自定义了toString()方法时，直接调用toString()方法，就不会再默认调用Object类的toString()方法，而是会使用我们自定义的方法，这样可能得不到我们想要的结果，所以我们还是应当尽量使用Object.prototype.toString.call/apply(this)。**
 
 
+#### 四、Object.prototype.toString(xxx)（ECMAScript 5） ####
+
+- 在了解Object.prototype.toString.call()之前，要先了解Object.prototype调用toString方法时的步骤和call对this的显示绑定。
+
+**1.当Object.prototype调用toString方法时的步骤**
+
+Object.prototype.toString()中的toString()只有在Object.prototype调用的时候才会走以下步骤（this的值就是this的指向）：
+
+（1）如果 this 是 null（如toString.call(null)）, 返回'[object Null]'，这里，尽管null也是一个对象类型的特殊值，它的toString行为也是由Object.prototype.toString定义的，并且特例化为返回表示null的字符串。
+
+（2）如果 this 是 undefined（例如，toString.call(undefined)）），返回 '[object Undefined]' ，这是因为undefined没有自己的属性或方法，所以它会遵循原型链找到Object.prototype.toString，但实际操作的对象是undefined，因此返回的是表示undefined的特殊字符串。
+
+（3）如果this既不是null也不是undefined，则调用ToObject()，let O = ToObject(this)，让O作为调用ToObject的结果。
+
+    - 调用ToObject()传入如果是原始数据类型，则转换成对象，如数字,则会new Number()，转换为 Number 对象，字符串会转换为 String 对象。
+    
+    - 如果传入的是一个对象，结果就是这个对象
+
+（4）定义一个class作为O的内部属性[[class]]的值。**（在js内部，给所有的数据都设定了一个[[class]]属性,它表明了数据类型，比如"Array"、"Date"、"Function"等，而且不能被修改。并且只有一个方法可以间接查询到它--就是toString()。例如，数组的 [[Class]] 可能是 "Array"）**
+
+（5）返回由"[object"和"class"和"]"组成的字符串。
+
+     Object.prototype.toString(123) //[object Object]
+
+
+**因为Object.prototype.toString()返回的是调用者的类型。不论你toString()本身的入参写的是什么，在Object.prototype.toString()中，他的调用者永远都是Object.prototype所以，在不加call()情况下，我们的出来的结果永远都是 '[object Object]'**
+
+**call(),是为了改变Object.prototype.toString这个函数都指向。Object.prototype.toString这个方法指向我们所传入的数据。**
+
+
+**2.call方法修改this指向（底层逻辑）**
+
+- call方法的主要步骤：
+
+   （1）判断调用call方法的是不是一个函数；
+
+   （2）通过在引入的形参对象上添加了一个独一无二的函数；
+
+   （3）将this（调用call的函数）赋值为刚刚添加的函数；
+
+   （4）然后将调用该函数的结果赋值给res（通过隐式绑定让this指向形参对象）；
+
+   （5）删除添加的函数；（为了使形参对象保持原状）
+
+   （6）返回res。
+
+**该效果相当于object借用了func函数。**
+
+- **Object.prototype.toString.call( )运行步骤**
+
+		Object.prototype.toString.call('1')
+		//相当于
+
+		Object.prototype.toString.call(new String('1'))
+		//call的参数是对象
+
+
+（1）通过call方法将this指向new String('1')对象;
+
+
+（2）Object.prototype调用toString方法，执行toString方法被调用的步骤：
+
+
+     - 判断是不是null和undefined;
+
+     - 创建一个变量O，将ToObject(this)的值（也就是String对象）赋值给变量O。
+
+     - 创建名为class的变量，将O的内部属性[[class]]（也就是"String"）赋值给class。
+
+     - 返回[object+class]组成的字符串（也就是[object + String]）。
+
+**3.为什么一定要用Object.prototype.toString.call()？直接在当前数据本身去调用toString()，然后让他顺着原型链去找，最后找到Object.prototype.toString这个方法不行吗？连call都省下了**
+
+  **因为对象的toString()方法可能被重写。所以，如果我们拿数据本身去toString()，是无法调用到Object.prototype.toString的。而且，在数组上被重写之后的toString方法，作用也不再是返回对象类型了。而是打印数组内容。**
+
+
+
+#### 五、Object.prototype.toString(xxx)（ECMAScript 6） ####
+
+**1.在ES6，调用 Object.prototype.toString 时，会进行如下步骤：**
+
+   （1）如果 this 是 undefined（例如，toString.call(undefined)）），返回 '[object Undefined]' ，这是因为undefined没有自己的属性或方法，所以它会遵循原型链找到Object.prototype.toString，但实际操作的对象是undefined，因此返回的是表示undefined的特殊字符串。
+    
+   （2）如果 this 是 null（如toString.call(null)） , 返回 '[object Null]'，这里，尽管null也是一个对象类型的特殊值，它的toString行为也是由Object.prototype.toString定义的，并且特例化为返回表示null的字符串。
+
+   （3）令 O 为以 this 作为参数调用 ToObject 的结果
+
+   （4）使用isArray方法验证O，令 isArray 为 IsArray(O) 
+
+   （5）如果O是特定字符串对象，则内部标识为"String"。
+
+   （6）如果O有一个[[ParameterMap]]内部插槽，则内部标识为"Arguments"。
+
+   （7）如果O有一个[[Call]]内部插槽，则内部标识为"Function"。
+
+   （8）如果O有一个[[ErrorData]]内部插槽，则内部标识为"Error" 
+
+   （9）如果O有一个[[BooleanData]]内部插槽，则内部标识为"Boolean"
+
+   （10）如果O有一个[[NumberData]]内部插槽，则内部标识为"Number"
+
+   （11）如果O有一个[[DateValue]]内部插槽，则内部标识为"Date"
+
+   （12）如果O有一个[[RegExpMatcher]]内部插槽，则内部标识为"RegExp"
+
+   （13）如果都不是则内部标识为"Object"。
+
+   （14）假设tag是O对象的@@toStringTag属性值。
+
+   （15）如果tag获取@@toStringTag属性值不是字符串，则tag等于内部标识。
+
+   （16）最后返回拼接后的字符串"[object tag]"。
+
+**在本规范的前几个版本中，toString这个函数通过访问内部属性[[class]]的内插槽的String值。上面toString函数保留了对以前一些特定类型内置对象的检测。但是对于其他内置对象或者预定义对象没有提供可靠的检测机制。针对这种情况，程序提供使用@@toStringTag的检测方式代替原来的类型检测方法。**
+
+**很明显toString方法在ES6内部产生了比较大的变化，具体体现第4~16步：**
+
+ （1）提供了专门判断数组的方法isArray。
+
+ （2）不再访问内置对象的[[call]]属性，而是根据一些特殊内部插槽判断内置对象，例如根据Arguments的[[ParameterMap]]内部插槽标记"Arguments"标识、根据Function的[[ParameterMap]]内部插槽标记"Function"标识等等（这里我认为内部卡槽可以简单理解为标识或属性）。
+
+ （3）一部分老的内置对象和新增的内置对象都有@@toStringTag属性值，例如JSON、Symbol、Map、Set、WeekMap、WeekSet、ArrayBuffer、DataView、Promise。
+ 
+ （4）获取对象的@@toStringTag或者内部标识的字符串值。（引擎为它们设置好了toStringTag标签）
+
+
+#### 六、如何让Object.prototype.toString方法识别自定义对象 ####
+
+		class Person {
+		  constructor(name, age) {
+		    this.name = name;
+		    this.age = age;
+		  }
+		​
+		  setName(name) {
+		    this.name = name;
+		  }
+		}
+		​
+		const p = new Person('王五', 25);
+		​
+		// undefined
+		console.log(Person.prototype[Symbol.toStringTag])
+		// [object Object]
+		console.log(Object.prototype.toString.call(p))
+
+
+代码中自定义了Person对象，但是使用Object.prototype.toString.call判断类型时只能返回"[object Object]"。
+
+这是因为Person继承了Object的toString方法，根据ES6的toString执行的步骤可以知道执行顺序是3->14->17，获取的tag是Object，所以最终的结果是"[object Object]"。
+
+如果可以让Object.prototype.toString.call判断类型返回"[object Person]"？
+
+ - 我们需要再次查看toString执行的步骤，看第15和第16可以知道，如果给Person设置@@toStringTag的话，就可以实现我们的目标。
+
+ **每个对象都有一个Symbol.toStringTag属性，这个属性设置的值就是@@toStringTag。**
+
+		class Person {
+		  constructor(name, age) {
+		    this.name = name;
+		    this.age = age;
+		  }
+		​
+		  setName(name) {
+		    this.name = name;
+		  }
+		​
+		  get [Symbol.toStringTag]() {
+		    return 'Person'
+		  }
+		}
+		​
+		const p = new Person('王五', 25);
+		​
+		// Person
+		console.log(Person.prototype[Symbol.toStringTag])
+
+		// [object Person]
+		console.log(Object.prototype.toString.call(p))

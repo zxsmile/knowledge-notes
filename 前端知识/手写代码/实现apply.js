@@ -5,7 +5,7 @@
 Function.prototype.myApply = function(newThis,argArr){
 	//this指的是调用apply的函数
     if(typeof this !== 'function'){
-        throw new TypeError(this + ' is not a function');
+        throw new  TypeError(this + ' is not a function');
     }
     newThis = newThis ? Object(newThis) : window
 	//newThis.fn = this
@@ -61,3 +61,24 @@ let obj = {
   
   console.log(bar.myApply(obj,null))
   console.log(obj.fn)
+
+
+//另一种写法
+
+  Function.prototype.myApply = function (context, arr) {
+    var contexts = Object(context) || window;
+    contexts.fn = this;
+    let result;
+    if (!arr) {
+        return contexts.fn();
+    } else {
+       let args = [];
+       for (var i = 0; i < arr.length; i++) {
+            args.push(`arr[${i}]`);
+        }
+       result = eval(`contexts.fn(${args})`);
+       
+    }
+    delete contexts.fn();
+    return result;
+}

@@ -5,53 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-     .box{
-      
-     }
 
-     .center{
-        background-color: aqua;
-        position: absolute;
-        left:100px;
-        right: 100px;
-     }
-     .left{
-        width:100px;
-        background-color: rgb(102, 87, 116);
-        position: absolute;
-        left:0;
-     }
-     .right{
-        width:100px;
-        background-color: brown;
-        position: absolute;
-        right:0;
-     }
   </style>
 </head>
+
 <body>
- <div class='box'>
-    <div class='left'>left</div>
-    <div class='center'>center</div>
+   <div class='box'>
+    <div class='left' id="box">left</div>
+    <div class='center' id="center">center</div>
     <div class='right'>right</div>
- </div>
- <iframe src="./test1.html"></iframe>
+    <button id='btn' onClick="console.log('1111')">点击</button>
+   </div>
+
   <script>
-//  let arr = [1,2,3]
-// arr.length = 2
-// console.log(arr)
-// arr.length = 3
-// console.log(arr[2])
-// let arr = []
-// let window2 = window.frames[0]
-// console.log(arr instanceof window2.Array)
-      console.log(Object.prototype.toString(123))
-		
-// console.log(Window.prototype.toString.call(window))
+  function* g() {
+  yield 1;
+  console.log('throwing an exception');
+  throw new Error('generator broke!');
+  yield 2;
+  yield 3;
+}
 
+function log(generator) {
+  var v;
+  console.log('starting generator');
+  try {
+    v = generator.next();
+    console.log('第一次运行next方法', v);
+  } catch (err) {
+    console.log('捕捉错误', v);
+  }
+  try {
+    v = generator.next();
+    console.log('第二次运行next方法', v);
+  } catch (err) {
+    console.log('捕捉错误', v);
+  }
+  try {
+    v = generator.next();
+    console.log('第三次运行next方法', v);
+  } catch (err) {
+    console.log('捕捉错误', v);
+  }
+  console.log('caller done');
+}
 
-
-  </script>
+log(g());
+// starting generator
+// 第一次运行next方法 { value: 1, done: false }
+// throwing an exception
+// 捕捉错误 { value: 1, done: false }
+// 第三次运行next方法 { value: undefined, done: true }
+// caller done
+ </script>
 </body>
 
 </html>

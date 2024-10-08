@@ -12,7 +12,7 @@ Function.prototype.bindFn = function(thisArg){
            //也可以用this instanceof bound判断
            if(new.target){
                 //bound函数用作构造函数,绑定的this会失效，函数中的this指向实例对象
-                var result = self.apply(this,newArges)
+                var result = self.apply(this,newArges) 
                 var isObject = typeof result==='object'&&result!==null
                 var isFunction = typeof result === 'function'
                 if(isObject||isFunction){
