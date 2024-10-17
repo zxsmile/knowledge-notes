@@ -69,7 +69,7 @@
 - Worker 线程内部需要有一个监听函数，监听message事件。通过 e.data 可以获取主线程发过来的数据。
 
 	self.addEventListener('message', function (e) {
-	  doSomething(e.data)
+	    (e.data)
 	}, false)
 	function doSomething() {
 	  ...
@@ -108,7 +108,7 @@
 
 #### 六、worker 线程直接写在主线程的页面里 ####
 
-		const script = `onmessage = function (e) {
+		const myTask = `onmessage = function (e) {
 				        var data = e.data;
 				        data.push('hello');
 				        console.log('worker:', data); // worker: [1, 2, 3, "hello"]
@@ -208,7 +208,7 @@
 		  conns+=1                                                                                                                                                                                                                                 
 		                                                                                                                                                                                                                                              
 		  port.addEventListener('message', e => {                                                                                                                                                                                                  
-		    console.log(e.data)  // 注意console对象指向第一个创建Worker线程的UI线程的console对象。即如果A先创建Worker线程，那么后续B、C等UI线程执行worker.port.postMessage时回显信心依然会发送给A页面。                                            
+		    console.log(e.data)  // 注意console对象指向第一个创建Worker线程的UI线程的console对象。即如果A先创建Worker线程，那么后续B、C等UI线程执行worker.port.postMessage时回显信息依然会发送给A页面。                                            
 		  })                                                                                                                                                                                                                                       
 		                                                                                                                                                                                                                                              
 		  // 建立双向连接，可相互通信                                                                                                                                                                                                              
