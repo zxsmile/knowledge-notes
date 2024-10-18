@@ -5,50 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+h1 + p{color:red}
 
   </style>
 </head>
 
 <body>
-   <div class='box'>
-    <div class='left' id="box">left</div>
-    <div class='center' id="center">center</div>
-    <div class='right'>right</div>
-    <button id='btn' onClick="console.log('1111')">点击</button>
-   </div>
+  <h1>h1元素</h1>
+  <p>第一个元素<p>不起作用</p></p>
+  <p>第二个元素</p>
+
 
   <script>
  
-    console.log(navigator.serviceWorker.register)
-    
-  //   navigator.serviceWorker.addEventListener('error', function (event) {
-	//    console.log(
-	//     'ERROR: Line ', event.lineno, ' in ', event.filename, ': ', event.message
-	//   )
-  // });
-  navigator.serviceWorker.register('./test.js').catch(err => {
-    console.log('ksksks',err)
-  })
-  // const myTask = `onmessage = function (e) {
-	// 			        var data = e.data;
-	// 			        data.push('hello');
-	// 			        console.log('worker:', data); // worker: [1, 2, 3, "hello"]
-	// 			        postMessage(data);
-  //                      }`;                                                                                                                                                                                                              
-	                                                                                                                                                                                                                                      
-		                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-  //   var blob = new Blob([myTask]);
-  //   navigator.serviceWorker.register(window.URL.createObjectURL(blob))
-		// var myWorker = new Worker(window.URL.createObjectURL(blob));
-		
-		// myWorker.onmessage = function (e) {
-		//     var data = e.data;
-		//     console.log('page:', data); // page: [1, 2, 3, "hello"]
-		//     console.log('arr:', arr); // arr: [1, 2, 3]
-		// };
 
-		// var arr = [1,2,3];
-		// myWorker.postMessage(arr);
+
  </script>
 </body>
 

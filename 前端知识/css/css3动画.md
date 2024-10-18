@@ -8,7 +8,7 @@ CSS3中有三个关于动画的样式属性transform、transition和animation
 
 .transform-class {
 
-   transform ： none | <transform-function>
+   transform ： none | <transform -function>
 }
 
 none表示不做变换；<transform-function>表示一个或多个变化函数，变化函数由函数名和参数组成，参数包含在()里面，用空格分开
@@ -440,5 +440,13 @@ https://www.tuicool.com/articles/na6jy2
 
 四、总结
 
-关于 CSS3 的动画的三个属性transform、transition、animation我们都介绍完了，让我们回顾一下。transform我们可以理解为元素的几何变形，它是有规律可寻的，这种变形并不会产生动画效果仅仅是原有形状的改变；transition和animation它们很像 flash 中的补间动画和逐帧动画；transition是从一个状态变化到另外一种状态，当变化有了平滑的效果后就产生了动画，它是一个公式化的变化，在比较规则的动画效果中我们可以使用，例如：旋转的风车、行驶的汽车、颜色的渐变等等；transition只能定义开始状态和结束状态，不能定义中间状态，也就是说只有两个状态；animation的动画效果更加灵活，可以实现像影片一样的复杂无规则的动画。
+关于 CSS3 的动画的三个属性transform、transition、animation我们都介绍完了，让我们回顾一下。
+
+- **transform我们可以理解为元素的几何变形，它是有规律可寻的，这种变形并不会产生动画效果仅仅是原有形状的改变；**
+
+- **transition和animation它们很像 flash 中的补间动画和逐帧动画；**
+
+   - **transition是从一个状态变化到另外一种状态，当变化有了平滑的效果后就产生了动画，它是一个公式化的变化，在比较规则的动画效果中我们可以使用，例如：旋转的风车、行驶的汽车、颜色的渐变等等；transition只能定义开始状态和结束状态，不能定义中间状态，也就是说只有两个状态； **
+
+   - **animation的动画效果更加灵活，可以实现像影片一样的复杂无规则的动画。**
 

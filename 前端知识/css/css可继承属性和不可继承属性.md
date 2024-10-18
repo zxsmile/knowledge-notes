@@ -8,7 +8,7 @@
 5. white-space：空白符的处理
 6. unicode-bidi：设置文本的方向
 7. 盒子模型的属性：width、height、margin、border、padding
-8. 背景属性：background、background-color、background-image、background-repeat、background-position、background-attachment
+8. 背景属性：background-image、background-repeat、background-position、background-attachment
 9. 定位属性：float、clear、position、top、right、bottom、left、min-width、min-height、max-width、max-height、overflow、clip、z-index
 10. 生成内容属性：content、counter-reset、counter-increment
 11. 轮廓样式属性：outline-style、outline-width、outline-color、outline
@@ -34,25 +34,34 @@
    - text-transform：控制文本大小写（就是uppercase、lowercase、capitalize这三个）
    - color：文本颜色
 
+3. 颜色属性
 
-3. 元素可见性
+   - 颜色属性包括color、background-color、border-color等。这些属性定义了文本、背景、边框的颜色，它们的值也会从父元素传递到子元素。
+   
+4. 表格属性
+
+   - 表格属性包括border-collapse、border-spacing、caption-side、empty-cells等。这些属性定义了表格的边框、间距、标题位置和空单元格处理方式，它们的值也会从父元素传递到子元素。
+
+5. 元素可见性
 
     - visibility：控制元素显示隐藏
 
 
-4. 列表布局属性
+6. 列表布局属性
 
-   - list-style：列表风格，包括list-style-type、list-style-image等
+   - list-style：列表风格，包括list-style-type、list-style-type、list-style-image等
 
 
-5. 光标属性
+7. 光标属性
 
    - cursor：光标显示为何种形态
 
 #### 三、回答 ####
 
 - 每一个属性在定义中都给出了该属性是否具有继承性，一个具有继承性的属性会在没有指定值的时候，会使用父元素的同属性的值来作为自己的值
+
 - 一般具有继承性的属性有，字体相关的属性，font-size和font-weight等。文本相关的属性，color和text-align等。表格的一些布局属性、列表属性如list-style等。还有光标属性cursor、元素可见性visibility。
+
 - 当一个属性不是继承属性的时候，我们也可以通过将它的值设置为inherit来使它从父元素那获取同名的属性值来继承。
 
 
