@@ -14,10 +14,25 @@ h1 + p{color:red}
   <h1>h1元素</h1>
   <p>第一个元素<p>不起作用</p></p>
   <p>第二个元素</p>
-
+<script src="./MyPromise.js"></script>
 
   <script>
- 
+
+
+
+MyPromise.resolve().then(() => {
+    console.log(0);
+    return MyPromise.resolve(4);
+}).then((res) => {
+    console.log(res)
+})
+
+
+
+
+
+
+
 
 
  </script>

@@ -148,15 +148,15 @@
 
      * macro-task(宏任务)包括：script(整体代码), setTimeout, setInterval, setImmediate, I/O, UI rendering
 
-     * micro-task(微任务)包括：process.nextTick, Promises, Object.observe, MutationObserver
+     * micro-task(微任务)包括：process.nextTick, Promise.[then/catch/finally], Object.observe, MutationObserver(浏览器环境)，process.nextTick(Node环境),queueMicrotask
 
 (2)macro-task(宏任务)
 
-事件列队中的每一个事件都是一个macro-task，可以理解是每次执行的代码都是一次宏任务(包括每次从时间列队中获取一个事件回调并放到执行栈中执行),第一个macrotask会从头到尾将这个任务执行完毕，不会执行其它
+事件列队中的每一个事件都是一个宏任务，可以理解是每次执行的代码都是一次宏任务(包括每次从时间列队中获取一个事件回调并放到执行栈中执行),第一个宏任务会从头到尾将这个任务执行完毕，不会执行其它
 
 (3)micro-task(微任务)
 
-* 可以理解是在当前macrotask执行结束后立即执行的任务,也就是说在当前macrotask任务后，下一个macrotask之前，在渲染之前。所以它的响应速度相比setTimeout(setTimeout是macrotask)会更快因为无需等待渲染。也就是说，在某一个macrotask执行完成后，就会将在它执行期间产生的所有microtask都执行完毕（在渲染前）。
+* 可以理解是在当前宏任务执行结束后立即执行的任务,也就是说在当前宏任务后，下一个宏任务之前，在渲染之前。所以它的响应速度相比setTimeout(setTimeout是宏任务)会更快因为无需等待渲染。也就是说，在某一个宏任务执行完成后，就会将在它执行期间产生的所有微任务都执行完毕（在渲染前）。
 
 * 注意：在Node环境下，process.nextTick的优先级高于promise.也就是：在宏任务结束后会先执行微任务队列中的nextTick部分，然后才会执行微任务中的promise部分
 
