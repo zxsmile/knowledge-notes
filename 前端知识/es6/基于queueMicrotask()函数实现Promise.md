@@ -60,7 +60,7 @@
 
  （3）Promise的状态只能由Pending->Fulfilled或者Pending->Rejected，且一旦发生改变边不可二次修改
 
- （4）Promise中使用resolve和reject**两个函数**来更改状态
+ （4）Promise中使用resolve和reject**两个函数**来更改状态，resolve和reject是我们的内置函数，用户在调用的时候会传入参数
 
  （5）then方法内部做的事情就是状态判断：
 
@@ -708,9 +708,13 @@
 
 #### 六、实现then方法的链式调用 ####
  
-1.then 方法要链式调用那么就需要返回一个 Promise 对象
+1.Promise 可以 then 多次，Promise 的 then 方法返回一个新的 Promise。
 
-2.then 方法里面 return 一个返回值作为下一个 then 方法的参数，如果是 return 一个 Promise 对象，那么就需要判断它的状态
+2.如果 then 返回的是一个正常值，那么就会把这个结果（value）作为参数，传递给下一个 then 的成功的回调（onFulfilled）
+
+3.如果 then 中抛出了异常，那么就会把这个异常（reason）作为参数，传递给下一个 then 的失败的回调(onRejected)
+
+4.如果 then 返回的是一个 promise 或者其他 thenable 对象，那么需要等这个 promise 执行完撑，promise 如果成功，就走下一个 then 的成功回调；如果失败，就走下一个 then 的失败回调。
 
 - 举个例子：
 	
@@ -736,53 +740,270 @@
 	  console.log('resolve', value)
 	})
 
-- 用目前的手写代码运行的时候会报错，无法链式调用
+- 在then中返回一个新的promise因为promise自带then，因此就可以实现链式调用！
+
+- **思路理解：**
+
+   1.promise在new的时候会在执行构造方法时，执行传入func。
+
+   2.resolve和reject会被作为参数传入到func中。
+
+   3.因为resolve和reject可以更新promise的状态和结果，所以func执行完之后promise的状态和结果就决定了。
+
+   4.所以在new promise实例这个过程中，无论同步或异步，这个过程完成之后都会确定当前promise的状态和结果。
+
+   5.链式调用需要返回一个promise，所以会在then函数中new promise。
+
+   6.实例化promise的时候需要传入一个func，并执行，如（3）所示，那这个func怎么获得呢？
+
+   7.所以我们会通过前一个promise的状态和结果以及then方法的两个入参（**使用者传递的成功回调和失败回调**）去为新的promise构造一个func。
+
+   8.在then中实例化一个promise，并执行（7）中构造的func，当func执行完之后，我们新实例化的promise状态也确定了，最后返回的就是一个状态和结果确定的promise实例。
+
+   9.如果针对上一个实例继续执行.then，相当于继续从（5）到（8）的操作
+
+   - 基于前一个promise的状态，结果以及then的两个参数（**使用者传递的成功回调和失败回调**）去为新的promise创建func，创建新的promise实例。
+
+   - 执行完之后，得到一个状态确定结果确定promise实例，并return出去就行。继续then就继续循环即可。
+
+- 在正式开始之前先看看es6内置的promise在链式调用的时候是什么样子的。
+
+	let promise = new Promise((resolve,reject) => {
+	  reject('结果')
+	})
+	
+	promise.then(res => {
+	  console.log('第一个then成功',res)
+	  return res + 1
+	},rej=>{
+	  console.log('第一个then失败',rej)
+	  return rej + 1
+	}).then(res => {
+	  console.log('第二个then成功',res)
+	  return res + 1
+	},rej=>{
+	  console.log('第二个then失败',rej)
+	  return rej + 1
+	}).then(res => {
+	  console.log('第三个then成功',res)
+	  return res + 1
+	},rej=>{
+	  console.log('第三个then失败',rej)
+	  return rej + 1
+	})
+
+	//第一个then失败 结果
+	//第二个then成功 结果1
+	//第三个then成功 结果11
+
+- **可以看到第一个then是接收第一个promise的失败结果，而后续的then返回的promise都是成功的状态。**
+
+- **因此我们知道then中promise都会用resolve去接收执行结果。**
+
+- **说明无论第一个promise状态是成功或失败，后续的promise都会用resolve去接收成功回调或失败回调中函数的执行结果。**
+
+- **有朋友可能会疑惑？**
+
+- **那reject来干嘛，其实reject更多的是处理函数的异常情况。**
+
+    let promise = new Promise((resolve,reject) => {
+	  reject('结果')
+	})
+	
+	promise.then(res => {
+	  console.log('第一个then成功',res)
+	  return res + 1
+	},rej=>{
+	  console.log('第一个then失败',rej)
+	  return rej + 1
+	}).then(res => {
+	  console.log('第二个then成功',res)
+	  return res + 1 + a
+	},rej=>{
+	  console.log('第二个then失败',rej)
+	  return rej + 1
+	}).then(res => {
+	  console.log('第三个then成功',res)
+	  return res + 1
+	},rej=>{
+	  console.log('第三个then失败',rej)
+	  return rej + 1
+	})
+
+	//第一个then失败 结果
+	//第二个then成功 结果1
+	//第三个then失败 ReferenceError: a is not defined
+
+- 上面例子中，定义了一个未存在的变量 a 所以执行成功回调时报错了返回的promise就是reject状态的。
 
 - 接着改：
 
-	  then(onFulfilled, onRejected) {
- 
-         return new MyPromise((resolve,reject) => {
+      then(onFulfilled, onRejected) {
+         let thenPromise = new MyPromise((resolve,reject) => {
              // 判断状态
 		     if (this.status === FULFILLED) {
 
 		         // 获取成功回调函数的执行结果
                 const resolveRes = onFulfilled(this.value);
 
-                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
+                // 传入resolvePromise集中处理
+                resolvePromise(x,resolve,reject)
 
-	            if(resolveRes instanceof MyPromise){
-
-	              resolveRes.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-
-	            }else {
-
-	             //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-
-	             resolve(resolveRes) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-	           }
 		     } else if (this.status === REJECTED) {
 
 		      // 调用失败回调，并且把原因返回
 		       let rejectRes = onRejected(this.reason);
  
-                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-                if (rejectRes instanceof MyPromise) {        
-			      rejectRes.then(resolve, reject)    
-                 } else {
-			    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-				  resolve(rejectRes)
-			    }
+              // 传入resolvePromise集中处理
+                resolvePromise(x,resolve,reject)
 
 		     }else if(this.status === PENDING) {
+
 		        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
 			    // 等到执行成功失败函数的时候再传递
 		        this.onFulfilledCallbacks.push(onFulfilled)
 		        this.onRejectedCallbacks.push(onRejected)
 		    }
          })
-   
+
+        return thenPromise
 	  }
+
+
+- **重点理解resolvePromise**
+
+    function resolvePromise(thenPromise, x, resolve, reject) {
+
+	  if (x === thenPromise) {
+
+	    // 因为x是回调的结果值，如果x指向thenPromise即自己，那么会重新解析自己，导致循环调用
+	    throw new TypeError("禁止循环调用");
+	  }
+	  
+	  // 如果x是一个Promise，我们必须等它完成（失败或成功）后得到一个普通值时，才能继续执行。
+
+	  // 那我们把要执行的任务放在x.then（）的成功回调和失败回调里面即可
+
+	  // 这就表示x完成后就会调用我们的代码。
+	  
+
+
+	  // 但是对于成功的情况,我们还需要再考虑下,x.then成功回调函数的参数,我们称为y
+
+	  // 那y也可能是一个thenable对象或者promise
+
+	  // 所以如果成功时，执行resolvePromise(promise2, y, resolve, reject)
+
+	  // 并且传入resolve, reject，当解析到普通值时就resolve出去，反之继续解析
+
+	  // 这样子用于保证最后resolve的结果一定是一个非promise类型的参数
+
+	  if (x instanceof myPromise) {
+	    x.then((y) => {
+	      resolvePromise(thenPromise, y, resolve, reject);
+	    },  r => reject(r));
+	  } 
+
+	  // (x instanceof myPromise) 处理了promise的情况，但是很多时候交互的promise可能不是原生的
+
+	  // 就像我们现在写的一个myPromise一样，这种有then方法的对象或函数我们称为thenable。
+
+	  // 因此我们需要处理thenable。
+
+	  else if ((typeof x === "object" || typeof x === "function") && x !== null ) {
+
+	    try {
+
+	      // 暂存x这个对象或函数的then，x也可能没有then，那then就会得到一个undefined
+	      var then = x.then;
+
+	    } catch (e) {
+
+	      // 如果读取then的过程中出现异常则reject异常出去
+	      return reject(e);
+
+	    }
+
+	    // 判断then是否函数且存在，如果函数且存在那这个就是合理的thenable，我们要尝试去解析
+
+	    if (typeof then === "function") {
+
+	      // 状态只能更新一次使用一个called防止反复调用
+	      // 因为成功和失败的回调只能执行其中之一
+
+	      let called = false;
+	      try {
+	        then.call(
+	          x,
+	          (y) => {
+
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            resolvePromise(thenPromise, y, resolve, reject);
+	          },
+	          (r) => {
+
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            reject(r);
+	          }
+	        );
+	        // 上面那一步等价于，即这里把thenable当作类似于promise的对象去执行then操作
+
+	        // x.then(
+	        //   (y) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     resolvePromise(thenPromise, y, resolve, reject);
+	        //   },
+	        //   (r) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     reject(r);
+	        //   }
+	        // )
+
+	      } catch (e) {
+
+	        // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+
+	        // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+
+	        if (called) return;
+	        called = true;
+	        reject(e);
+	      }
+	    } else {
+
+	      // 如果是对象或函数但不是thenable（即没有正确的then属性）
+	      // 当成普通值则直接resolve出去
+	      resolve(x);
+	    }
+	  } 
+
+	  // 如果既不是promise，也不是非null的对象或函数，当成普通值则直接resolve出去
+
+	  else {
+
+	    return resolve(x);
+
+	  }
+	}
+
+
+- 在理解resolvePromise的时候可以这样子去思考：
+
+     - **promise需要resolve或reject出去一个普通值。（前提）**
+
+     - **但是我们在获取成功回调结果或失败回调结果时。**
+
+     - **可能拿到的结果是promise或者thenable，因此 resolvePromise 就针对结果去解析promise，thenable，使其最后也返回一个普通值的过程。**
 
 - 目前完整代码：
 
@@ -861,214 +1082,223 @@
 	  }
 	
 	  then(onFulfilled, onRejected) {
-	 
-	    return new MyPromise((resolve,reject) => {
+	    let thenPromise = new MyPromise((resolve,reject) => {
 	        // 判断状态
 	        if (this.status === FULFILLED) {
 	
-	            // 获取成功回调函数的执行结果
-	           const resolveRes = onFulfilled(this.value);
+	          // 获取成功回调函数的执行结果
+	          const x = onFulfilled(this.value);
 	
-	           // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-	           if(resolveRes instanceof MyPromise){
-	              resolveRes.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-	           }else {
-	             //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-	             resolve(resolveRes) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-	           }
+	          // 传入resolvePromise集中处理
+	          this.resolvePromise(thenPromise,x,resolve,reject)
+	
 	        } else if (this.status === REJECTED) {
 	
-	         // 调用失败回调，并且把原因返回
-	          let rejectRes = onRejected(this.reason);
+	          // 调用失败回调，并且把原因返回
+	          let x = onRejected(this.reason);
 	
-	           // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-	           if (rejectRes instanceof MyPromise) {        
-	             rejectRes.then(resolve, reject)    
-	            } else {
-	           //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-	             resolve(rejectRes)
-	           }
+	          // 传入resolvePromise集中处理
+	          this.resolvePromise(thenPromise,x,resolve,reject)
 	
 	        }else if(this.status === PENDING) {
-	           // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-	           // 等到执行成功失败函数的时候再传递
-	           this.onFulfilledCallbacks.push(onFulfilled)
-	           this.onRejectedCallbacks.push(onRejected)
-	       }
+	
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(onFulfilled)
+	          this.onRejectedCallbacks.push(onRejected)
+	  
+	        }
 	    })
 	
-	 }
-	}
+	    return thenPromise
+	  }
 	
+	    
+	  resolvePromise(thenPromise, x, resolve, reject) {
+	
+	    if (x === thenPromise) {
+	
+	      // 因为x是回调的结果值，如果x指向thenPromise即自己，那么会重新解析自己，导致循环调用
+	      throw new TypeError("禁止循环调用");
+	    }
+	    
+	    // 如果x是一个Promise，我们必须等它完成（失败或成功）后得到一个普通值时，才能继续执行。
+	
+	    // 那我们把要执行的任务放在x.then（）的成功回调和失败回调里面即可
+	
+	    // 这就表示x完成后就会调用我们的代码。
+	  
+	
+	
+	    // 但是对于成功的情况,我们还需要再考虑下,x.then成功回调函数的参数,我们称为y
+	
+	    // 那y也可能是一个thenable对象或者promise
+	
+	    // 所以如果成功时，执行resolvePromise(promise2, y, resolve, reject)
+	
+	    // 并且传入resolve, reject，当解析到普通值时就resolve出去，反之继续解析
+	
+	    // 这样子用于保证最后resolve的结果一定是一个非promise类型的参数
+	
+	    if (x instanceof MyPromise) {
+	      x.then((y) => {
+	        this.resolvePromise(thenPromise, y, resolve, reject);
+	      },  r => reject(r));
+	    } 
+	
+	    // (x instanceof MyPromise) 处理了promise的情况，但是很多时候交互的promise可能不是原生的
+	
+	    // 就像我们现在写的一个MyPromise一样，这种有then方法的对象或函数我们称为thenable。
+	
+	    // 因此我们需要处理thenable。
+	
+	  else if ((typeof x === "object" || typeof x === "function") && x !== null ) {
+	
+	    try {
+	
+	      // 暂存x这个对象或函数的then，x也可能没有then，那then就会得到一个undefined
+	      var then = x.then;
+	
+	    } catch (e) {
+	
+	      // 如果读取then的过程中出现异常则reject异常出去
+	      return reject(e);
+	
+	    }
+	
+	    // 判断then是否函数且存在，如果函数且存在那这个就是合理的thenable，我们要尝试去解析
+	
+	    if (typeof then === "function") {
+	
+	      // 状态只能更新一次使用一个called防止反复调用
+	      // 因为成功和失败的回调只能执行其中之一
+	
+	      let called = false;
+	      try {
+	        then.call(
+	          x,
+	          (y) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            this.resolvePromise(thenPromise, y, resolve, reject);
+	          },
+	          (r) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            reject(r);
+	          }
+	        );
+	        // 上面那一步等价于，即这里把thenable当作类似于promise的对象去执行then操作
+	
+	        // x.then(
+	        //   (y) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     resolvePromise(thenPromise, y, resolve, reject);
+	        //   },
+	        //   (r) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     reject(r);
+	        //   }
+	        // )
+	
+	      } catch (e) {
+	
+	        // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	        // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	
+	        if (called) return;
+	        called = true;
+	        reject(e);
+	      }
+	    } else {
+	
+	      // 如果是对象或函数但不是thenable（即没有正确的then属性）
+	      // 当成普通值则直接resolve出去
+	      resolve(x);
+	    }
+	  } 
+	
+	  // 如果既不是promise，也不是非null的对象或函数，当成普通值则直接resolve出去
+	  else {
+	
+	    return resolve(x);
+	
+	   }
+	  }
+	}
+
 	module.exports = MyPromise
 
 - 上面例子，执行一下，结果
 
 	1
 	resolve success
-	2
-	resolve other
 
-
-#### 七、then方法链式调用识别Promise是否返回自己 ####
-
-- 如果 then 方法返回的是自己的 Promise 对象，则会发生循环调用，这个时候程序会报错
-
-- 例如下面这种情况：
-
-	// test.js
-	
-	const promise = new Promise((resolve, reject) => {
-	  resolve(100)
-	})
-	const p1 = promise.then(value => {
-	  console.log(value)
-	  return p1
-	})
-
-- 使用原生 Promise 执行这个代码，会报类型错误
-
-100
-Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
-
-- 我们在 MyPromise 实现一下：
-
-    then(onFulfilled, onRejected) {
- 
-        const promise2  = new MyPromise((resolve,reject) => {
-             // 判断状态
-		     if (this.status === FULFILLED) {
-
-		         // 获取成功回调函数的执行结果
-                const resolveRes = onFulfilled(this.value);
- 
-                // 如果相等了，说明return的是自己，抛出类型错误并返回
-                if(promise2 === resolveRes){
-
-                  return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-
-                }
-                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-
-	            if(resolveRes instanceof MyPromise){
-
-	              resolveRes.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-
-	            }else {
-
-	              //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-
-	              resolve(resolveRes) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-	           }
-		     } else if (this.status === REJECTED) {
-
-		      // 调用失败回调，并且把原因返回
-		       let rejectRes = onRejected(this.reason);
-              // 如果相等了，说明return的是自己，抛出类型错误并返回
-                if(promise2 === rejectRes){
-
-                  return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-
-                }
-                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-                if (rejectRes instanceof MyPromise) {        
-			      rejectRes.then(resolve, reject)    
-                 } else {
-			    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-				  resolve(rejectRes)
-			    }
-
-		     }else if(this.status === PENDING) {
-		        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-			    // 等到执行成功失败函数的时候再传递
-		        this.onFulfilledCallbacks.push(onFulfilled)
-		        this.onRejectedCallbacks.push(onRejected)
-		    }
-         })
-
-         return promise2
-   
-	  }
+	Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 
 - 执行一下，竟然报错了
 
-      resolvePromise(promise2, x, resolve, reject);
-                       ^
+#### 七、创建微任务 ####
 
-      ReferenceError: Cannot access 'promise2' before initialization
+- 上面代码为啥会报错呢？从错误提示可以看出，**我们必须要等 promise2 完成初始化。这个时候我们就要用上宏微任务和事件循环的知识了，这里就需要创建一个异步函数去等待 promise2 完成初始化，前面我们已经确认了创建微任务的技术方案 --> queueMicrotask**
 
-- 为啥会报错呢？从错误提示可以看出，**我们必须要等 promise2 完成初始化。这个时候我们就要用上宏微任务和事件循环的知识了，这里就需要创建一个异步函数去等待 promise2 完成初始化，前面我们已经确认了创建微任务的技术方案 --> queueMicrotask**
-
-        then(onFulfilled, onRejected) {
- 
-            const promise2  = new MyPromise((resolve,reject) => {
-             // 判断状态
-		     if (this.status === FULFILLED) {
-          
-                queueMicrotask(() => {
-                // 获取成功回调函数的执行结果
-	                const resolveRes = onFulfilled(this.value);
+	 then(onFulfilled, onRejected) {
+	    let thenPromise = new MyPromise((resolve,reject) => {
+	        // 判断状态
+	        if (this.status === FULFILLED) {
+	       
+	          queueMicrotask(() => {
+	
+	            // 获取成功回调函数的执行结果
+	            const x = onFulfilled(this.value);
+	
+	            // 传入resolvePromise集中处理
+	            this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	          })
+	         
+	
+	        } else if (this.status === REJECTED) {
 	 
-	                // 如果相等了，说明return的是自己，抛出类型错误并返回
-	                if(promise2 === resolveRes){
+	        queueMicrotask(() => {
 	
-	                  return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
+	          // 调用失败回调，并且把原因返回
+	          let x = onRejected(this.reason);
 	
-	                }
-	                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
+	          // 传入resolvePromise集中处理
+	          this.resolvePromise(thenPromise,x,resolve,reject)
+	        })
+	        
+	        }else if(this.status === PENDING) {
 	
-		            if(resolveRes instanceof MyPromise){
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(onFulfilled)
+	          this.onRejectedCallbacks.push(onRejected)
+	  
+	        }
+	    })
 	
-		              resolveRes.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-	
-		            }else {
-	
-		              //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-	
-		              resolve(resolveRes) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-		           }
-                })
-		         
-		     } else if (this.status === REJECTED) {
-
-               queueMicrotask(() => {
-
-	              // 调用失败回调，并且把原因返回
-			       let rejectRes = onRejected(this.reason);
-	              // 如果相等了，说明return的是自己，抛出类型错误并返回
-	                if(promise2 === rejectRes){
-	
-	                  return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-	
-	                }
-	                // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-	                if (rejectRes instanceof MyPromise) {        
-				      rejectRes.then(resolve, reject)    
-	                 } else {
-				    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-					  resolve(rejectRes)
-				    }
-               })
-		     
-
-		     }else if(this.status === PENDING) {
-		        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-			    // 等到执行成功失败函数的时候再传递
-		        this.onFulfilledCallbacks.push(onFulfilled)
-		        this.onRejectedCallbacks.push(onRejected)
-		    }
-         })
-
-         return promise2
-   
-	  } 
+	    return thenPromise
+	  }
 
 - 这里得到我们的结果:
 
 	1
-	resolve success
-	3
-	Chaining cycle detected for promise #<Promise>
+    resolve success
+    2
+    resolve other
 
 #### 八、捕获错误 ####
 
@@ -1113,78 +1343,63 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 
 **2.then 执行的时错误捕获**
 
-	  then(onFulfilled, onRejected) {
- 
-		    const promise2  = new MyPromise((resolve,reject) => {
-		     // 判断状态
-		     if (this.status === FULFILLED) {
-		  
-		        queueMicrotask(() => {
-		          try{
-		            // 获取成功回调函数的执行结果
-		            const resolveRes = onFulfilled(this.value);
-		
-		            // 如果相等了，说明return的是自己，抛出类型错误并返回
-		            if(promise2 === resolveRes){
-		
-		                return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-		
-		            }
-		            // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-		
-		            if(resolveRes instanceof MyPromise){
-		
-		                resolveRes.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-		
-		            }else {
-		
-		            //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-		
-		                resolve(resolveRes) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-		            }resolve
-		          }catch(err){
-		            reject(err)
-		          }
-		        
-		        })
-		         
-		     } else if (this.status === REJECTED) {
-		
-		       queueMicrotask(() => {
-         
-			        try {
-			          // 调用失败回调，并且把原因返回
-			           let rejectRes = onRejected(this.reason);
-			          // 如果相等了，说明return的是自己，抛出类型错误并返回
-			            if(promise2 === rejectRes){
-			
-			              return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-			
-			            }
-			            // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-			            if (rejectRes instanceof MyPromise) {        
-			              rejectRes.then(resolve, reject)    
-			             } else {
-			            //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-			              resolve(rejectRes)
-			            }
-			         }catch(err) {
-			           console.log(err)
-			         }  
-		       })
-		     
-		
-		     }else if(this.status === PENDING) {
-		        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-		        // 等到执行成功失败函数的时候再传递
-		        this.onFulfilledCallbacks.push(onFulfilled)
-		        this.onRejectedCallbacks.push(onRejected)
-		    }
-		 })
-		
-		 return promise2
-		
-		}
+	   then(onFulfilled, onRejected) {
+	    let thenPromise = new MyPromise((resolve,reject) => {
+	        // 判断状态
+	        if (this.status === FULFILLED) {
+	       
+	          queueMicrotask(() => {
+	
+	            try{
+	
+	              // 获取成功回调函数的执行结果
+	              const x = onFulfilled(this.value);
+	
+	              // 传入resolvePromise集中处理
+	              this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	            }catch(error){
+	     
+	              reject(error)
+	               
+	            }
+	            
+	
+	          })
+	         
+	
+	        } else if (this.status === REJECTED) {
+	 
+	        queueMicrotask(() => {
+	
+	          try{
+	
+	            // 调用失败回调，并且把原因返回
+	            let x = onRejected(this.reason);
+	
+	            // 传入resolvePromise集中处理
+	            this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	          }catch(error){
+	
+	            reject(error)
+	            
+	          }
+	
+	        })
+	
+	        }else if(this.status === PENDING) {
+	
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(onFulfilled)
+	          this.onRejectedCallbacks.push(onRejected)
+	  
+	        }
+	    })
+	
+	    return thenPromise
+	  }
 
 
 - 验证一下：
@@ -1236,53 +1451,69 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
    - 增加错误捕获
 
 	 then(onFulfilled, onRejected) {
-	 
-	    const thenPromise  = new MyPromise((resolve,reject) => {
-	     // 判断状态
-	     if (this.status === FULFILLED) {
-	  
-	        queueMicrotask(() => {
-	          try{
-	            // 获取成功回调函数的执行结果
-	            const resolveRes = onFulfilled(this.value);
-	            this.resolvePromise(thenPromise, resolveRes, resolve, reject)
-	           
-	          }catch(err){
-	            reject(err)
-	          }
-	        
-	        })
-	         
-	     } else if (this.status === REJECTED) {
+
+	    let thenPromise = new MyPromise((resolve,reject) => {
+	        // 判断状态
+	        if (this.status === FULFILLED) {
+	       
+	          queueMicrotask(() => {
 	
-	        queueMicrotask(() => {
-	        try {
-	          // 调用失败回调，并且把原因返回
-	           let rejectRes = onRejected(this.reason);
-	           this.resolvePromise(thenPromise, rejectRes, resolve, reject)
-	         }catch(err) {
-	           console.log(err)
-	         }  
-	       })
+	            try{
+	
+	              // 获取成功回调函数的执行结果
+	              const x = onFulfilled(this.value);
+	
+	              // 传入resolvePromise集中处理
+	              this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	            }catch(error){
 	     
+	              reject(error)
+	               
+	            }
+	            
 	
-	     }else if(this.status === PENDING) {
-	        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-	        // 等到执行成功失败函数的时候再传递
-	        this.onFulfilledCallbacks.push(() => {
-	            queueMicrotask(() => {
-	                try{
-	                  // 获取成功回调函数的执行结果
-	                  const resolveRes = onFulfilled(this.value);
-	                  this.resolvePromise(thenPromise, resolveRes, resolve, reject)
-	                 
-	                }catch(err){
-	                  reject(err)
-	                }
-	              
-	              })
+	          })
+	         
+	
+	        } else if (this.status === REJECTED) {
+	 
+	        queueMicrotask(() => {
+	
+	          try{
+	
+	            // 调用失败回调，并且把原因返回
+	            let x = onRejected(this.reason);
+	
+	            // 传入resolvePromise集中处理
+	            this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	          }catch(error){
+	
+	            reject(error)
+	
+	          }
+	
 	        })
-	        this.onRejectedCallbacks.push(() => {
+	
+	        }else if(this.status === PENDING) {
+	
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(() => {
+		            queueMicrotask(() => {
+		                try{
+		                  // 获取成功回调函数的执行结果
+		                  const resolveRes = onFulfilled(this.value);
+		                  this.resolvePromise(thenPromise, resolveRes, resolve, reject)
+		                 
+		                }catch(err){
+		                  reject(err)
+		                }
+		              
+		              })
+		        })
+	          this.onRejectedCallbacks.push(() => {
 	            queueMicrotask(() => {
 	                try {
 	                  // 调用失败回调，并且把原因返回
@@ -1293,34 +1524,13 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 	                 }  
 	               })
 	        })
-	    }
-	 })
+	  
+	        }
+	    })
 	
-	 return thenPromise
-	
+	    return thenPromise
 	  }
-	
-	  resolvePromise(thenPromise, res, resolve, reject) {
-	     // 如果相等了，说明return的是自己，抛出类型错误并返回
-	    if(thenPromise === res){
-	
-	        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-	
-	    }
-	    // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-	
-	    if(res instanceof MyPromise){
-	
-	        res.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-	
-	    }else {
-	
-	    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-	
-	        resolve(res) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-	    }
-	      
-	  }
+
 
 #### 十、then中的参数变为可选 ####
 
@@ -1352,7 +1562,7 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 	  onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason};
 	
 	  // 为了链式调用这里直接创建一个 MyPromise，并在后面 return 出去
-	  const promise2 = new MyPromise((resolve, reject) => {
+	  const thenPromise = new MyPromise((resolve, reject) => {
 	  ......
 	}
 
@@ -1387,122 +1597,139 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 
 - 写到这里，麻雀版的 Promise 基本完成了，完整代码
 
-		// 先定义三个常量表示状态
-		const PENDING = 'pending';
-		const FULFILLED = 'fulfilled';
-		const REJECTED = 'rejected';
-		
-		// 新建 MyPromise 类
-		class MyPromise {
-		
-		  constructor(executor){
-		
-		    // 判断参数否为function
-		    if(typeof executor !== 'function'){
-		      throw new Error('MyPromise must accept a function as a parameter')
-		    }
-		      
-		    // 储存状态的变量，初始值是 pending
-		       this.status = PENDING;
-		
-		    // 成功之后的值
-		       this.value = null;
-		      
-		    // 失败之后的原因
-		       this.reason = null;
-		
-		    // 存储成功回调函数
-		    //    this.onFulfilledCallback = null
-		
-		       this.onFulfilledCallbacks = []
-		
-		    //存储失败回调
-		
-		    //    this.onRejectedCallback = null
-		       this.onRejectedCallbacks = []
-		
-		    // executor 是一个函数(执行器)，进入会立即执行
-		    // 并传入resolve和reject方法
-		     try {
-			    executor(this.resolve, this.reject)
-			  } catch (error) {
-			    // 如果有错误，就直接执行 reject
-			    this.reject(error)
-			  }
-		 }
-		
-		
-		  // resolve和reject为什么要用箭头函数？
-		  // 如果直接调用的话，普通函数this指向的是window或者undefined
-		  // 用箭头函数就可以让this指向当前实例对象
-		  // 更改成功后的状态
-		  resolve = (value) => {
-		    // 只有状态是等待，才执行状态修改
-		    if (this.status === PENDING) {
-		      // 状态修改为成功
-		      this.status = FULFILLED;
-		      // 保存成功之后的值
-		      this.value = value;
-		      // 判断成功回调是否存在，如果存在就调用
-		      while(this.onFulfilledCallbacks.length){
-		        this.onFulfilledCallbacks.shift()(value)
-		      }
-		    }
-		  }
-		
-		  // 更改失败后的状态
-		  reject = (reason) => {
-		    // 只有状态是等待，才执行状态修改
-		    if (this.status === PENDING) {
-		      // 状态修改为失败
-		      this.status = REJECTED;
-		      // 保存失败后的原因
-		      this.reason = reason;
-		    // 判断失败回调是否存在，如果存在就调用
-		      while(this.onRejectedCallbacks.length){
-		        this.onRejectedCallbacks.shift()(reason)
-		      }
-		    }
-		  }   
-		
-		  then(onFulfilled, onRejected) {
-		 
-		     // 如果不传，就使用默认函数
+	// 先定义三个常量表示状态
+	const PENDING = 'pending';
+	const FULFILLED = 'fulfilled';
+	const REJECTED = 'rejected';
+	
+	// 新建 MyPromise 类
+	class MyPromise {
+	
+	  constructor(executor){
+	
+	    // 判断参数否为function
+	    if(typeof executor !== 'function'){
+	      throw new Error('MyPromise must accept a function as a parameter')
+	    }
+	      
+	    // 储存状态的变量，初始值是 pending
+	       this.status = PENDING;
+	
+	    // 成功之后的值
+	       this.value = null;
+	      
+	    // 失败之后的原因
+	       this.reason = null;
+	
+	    // 存储成功回调函数
+	    //    this.onFulfilledCallback = null
+	
+	       this.onFulfilledCallbacks = []
+	
+	    //存储失败回调
+	
+	    //    this.onRejectedCallback = null
+	       this.onRejectedCallbacks = []
+	
+	    // executor 是一个函数(执行器)，进入会立即执行
+	    // 并传入resolve和reject方法
+	    try {
+	      executor(this.resolve, this.reject)
+	    } catch (error) {
+	      // 如果有错误，就直接执行 reject
+	      this.reject(error)
+	    }
+	 }
+	
+	
+	  // resolve和reject为什么要用箭头函数？
+	  // 如果直接调用的话，普通函数this指向的是window或者undefined
+	  // 用箭头函数就可以让this指向当前实例对象
+	  // 更改成功后的状态
+	  resolve = (value) => {
+	    // 只有状态是等待，才执行状态修改
+	    if (this.status === PENDING) {
+	      // 状态修改为成功
+	      this.status = FULFILLED;
+	      // 保存成功之后的值
+	      this.value = value;
+	      // 判断成功回调是否存在，如果存在就调用
+	      while(this.onFulfilledCallbacks.length){
+	        this.onFulfilledCallbacks.shift()(value)
+	      }
+	    }
+	  }
+	
+	  // 更改失败后的状态
+	  reject = (reason) => {
+	    // 只有状态是等待，才执行状态修改
+	    if (this.status === PENDING) {
+	      // 状态修改为失败
+	      this.status = REJECTED;
+	      // 保存失败后的原因
+	      this.reason = reason;
+	    // 判断失败回调是否存在，如果存在就调用
+	      while(this.onRejectedCallbacks.length){
+	        this.onRejectedCallbacks.shift()(reason)
+	      }
+	    }
+	  }
+	
+	  then(onFulfilled, onRejected) {
+	
+	    // 如果不传，就使用默认函数
 			onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
-			onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason};
-		    const thenPromise  = new MyPromise((resolve,reject) => {
-		     // 判断状态
-		     if (this.status === FULFILLED) {
-		  
-		        queueMicrotask(() => {
-		          try{
-		            // 获取成功回调函数的执行结果
-		            const resolveRes = onFulfilled(this.value);
-		            this.resolvePromise(thenPromise,resolveRes, resolve, reject)
-		           
-		          }catch(err){
-		            reject(err)
-		          }
-		        
-		        })
-		         
-		     } else if (this.status === REJECTED) {
-		
-		        queueMicrotask(() => {
-		        try {
-		          // 调用失败回调，并且把原因返回
-		           let rejectRes = onRejected(this.reason);
-		           this.resolvePromise(thenPromise, rejectRes, resolve, reject)
-		         }catch(err) {
-		           console.log(err)
-		         }  
-		       })
-		     
-		
-		     }else if(this.status === PENDING) {
-		        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-		        // 等到执行成功失败函数的时候再传递
-		        this.onFulfilledCallbacks.push(() => {
+	    onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason};
+	    
+	    let thenPromise = new MyPromise((resolve,reject) => {
+	        // 判断状态
+	        if (this.status === FULFILLED) {
+	       
+	          queueMicrotask(() => {
+	
+	            try{
+	
+	              // 获取成功回调函数的执行结果
+	              const x = onFulfilled(this.value);
+	
+	              // 传入resolvePromise集中处理
+	              this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	            }catch(error){
+	     
+	              reject(error)
+	               
+	            }
+	            
+	
+	          })
+	         
+	
+	        } else if (this.status === REJECTED) {
+	 
+	        queueMicrotask(() => {
+	
+	          try{
+	
+	            // 调用失败回调，并且把原因返回
+	            let x = onRejected(this.reason);
+	
+	            // 传入resolvePromise集中处理
+	            this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	          }catch(error){
+	
+	            reject(error)
+	
+	          }
+	
+	        })
+	
+	        }else if(this.status === PENDING) {
+	
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(() => {
 		            queueMicrotask(() => {
 		                try{
 		                  // 获取成功回调函数的执行结果
@@ -1515,47 +1742,149 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 		              
 		              })
 		        })
-		        this.onRejectedCallbacks.push(() => {
-		            queueMicrotask(() => {
-		                try {
-		                  // 调用失败回调，并且把原因返回
-		                   let rejectRes = onRejected(this.reason);
-		                   this.resolvePromise(thenPromise, rejectRes, resolve, reject)
-		                 }catch(err) {
-		                   console.log(err)
-		                 }  
-		               })
-		        })
-		    }
-		 })
-		
-		 return thenPromise
-		
-		  }
-		
-		  resolvePromise(thenPromise, res, resolve, reject) {
-		     // 如果相等了，说明return的是自己，抛出类型错误并返回
-		    if(thenPromise === res){
-		
-		        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
-		
-		    }
-		    // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
-		
-		    if(res instanceof MyPromise){
-		
-		        res.then(resolve, reject)//先通过then获取到当前的resolveRes这个promise的状态，然后继续执行myPromise的then的逻辑
-		
-		    }else {
-		
-		    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
-		
-		       resolve(res) // 将上一个then的返回值通过执行resolve(resolveRes)传递给下一个then，因为调用完resolve(resolveRes)就直接进入then了（如果后面有then的话）
-		    }
-		      
-		  }
-		
-		}
+	          this.onRejectedCallbacks.push(() => {
+	            queueMicrotask(() => {
+	                try {
+	                  // 调用失败回调，并且把原因返回
+	                   let rejectRes = onRejected(this.reason);
+	                   this.resolvePromise(thenPromise, rejectRes, resolve, reject)
+	                 }catch(err) {
+	                   console.log(err)
+	                 }  
+	               })
+	        })
+	  
+	        }
+	    })
+	
+	    return thenPromise
+	  }
+	
+	    
+	  resolvePromise(thenPromise, x, resolve, reject) {
+	
+	    if (x === thenPromise) {
+	
+	      // 因为x是回调的结果值，如果x指向thenPromise即自己，那么会重新解析自己，导致循环调用
+	      throw new TypeError("禁止循环调用");
+	    }
+	    
+	    // 如果x是一个Promise，我们必须等它完成（失败或成功）后得到一个普通值时，才能继续执行。
+	
+	    // 那我们把要执行的任务放在x.then（）的成功回调和失败回调里面即可
+	
+	    // 这就表示x完成后就会调用我们的代码。
+	  
+	
+	
+	    // 但是对于成功的情况,我们还需要再考虑下,x.then成功回调函数的参数,我们称为y
+	
+	    // 那y也可能是一个thenable对象或者promise
+	
+	    // 所以如果成功时，执行resolvePromise(promise2, y, resolve, reject)
+	
+	    // 并且传入resolve, reject，当解析到普通值时就resolve出去，反之继续解析
+	
+	    // 这样子用于保证最后resolve的结果一定是一个非promise类型的参数
+	
+	    if (x instanceof MyPromise) {
+	      x.then((y) => {
+	        this.resolvePromise(thenPromise, y, resolve, reject);
+	      },  r => reject(r));
+	    } 
+	
+	    // (x instanceof MyPromise) 处理了promise的情况，但是很多时候交互的promise可能不是原生的
+	
+	    // 就像我们现在写的一个MyPromise一样，这种有then方法的对象或函数我们称为thenable。
+	
+	    // 因此我们需要处理thenable。
+	
+	  else if ((typeof x === "object" || typeof x === "function") && x !== null ) {
+	
+	    try {
+	
+	      // 暂存x这个对象或函数的then，x也可能没有then，那then就会得到一个undefined
+	      var then = x.then;
+	
+	    } catch (e) {
+	
+	      // 如果读取then的过程中出现异常则reject异常出去
+	      return reject(e);
+	
+	    }
+	
+	    // 判断then是否函数且存在，如果函数且存在那这个就是合理的thenable，我们要尝试去解析
+	
+	    if (typeof then === "function") {
+	
+	      // 状态只能更新一次使用一个called防止反复调用
+	      // 因为成功和失败的回调只能执行其中之一
+	
+	      let called = false;
+	      try {
+	        then.call(
+	          x,
+	          (y) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            this.resolvePromise(thenPromise, y, resolve, reject);
+	          },
+	          (r) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	            if (called) return;
+	            called = true;
+	            reject(r);
+	          }
+	        );
+	        // 上面那一步等价于，即这里把thenable当作类似于promise的对象去执行then操作
+	
+	        // x.then(
+	        //   (y) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     resolvePromise(thenPromise, y, resolve, reject);
+	        //   },
+	        //   (r) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     reject(r);
+	        //   }
+	        // )
+	
+	      } catch (e) {
+	
+	        // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	        // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	
+	        if (called) return;
+	        called = true;
+	        reject(e);
+	      }
+	    } else {
+	
+	      // 如果是对象或函数但不是thenable（即没有正确的then属性）
+	      // 当成普通值则直接resolve出去
+	      resolve(x);
+	    }
+	  } 
+	
+	  // 如果既不是promise，也不是非null的对象或函数，当成普通值则直接resolve出去
+	  else {
+	
+	    return resolve(x);
+	
+	   }
+	  }
+	}
+
 		
 		module.exports = MyPromise
 
@@ -1649,12 +1978,12 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 	
 	    // executor 是一个函数(执行器)，进入会立即执行
 	    // 并传入resolve和reject方法
-	     try {
-		    executor(this.resolve, this.reject)
-		  } catch (error) {
-		    // 如果有错误，就直接执行 reject
-		    this.reject(error)
-		  }
+	    try {
+	      executor(this.resolve, this.reject)
+	    } catch (error) {
+	      // 如果有错误，就直接执行 reject
+	      this.reject(error)
+	    }
 	 }
 	
 	
@@ -1692,56 +2021,73 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 	  }
 	
 	  then(onFulfilled, onRejected) {
-	 
-	     // 如果不传，就使用默认函数
-		onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
-		onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason};
-	    const thenPromise  = new MyPromise((resolve,reject) => {
-	     // 判断状态
-	     if (this.status === FULFILLED) {
-	  
-	        queueMicrotask(() => {
-	          try{
-	            // 获取成功回调函数的执行结果
-	            const resloveRes = onFulfilled(this.value);
-	            this.resolvePromise(thenPromise, resloveRes, resolve, reject)
-	           
-	          }catch(err){
-	            reject(err)
-	          }
-	        
-	        })
-	         
-	     } else if (this.status === REJECTED) {
 	
-	        queueMicrotask(() => {
-	        try {
-	          // 调用失败回调，并且把原因返回
-	           let rejectRes = onRejected(this.reason);
-	           this.resolvePromise(thenPromise, rejectRes, resolve, reject)
-	         }catch(err) {
-	           console.log(err)
-	         }  
-	       })
+	    // 如果不传，就使用默认函数
+			onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : value => value;
+	    onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw reason};
+	    
+	    let thenPromise = new MyPromise((resolve,reject) => {
+	        // 判断状态
+	        if (this.status === FULFILLED) {
+	       
+	          queueMicrotask(() => {
+	
+	            try{
+	
+	              // 获取成功回调函数的执行结果
+	              const x = onFulfilled(this.value);
+	
+	              // 传入resolvePromise集中处理
+	              this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	            }catch(error){
 	     
+	              reject(error)
+	               
+	            }
+	            
 	
-	     }else if(this.status === PENDING) {
-	        // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-	        // 等到执行成功失败函数的时候再传递
-	        this.onFulfilledCallbacks.push(() => {
-	            queueMicrotask(() => {
-	                try{
-	                  // 获取成功回调函数的执行结果
-	                  const resloveRes = onFulfilled(this.value);
-	                  this.resolvePromise(thenPromise, resloveRes, resolve, reject)
-	                 
-	                }catch(err){
-	                  reject(err)
-	                }
-	              
-	              })
+	          })
+	         
+	
+	        } else if (this.status === REJECTED) {
+	 
+	        queueMicrotask(() => {
+	
+	          try{
+	
+	            // 调用失败回调，并且把原因返回
+	            let x = onRejected(this.reason);
+	
+	            // 传入resolvePromise集中处理
+	            this.resolvePromise(thenPromise,x,resolve,reject)
+	
+	          }catch(error){
+	
+	            reject(error)
+	
+	          }
+	
 	        })
-	        this.onRejectedCallbacks.push(() => {
+	
+	        }else if(this.status === PENDING) {
+	
+	          // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
+	          // 等到执行成功失败函数的时候再传递
+	          this.onFulfilledCallbacks.push(() => {
+		            queueMicrotask(() => {
+		                try{
+		                  // 获取成功回调函数的执行结果
+		                  const resolveRes = onFulfilled(this.value);
+		                  this.resolvePromise(thenPromise, resolveRes, resolve, reject)
+		                 
+		                }catch(err){
+		                  reject(err)
+		                }
+		              
+		              })
+		        })
+	          this.onRejectedCallbacks.push(() => {
 	            queueMicrotask(() => {
 	                try {
 	                  // 调用失败回调，并且把原因返回
@@ -1752,165 +2098,159 @@ Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
 	                 }  
 	               })
 	        })
+	  
+	        }
+	    })
+	
+	    return thenPromise
+	  }
+	
+	    
+	  resolvePromise(thenPromise, x, resolve, reject) {
+	
+	    if (x === thenPromise) {
+	
+	      // 因为x是回调的结果值，如果x指向thenPromise即自己，那么会重新解析自己，导致循环调用
+	      throw new TypeError("禁止循环调用");
 	    }
-	 })
+	    
+	    // 如果x是一个Promise，我们必须等它完成（失败或成功）后得到一个普通值时，才能继续执行。
 	
-	 return thenPromise
+	    // 那我们把要执行的任务放在x.then（）的成功回调和失败回调里面即可
 	
-	  }
+	    // 这就表示x完成后就会调用我们的代码。
+	  
 	
-	  resolvePromise(thenPromise, res, resolve, reject) {
-	     // 如果相等了，说明return的是自己，抛出类型错误并返回
-	    if(thenPromise === res){
 	
-	        return reject(new TypeError('Chaining cycle detected for promise #<Promise>'))
+	    // 但是对于成功的情况,我们还需要再考虑下,x.then成功回调函数的参数,我们称为y
 	
-	    }
-	    // 如果当前回调函数返回MyPromise对象，必须等待其状态改变后在执行下一个回调
+	    // 那y也可能是一个thenable对象或者promise
 	
-	    if(res instanceof MyPromise){
+	    // 所以如果成功时，执行resolvePromise(promise2, y, resolve, reject)
 	
-	        res.then(resolve, reject)//先通过then获取到当前的resloveRes这个promise的状态，然后继续执行myPromise的then的逻辑
+	    // 并且传入resolve, reject，当解析到普通值时就resolve出去，反之继续解析
 	
-	    }else {
+	    // 这样子用于保证最后resolve的结果一定是一个非promise类型的参数
 	
-	    //否则会将返回结果直接作为参数，传入下一个then的回调函数，并立即执行下一个then的回调函数
+	    if (x instanceof MyPromise) {
+	      x.then((y) => {
+	        this.resolvePromise(thenPromise, y, resolve, reject);
+	      },  r => reject(r));
+	    } 
 	
-	       resolve(res) // 将上一个then的返回值通过执行reslove(resloveRes)传递给下一个then，因为调用完reslove(resloveRes)就直接进入then了（如果后面有then的话）
-	    }
-	      
-	  }
-	  // resolve 静态方法
-	  static resolve (parameter) {
-		// 如果传入 MyPromise 就直接返回
-		if (parameter instanceof MyPromise) {
-		    return parameter;
-		}
-		
-		// 转成常规方式
-		return new MyPromise(resolve =>  {
-		    resolve(parameter);
-		});
-	  }
-		
-	  // reject 静态方法
-	  static reject (reason) {
-		return new MyPromise((resolve, reject) => {
-		    reject(reason);
-		});
-	  }
-	}
+	    // (x instanceof MyPromise) 处理了promise的情况，但是很多时候交互的promise可能不是原生的
 	
-	module.exports = MyPromise
-
-#### 十二、Promise A+ 测试 ####
-
-- 上面介绍了 Promise A+ 规范，当然我们手写的版本也得符合了这个规范才有资格叫 Promise， 不然就只能是伪 Promise 了。
-
-- 上文讲到了 promises-aplus-tests，现在我们正式开箱使用
-
-**1.安装**
-
-    npm install promises-aplus-tests -D
-
-**2.手写代码中加入 deferred**
-
-	// MyPromise.js
+	    // 就像我们现在写的一个MyPromise一样，这种有then方法的对象或函数我们称为thenable。
 	
-	MyPromise {
-	  ......
-	}
+	    // 因此我们需要处理thenable。
 	
-	MyPromise.deferred = function () {
-	  var result = {};
-	  result.promise = new MyPromise(function (resolve, reject) {
-	    result.resolve = resolve;
-	    result.reject = reject;
-	  });
+	  else if ((typeof x === "object" || typeof x === "function") && x !== null ) {
 	
-	  return result;
-	}
-	module.exports = MyPromise;
-
-**3. 配置启动命令**
-
-	{
-	  "name": "promise",
-	  "version": "1.0.0",
-	  "description": "my promise",
-	  "main": "MyPromise.js",
-	  "scripts": {
-	    "test": "promises-aplus-tests MyPromise"
-	  },
-	  "author": "ITEM",
-	  "license": "ISC",
-	  "devDependencies": {
-	    "promises-aplus-tests": "^2.1.2"
-	  }
-	}
-
-- 虽然功能上没啥问题，但是测试却失败了，有一些细节，我们都没有处理
-
-- 按照规范改造一下 resolvePromise 方法吧
-
-// MyPromise.js
-
-	function resolvePromise(promise, x, resolve, reject) {
-	  // 如果相等了，说明return的是自己，抛出类型错误并返回
-	  if (promise === x) {
-	    return reject(new TypeError('The promise and the return value are the same'));
-	  }
-	
-	  if (typeof x === 'object' || typeof x === 'function') {
-	    // x 为 null 直接返回，走后面的逻辑会报错
-	    if (x === null) {
-	      return resolve(x);
-	    }
-	
-	    let then;
 	    try {
-	      // 把 x.then 赋值给 then 
-	      then = x.then;
-	    } catch (error) {
-	      // 如果取 x.then 的值时抛出错误 error ，则以 error 为据因拒绝 promise
-	      return reject(error);
+	
+	      // 暂存x这个对象或函数的then，x也可能没有then，那then就会得到一个undefined
+	      var then = x.then;
+	
+	    } catch (e) {
+	
+	      // 如果读取then的过程中出现异常则reject异常出去
+	      return reject(e);
+	
 	    }
 	
-	    // 如果 then 是函数
-	    if (typeof then === 'function') {
+	    // 判断then是否函数且存在，如果函数且存在那这个就是合理的thenable，我们要尝试去解析
+	
+	    if (typeof then === "function") {
+	
+	      // 状态只能更新一次使用一个called防止反复调用
+	      // 因为成功和失败的回调只能执行其中之一
+	
 	      let called = false;
 	      try {
 	        then.call(
-	          x, // this 指向 x
-	          // 如果 resolvePromise 以值 y 为参数被调用，则运行 [[Resolve]](promise, y)
-	          y => {
-	            // 如果 resolvePromise 和 rejectPromise 均被调用，
-	            // 或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
-	            // 实现这条需要前面加一个变量 called
+	          x,
+	          (y) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
 	            if (called) return;
 	            called = true;
-	            resolvePromise(promise, y, resolve, reject);
+	            this.resolvePromise(thenPromise, y, resolve, reject);
 	          },
-	          // 如果 rejectPromise 以据因 r 为参数被调用，则以据因 r 拒绝 promise
-	          r => {
+	          (r) => {
+	
+	            // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	            // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
 	            if (called) return;
 	            called = true;
 	            reject(r);
-	          });
-	      } catch (error) {
-	        // 如果调用 then 方法抛出了异常 error：
-	        // 如果 resolvePromise 或 rejectPromise 已经被调用，直接返回
-	        if (called) return;
+	          }
+	        );
+	        // 上面那一步等价于，即这里把thenable当作类似于promise的对象去执行then操作
 	
-	        // 否则以 error 为据因拒绝 promise
-	        reject(error);
+	        // x.then(
+	        //   (y) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     resolvePromise(thenPromise, y, resolve, reject);
+	        //   },
+	        //   (r) => {
+	        //     if (called) return;
+	        //     called = true;
+	        //     reject(r);
+	        //   }
+	        // )
+	
+	      } catch (e) {
+	
+	        // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
+	
+	        // 需要做限制如果thenPromise已经成功或失败了，则不会再处理了
+	
+	        if (called) return;
+	        called = true;
+	        reject(e);
 	      }
 	    } else {
-	      // 如果 then 不是函数，以 x 为参数执行 promise
+	
+	      // 如果是对象或函数但不是thenable（即没有正确的then属性）
+	      // 当成普通值则直接resolve出去
 	      resolve(x);
 	    }
-	  } else {
-	    // 如果 x 不为对象或者函数，以 x 为参数执行 promise
-	    resolve(x);
+	  } 
+	
+	  // 如果既不是promise，也不是非null的对象或函数，当成普通值则直接resolve出去
+	  else {
+	
+	    return resolve(x);
+	
+	   }
 	  }
+	
+	  static resolve (parameter) {
+			// 如果传入 MyPromise 就直接返回
+			if (parameter instanceof MyPromise) {
+			    return parameter;
+			}
+			
+			// 转成常规方式
+			return new MyPromise(resolve =>  {
+			    resolve(parameter);
+			});
+		}
+			
+		  // reject 静态方法
+		static reject (reason) {
+			return new MyPromise((resolve, reject) => {
+			    reject(reason);
+			});
+		}
 	}
+
+	
+	module.exports = MyPromise
+
+#### 十二、 ####
+

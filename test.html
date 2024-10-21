@@ -17,20 +17,54 @@ h1 + p{color:red}
 <script src="./MyPromise.js"></script>
 
   <script>
-
-
-
 MyPromise.resolve().then(() => {
-    console.log(0);
-    return MyPromise.resolve(4);
-}).then((res) => {
-    console.log(res)
-})
+	    console.log(0);
+	    return MyPromise.resolve(4);
+	}).then((res) => {
+	    console.log(res)
+	})
 
+// let promise = new Promise((resolve,reject) => {
+//   reject('结果')
+// })
 
+// promise.then('5555','pppp').then(res => {
+//   console.log('第二个then成功',res)
+//   return res + 1
+// },rej=>{
+//   console.log('第二个then失败',rej)
+//   return rej + 1
+// }).then(res => {
+//   console.log('第三个then成功',res)
+//   return res + 1
+// },rej=>{
+//   console.log('第三个then失败',rej)
+//   return rej + 1
+// })
 
-
-
+// let promise = new Promise((resolve,reject) => {
+// 	  reject('结果')
+// 	})
+	
+// 	promise.then(res => {
+// 	  console.log('第一个then成功',res)
+// 	  return res + 1
+// 	},rej=>{
+// 	  console.log('第一个then失败',rej)
+// 	  return rej + 1
+// 	}).then(res => {
+// 	  console.log('第二个then成功',res)
+// 	  return res + 1 + a
+// 	},rej=>{
+// 	  console.log('第二个then失败',rej)
+// 	  return rej + 1
+// 	}).then(res => {
+// 	  console.log('第三个then成功',res)
+// 	  return res + 1
+// 	},rej=>{
+// 	  console.log('第三个then失败',rej)
+// 	  return rej + 1
+// 	})
 
 
 
