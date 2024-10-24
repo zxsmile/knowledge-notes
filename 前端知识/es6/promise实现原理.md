@@ -448,6 +448,10 @@
 		// 添加静态all方法
 		static all (list) {
 		  return new MyPromise((resolve, reject) => {
+            if (!Array.isArray(arr)) {
+               throw new TypeError('Promise.all 参数必须是数组');
+             }    
+
 		    /**
 		     * 返回值的集合
 		     */
@@ -485,6 +489,65 @@
 		  })
 		}
 
+
+#### 九、allSettled 方法 ####
+
+- 用来确定一组异步操作是否都结束了（不管成功或失败）。所以，它的名字叫做”Settled“，包含了”fulfilled“和”rejected“两种情况。
+
+	 static allSettled(list) {
+	      if(!Array.isArray(list)){
+	          throw new TypeError('参数必须是数组')
+	      }
+	
+	      return new MyPromise((resolve,reject) => {
+	          let resArr = []
+	          let count = 0
+	          for(let i=0;i<list.length;i++){
+	              let item = list[i]
+	              this.reslove(item).then(value => {
+	                  resArr[i] = {status:'fulfilled',value:value}
+	                  count++
+	                  if(count === list.length){
+	                    resolve(resArr)
+	                  }
+	              },e => {
+	                  resArr[i] = {status:'rejected',value:e}
+	                  if(count === list.length){
+	                    resolve(resArr)
+	                  }
+	              })
+	             
+	          }
+	      })
+	  }
+
+#### 十、any 方法 ####
+
+- 只要参数实例有一个变成fulfilled状态，包装实例就会变成fulfilled状态；如果所有参数实例都变成rejected状态，包装实例就会变成rejected状态。
+
+	static any(list) {
+	      if(!Array.isArray(list)){
+	          throw new TypeError('参数必须是数组')
+	      }
+	
+	      return new MyPromise((resolve,reject) => {
+	          let resArr = []
+	          let count = 0
+	          for(let i=0;i<list.length;i++){
+	              let item = list[i]
+	              this.resolve(item).then(val => {
+	                  resolve(val)
+	              },err=>{
+	                  resArr[count] = err
+	                  count++
+	                  if(count === list.length){
+	                    reject(new AggregateError('No Promise in Promise.any was resolved'))
+	                  }
+	              })
+	          }
+	
+	      })
+	  }
 
 #### 九、finally 方法 ####
 
