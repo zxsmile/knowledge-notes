@@ -2252,5 +2252,3 @@
 	
 	module.exports = MyPromise
 
-#### 十二、 ####
-
