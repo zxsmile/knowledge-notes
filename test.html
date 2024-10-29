@@ -17,51 +17,34 @@ h1 + p{color:red}
 <script src="./MyPromise.js"></script>
 
   <script>
-var urls = [
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/AboutMe-painting1.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/AboutMe-painting2.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/AboutMe-painting3.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/AboutMe-painting4.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/AboutMe-painting5.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmn6.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmn7.png",
-            "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmn8.png",
-          ];
-          function loadImg(url) {
-            return new Promise((resolve, reject) => {
-              const img = new Image();
-              img.onload = function() {
-                console.log("一张图片加载完成");
-                resolve(img);
-              };
-              img.onerror = function() {
-                  reject(new Error('Could not load image at' + url));
-              };
-              img.src = url;
-            });
-        }
+  
+   function runPromiseInSeq3(requestFns) {
+    requestFns.reduce((prev,cur) =>{
+      return prev.finally(() => {
+        return cur()
+      })
+    },Promise.resolve())
+   }
 
-        async function limitLoad(urlArr,limitCount,handler) {
-          let curUrlArr = []
-          let resPoolArr = []
 
-          while(urlArr.length){
-            if(curUrlArr.length < limitCount){
-              let url = urlArr.pop()
-              console.log('当前请求url',url)
-              let p = handler(url).then(res => {
-                curUrlArr.splice(curUrlArr.indexOf(p),1)
-                resPoolArr.push(res)
-              })
-              curUrlArr.push(p)
-            }else{
-              console.log(curUrlArr)
-              await Promise.race(curUrlArr)
-            }
-          }
-        }
-        limitLoad(urls,3,loadImg)
-
+   function createRequest(delay) {
+  return () =>
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(delay);
+      }, delay);
+    }).then((res) => {
+      console.log(res);
+    });
+}
+// 执行顺序从左至右
+const requestFns = [
+  createRequest(3000),
+  createRequest(2000),
+  createRequest(1000),
+];
+// 串行调用
+runPromiseInSeq3(requestFns);
 
 
 
