@@ -17,34 +17,21 @@ h1 + p{color:red}
 <script src="./MyPromise.js"></script>
 
   <script>
-  
-   function runPromiseInSeq3(requestFns) {
-    requestFns.reduce((prev,cur) =>{
-      return prev.finally(() => {
-        return cur()
-      })
-    },Promise.resolve())
+
+   class Observer{
+     constructor(options) {
+       this.data = options.data
+       this.el = options.el
+     } 
+
    }
 
+   function defineReactive(obj) {
+    Object.defineProperty(obj,key,{
+      enumerable:true,
+    })
+   }
 
-   function createRequest(delay) {
-  return () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(delay);
-      }, delay);
-    }).then((res) => {
-      console.log(res);
-    });
-}
-// 执行顺序从左至右
-const requestFns = [
-  createRequest(3000),
-  createRequest(2000),
-  createRequest(1000),
-];
-// 串行调用
-runPromiseInSeq3(requestFns);
 
 
 

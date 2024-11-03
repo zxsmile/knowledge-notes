@@ -10,15 +10,17 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
 ![](./images/MVVM2.jpg)
 
-**实例化一个vue的时候，大概在created阶段**
+**实例化一个vue的时候（new Vue()），大概在created阶段**
 
-- **通过一个observer类劫持并监听所有属性**
+- **通过一个observer类劫持并监听所有属性,在监听数据过程中，由于每个属性可能对应多个订阅者，所以会为每个属性创建一个Dep对象，用于收集当前属性的依赖关系。**
 
-- **在模板编译解析(Compile)过程中，vue会收集每个属性对应的订阅者(Watcher)，由于每个属性可能对应多个订阅者，所以会为每个属性创建一个Dep对象，用于收集当前属性的依赖关系。**
+- **在模板编译解析(Compile)过程中，会为每个与数据绑定相关的节点生成一个订阅者Watcher，Watcher会将自己添加到对应属性的Dep容器中**
+
+- **Dep怎么收集呢？在读一个属性的时候，observer类中的get可以监听到，这个时候将订阅者push到Dep中**
 
 - **当observer监听的属性发生变化时，通知该属性对应的Dep，Dep通知每一个watcher去执行更新函数，然后更新视图（View）**
 
-#### 二、Vue响应式数据的原理设计思想 ####
+#### 三、Vue响应式数据的原理设计思想 ####
 
 - **Vue 通过 Object.defineProperty 方法将对象属性转化为响应式属性，并在访问属性时收集依赖，在属性变化时通知依赖的 Watcher 对象进行更新操作，从而实现数据的响应式更新。Vue响应式数据的原理设计思想是：数据劫持 + 发布订阅者模式。**
 
@@ -42,7 +44,7 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 
   - 依赖收集与响应更新过程也被称为发布订阅。
 
-#### 三、理解双向数据绑定 ####
+#### 四、理解双向数据绑定 ####
 
 **1.主要职责**
 
@@ -305,7 +307,7 @@ https://www.cnblogs.com/canfoo/p/6891868.html
 					let dep = new Dep();
 					Object.defineProperty(obj, key, {
 						get(){
-							dep.depend();
+							dep.depend(); //给每一个属性添加订阅者
 							console.log(`${key}属性被读取了`);
 							return val;
 						},

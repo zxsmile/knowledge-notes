@@ -225,7 +225,7 @@ class MyPromise {
       try {
         then.call(
           x,
-          (y) => {
+          (y) => { 
 
             // called就是用于防止成功和失败被同时执行，因为这个是thenable，不是promise
 
