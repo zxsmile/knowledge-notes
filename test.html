@@ -17,24 +17,27 @@ h1 + p{color:red}
 <script src="./MyPromise.js"></script>
 
   <script>
+let arr = [2, 7, 11, 15] 
+let target = 9
 
-   class Observer{
-     constructor(options) {
-       this.data = options.data
-       this.el = options.el
-     } 
+const twoSum = function(nums, target) {
+  let resArr = []
+  let map = new Map
+  for(let i=0;i<nums.length;i++){
+    let rest = target - nums[i]
+    let mapVal = map.get(rest)
+    if(mapVal!== undefined){
+      resArr.push(mapVal,i)
+      return resArr
+    }
+    map.set(nums[i],i)
+  }
+  console.log(resArr)
+  
+}
 
-   }
-
-   function defineReactive(obj) {
-    Object.defineProperty(obj,key,{
-      enumerable:true,
-    })
-   }
-
-
-
-
+let res = twoSum(arr,target)
+console.log(res)
  </script>
 </body>
 
