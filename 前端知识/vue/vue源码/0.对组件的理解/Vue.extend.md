@@ -10,16 +10,20 @@
 
 - 注册或获取全局组件。注册还会自动使用给定的 id 设置组件的名称
 
-	// 注册组件，传入一个扩展过的构造器
-	Vue.component('my-component', Vue.extend({ /* ... */ }))
-	
-	// 注册组件，传入一个选项对象 (自动调用 Vue.extend)
-	Vue.component('my-component', { /* ... */ })
-	
-	// 获取注册的组件 (始终返回构造器)
-	var MyComponent = Vue.component('my-component')
-	let ElInput = Vue.component('ElInput');
-	console.log(new ElInput);  // 就是Inout的实例
+- ```
+  // 注册组件，传入一个扩展过的构造器
+  Vue.component('my-component', Vue.extend({ /* ... */ }))
+  
+  // 注册组件，传入一个选项对象 (自动调用 Vue.extend)
+  Vue.component('my-component', { /* ... */ })
+  
+  // 获取注册的组件 (始终返回构造器)
+  var MyComponent = Vue.component('my-component')
+  let ElInput = Vue.component('ElInput');
+  console.log(new ElInput);  // 就是Inout的实例
+  ```
+
+  
 
 - 用法也特别的简单，你写好的组件，直接在main.js里面导入然后使用Vue.component('xx-xxx',xxx)就可以全局通用了。
 
@@ -73,11 +77,13 @@
 
   - **注意这里，可以发现Id为mount-point的div ,是直接被替代了，没有在内部填充，在我们 main.js 初始化的时候用发其实也是一样：**
 
-	new Vue({
-	  router,
-	  store,
-	  render: h => h(App)
-	}).$mount('#app');  // 此处都是替换，不是填充
+  ```
+  new Vue({
+    router,
+    store,
+    render: h => h(App)
+  }).$mount('#app');  // 此处都是替换，不是填充
+  ```
 
 - 这个 API 可以实现很灵活的功能，比如 ElementUI 里的$message，我们使用this.$message('hello')的时候，其实就是通过这种方式创建一个组件实例，然后再将这个组件挂载到了 body 上，ElementUI里面的这个方法还可以传入虚拟节点，
 
@@ -157,40 +163,40 @@
   **(2)挂载 loading**
 
      - 在loading同级目录下创建 loading.js 将组件挂载到全局
-
-		// 引入vue
-		import Vue from 'vue'
-		
-		// 引入loading组件
-		import Loading from './loading'
-		
-		// 通过Vue的extend方法继承这个引入的 loading 组件，继承后会返回一个vue子类，需要使用实例化即可
-		const LoadingConstructor = Vue.extend(Loading)
-		
-		// 创建实例并且挂载到 div上
-		const loading = new LoadingConstructor().$mount(document.createElement('div'))
-		
-		// 显示loading效果
-		function showLoad (options) {
-		  // 初始化调用传递过来的参数赋值更改组件内内部值
-		  for (const key in options) {
-		    loading[key] = options[key]
-		  }
-		  // 让其显示
-		  loading.showLoading = true
-		  // 并将 Vue.extend 创建的 dom 元素插入body中
-		  document.getElementById('app').appendChild(loading.$el)
-		}
-		
-		// 关闭loading效果
-		function hideLoad () {
-		  // 因为是v-if去控制，所以将标识showLoading置为false，就会自动把弹框dom删掉
-		  loading.showLoading = false
-		}
-		
-		// 将控制 loading 的方法挂载到 Vue 原型
-		Vue.prototype.$showLoad = showLoad
-		Vue.prototype.$hideLoad = hideLoad
+    
+    	// 引入vue
+    	import Vue from 'vue'
+    	
+    	// 引入loading组件
+    	import Loading from './loading'
+    	
+    	// 通过Vue的extend方法继承这个引入的 loading 组件，继承后会返回一个vue子类，需要使用实例化即可
+    	const LoadingConstructor = Vue.extend(Loading)
+    	
+    	// 创建实例并且挂载到 div上
+    	const loading = new LoadingConstructor().$mount(document.createElement('div'))
+    	
+    	// 显示loading效果
+    	function showLoad (options) {
+    	  // 初始化调用传递过来的参数赋值更改组件内内部值
+    	  for (const key in options) {
+    	    loading[key] = options[key]
+    	  }
+    	  // 让其显示
+    	  loading.showLoading = true
+    	  // 并将 Vue.extend 创建的 dom 元素插入body中
+    	  document.getElementById('app').appendChild(loading.$el)
+    	}
+    	
+    	// 关闭loading效果
+    	function hideLoad () {
+    	  // 因为是v-if去控制，所以将标识showLoading置为false，就会自动把弹框dom删掉
+    	  loading.showLoading = false
+    	}
+    	
+    	// 将控制 loading 的方法挂载到 Vue 原型
+    	Vue.prototype.$showLoad = showLoad
+    	Vue.prototype.$hideLoad = hideLoad
 
   **(3)在 main.js 中引入**
 
@@ -206,7 +212,7 @@
 
   **(4)调用**
 
-     - 通过 this.$showLoad() 即可实现页面的 loading 效果
+  通过 this.$showLoad() 即可实现页面的 loading 效果
 
 **2.全局 toast 实现**
 
@@ -325,37 +331,37 @@
   **(2)挂载到全局**
 
      - 通过 vm.$on 给组件绑定事件，这个也是平时经常用到的一个 api
-
-		import Vue from 'vue'
-		import Toast from './toast.vue'
-		
-		// 创建Toast构造器
-		const ToastConstructor = Vue.extend(Toast)
-		let instance
-		
-		function toast (options = {}) {
-		  // 设置默认参数为对象，如果参数为字符串，参数中message属性等于该参数
-		  if (typeof options === 'string') {
-		    options = {
-		      message: options,
-		    }
-		  }
-		  // 创建实例
-		  instance = new ToastConstructor({
-		    data: options,
-		  })
-		  
-		  // 注册组件的监听事件
-		  instance.$on('close-event', () => {
-		    console.log('success')
-		  })
-		  
-		  // 将实例挂载到body下
-		  document.body.appendChild(instance.$mount().$el)
-		}
-		
-		// 将Toast组件挂载到vue原型上
-		Vue.prototype.$toast = toast
+    
+    	import Vue from 'vue'
+    	import Toast from './toast.vue'
+    	
+    	// 创建Toast构造器
+    	const ToastConstructor = Vue.extend(Toast)
+    	let instance
+    	
+    	function toast (options = {}) {
+    	  // 设置默认参数为对象，如果参数为字符串，参数中message属性等于该参数
+    	  if (typeof options === 'string') {
+    	    options = {
+    	      message: options,
+    	    }
+    	  }
+    	  // 创建实例
+    	  instance = new ToastConstructor({
+    	    data: options,
+    	  })
+    	  
+    	  // 注册组件的监听事件
+    	  instance.$on('close-event', () => {
+    	    console.log('success')
+    	  })
+    	  
+    	  // 将实例挂载到body下
+    	  document.body.appendChild(instance.$mount().$el)
+    	}
+    	
+    	// 将Toast组件挂载到vue原型上
+    	Vue.prototype.$toast = toast
 
   **(3)在 main 中引入**    
 
@@ -371,137 +377,143 @@
 
   **(4)使用方式**   
 
-     - 调用提供的全局方法 $toast() 即可 
+ 调用提供的全局方法 $toast() 即可 
 
-		this.$toast({
-		  type: 'error',
-		  size: 'default',
-		  message: '数据请求出错请联系管理员！',
-		  duration: 3000,
-		})
+    	this.$toast({
+    	  type: 'error',
+    	  size: 'default',
+    	  message: '数据请求出错请联系管理员！',
+    	  duration: 3000,
+    	})
 
 #### 五、Vue.extend源码实现 ####
 
 - Vue.extend 的源码位置：src/core/global-api/extend.js
 
-		// 定义 Vue.extend 方法   基于 Vue 构造器，创建一个 Vue 的“子类” 
-		export function initExtend (Vue: GlobalAPI) {
-		
-		  // 每个实例构造函数，包括 Vue，都有一个唯一的 cid。
-		  // 这使我们能够为原型继承创建包装的“子构造函数”并缓存它们。
-		  // 这个cid是一个全局唯一的递增的id, 缓存的时候会用到它，形成闭包
-		  Vue.cid = 0
-		  let cid = 1
-		
-		  /**
-		   * Class inheritance
-		   * 基于 Vue 去扩展子类，该子类同样支持进一步的扩展
-		   * 扩展时可以传递一些默认配置，就像 Vue 也会有一些默认配置
-		   * 默认配置如果和基类有冲突则会进行选项合并（mergeOptions)
-		   */
-		  Vue.extend = function (extendOptions: Object): Function {
-		    extendOptions = extendOptions || {}
-		    // 这里的Super就是Vue
-		    const Super = this
-		    const SuperId = Super.cid
-		
-		    // 每次创建完Sub构造函数后，都会把这个函数储存在extendOptions上的_Ctor中
-		    // 下次如果用再同一个extendOptions创建Sub时
-		    // 就会直接从_Ctor返回
-		    const cachedCtors = extendOptions._Ctor || (extendOptions._Ctor = {})
-		    if (cachedCtors[SuperId]) {
-		      return cachedCtors[SuperId]
-		    }
-		
-		  /**
-		   * 利用缓存，如果存在则直接返回缓存中的构造函数
-		   * 什么情况下可以利用到这个缓存？
-		   *   如果你在多次调用 Vue.extend 时使用了同一个配置项（extendOptions），这时就会启用该缓存
-		   */
-		    
-		  // 验证组件名称
-		    const name = extendOptions.name || Super.options.name
-		    if (process.env.NODE_ENV !== 'production' && name) {
-		      validateComponentName(name)
-		    }
-		
-		
-		    // 创建 Sub 构造函数，和 Vue 构造函数一样
-		    const Sub = function VueComponent (options) {
-		      // 调用 Vue.prototype._init，之后的流程就和首次加载保持一致
-		      this._init(options)
-		    }
-		
-		
-		    // 通过原型继承的方式继承 Vue，这里的Super就是Vue
-		    Sub.prototype = Object.create(Super.prototype)
-		    Sub.prototype.constructor = Sub
-		    Sub.cid = cid++
-		
-		    
-		    // 选项合并，合并 Vue 的配置项到 自己的配置项上来
-		    Sub.options = mergeOptions(
-		      Super.options,   // Vue 的 options
-		      extendOptions   //  组件的 options
-		    )
-		    Sub['super'] = Super
-		
-		    // 初始化 props，将 props 配置代理到 Sub.prototype._props 对象上
-		    // 在组件内通过 this._props 方式可以访问
-		    if (Sub.options.props) {
-		      initProps(Sub)
-		    }
-		
-		
-		    // 初始化 computed，将 computed 配置代理到 Sub.prototype 对象上
-		    // 在组件内可以通过 this.computedKey 的方式访问
-		    if (Sub.options.computed) {
-		      initComputed(Sub)
-		    }
-		
-		    // allow further extension/mixin/plugin usage
-		    // 继承 Vue 的 global-api：extend、mixin、use 这三个静态方法，允许在 Sub 基础上再进一步构造子类
-		    Sub.extend = Super.extend
-		    Sub.mixin = Super.mixin
-		    Sub.use = Super.use
-		
-		    // 继承assets的api，比如注册组件(component)，指令(filter)，过滤器(directive) 静态方法
-		    ASSET_TYPES.forEach(function (type) {
-		      Sub[type] = Super[type]
-		    })
-		
-		
-		    // 递归组件的原理，如果组件设置了 name 属性，则将自己注册到自己的 components 选项中
-		    if (name) {
-		      Sub.options.components[name] = Sub
-		    }
-		
-		
-		    // 在扩展时保留对基类选项的引用。
-		    // 稍后在实例化时，我们可以检查 Super 的选项是否具有更新
-		    Sub.superOptions = Super.options
-		    Sub.extendOptions = extendOptions
-		    Sub.sealedOptions = extend({}, Sub.options)
-		
-		    // cache constructor 设置缓存
-		    cachedCtors[SuperId] = Sub
-		    return Sub
-		  }
-		}
-		
-		function initProps (Comp) {
-		  const props = Comp.options.props
-		  for (const key in props) {
-		    proxy(Comp.prototype, `_props`, key)
-		  }
-		}
-		
-		function initComputed (Comp) {
-		  const computed = Comp.options.computed
-		  for (const key in computed) {
-		    defineComputed(Comp.prototype, key, computed[key])
-		  }
-		}
+  	// 定义 Vue.extend 方法   基于 Vue 构造器，创建一个 Vue 的“子类” 
+  	export function initExtend (Vue: GlobalAPI) {
+  	
+  	  // 每个实例构造函数，包括 Vue，都有一个唯一的 cid。
+  	  // 这使我们能够为原型继承创建包装的“子构造函数”并缓存它们。
+  	  // 这个cid是一个全局唯一的递增的id, 缓存的时候会用到它，形成闭包
+  	  Vue.cid = 0
+  	  let cid = 1
+  	
+  	  /**
+  	   * Class inheritance
+  	   * 基于 Vue 去扩展子类，该子类同样支持进一步的扩展
+  	   * 扩展时可以传递一些默认配置，就像 Vue 也会有一些默认配置
+  	   * 默认配置如果和基类有冲突则会进行选项合并（mergeOptions)
+  	   */
+  	  Vue.extend = function (extendOptions: Object): Function {
+  	    extendOptions = extendOptions || {}
+  	    // 这里的Super就是Vue
+  	    const Super = this
+  	    const SuperId = Super.cid
+  	
+  	    // 每次创建完Sub构造函数后，都会把这个函数储存在extendOptions上的_Ctor中
+  	    // 下次如果用再同一个extendOptions创建Sub时
+  	    // 就会直接从_Ctor返回
+  	    const cachedCtors = extendOptions._Ctor || (extendOptions._Ctor = {})
+  	    if (cachedCtors[SuperId]) {
+  	      return cachedCtors[SuperId]
+  	    }
+  	
+  	  /**
+  	   * 利用缓存，如果存在则直接返回缓存中的构造函数
+  	   * 什么情况下可以利用到这个缓存？
+  	   *   如果你在多次调用 Vue.extend 时使用了同一个配置项（extendOptions），这时就会启用该缓存
+  	   */
+  	    
+  	  // 验证组件名称
+  	    const name = extendOptions.name || Super.options.name
+  	    if (process.env.NODE_ENV !== 'production' && name) {
+  	      validateComponentName(name)
+  	    }
+
+
+  ​	
+  	    // 创建 Sub 构造函数，和 Vue 构造函数一样
+  	    const Sub = function VueComponent (options) {
+  	      // 调用 Vue.prototype._init，之后的流程就和首次加载保持一致
+  	      this._init(options)
+  	    }
+
+
+  ​	
+  	    // 通过原型继承的方式继承 Vue，这里的Super就是Vue
+  	    Sub.prototype = Object.create(Super.prototype)
+  	    Sub.prototype.constructor = Sub
+  	    Sub.cid = cid++
+
+
+  ​	    
+  	    // 选项合并，合并 Vue 的配置项到 自己的配置项上来
+  	    Sub.options = mergeOptions(
+  	      Super.options,   // Vue 的 options
+  	      extendOptions   //  组件的 options
+  	    )
+  	    Sub['super'] = Super
+  	
+  	    // 初始化 props，将 props 配置代理到 Sub.prototype._props 对象上
+  	    // 在组件内通过 this._props 方式可以访问
+  	    if (Sub.options.props) {
+  	      initProps(Sub)
+  	    }
+
+
+  ​	
+  	    // 初始化 computed，将 computed 配置代理到 Sub.prototype 对象上
+  	    // 在组件内可以通过 this.computedKey 的方式访问
+  	    if (Sub.options.computed) {
+  	      initComputed(Sub)
+  	    }
+  	
+  	    // allow further extension/mixin/plugin usage
+  	    // 继承 Vue 的 global-api：extend、mixin、use 这三个静态方法，允许在 Sub 基础上再进一步构造子类
+  	    Sub.extend = Super.extend
+  	    Sub.mixin = Super.mixin
+  	    Sub.use = Super.use
+  	
+  	    // 继承assets的api，比如注册组件(component)，指令(filter)，过滤器(directive) 静态方法
+  	    ASSET_TYPES.forEach(function (type) {
+  	      Sub[type] = Super[type]
+  	    })
+
+
+  ​	
+  	    // 递归组件的原理，如果组件设置了 name 属性，则将自己注册到自己的 components 选项中
+  	    if (name) {
+  	      Sub.options.components[name] = Sub
+  	    }
+
+
+  ​	
+  	    // 在扩展时保留对基类选项的引用。
+  	    // 稍后在实例化时，我们可以检查 Super 的选项是否具有更新
+  	    Sub.superOptions = Super.options
+  	    Sub.extendOptions = extendOptions
+  	    Sub.sealedOptions = extend({}, Sub.options)
+  	
+  	    // cache constructor 设置缓存
+  	    cachedCtors[SuperId] = Sub
+  	    return Sub
+  	  }
+  	}
+  	
+  	function initProps (Comp) {
+  	  const props = Comp.options.props
+  	  for (const key in props) {
+  	    proxy(Comp.prototype, `_props`, key)
+  	  }
+  	}
+  	
+  	function initComputed (Comp) {
+  	  const computed = Comp.options.computed
+  	  for (const key in computed) {
+  	    defineComputed(Comp.prototype, key, computed[key])
+  	  }
+  	}
 
 - Vue.extend 中实现的流程如下：
 
@@ -643,11 +655,13 @@
 
 - 在 _init 的最后判断是否需要将组件进行挂载
 
-	  // 如果发现配置项上有 el 选项,则自动调用 $mount 方法
-	  // el 选项为 Vue 实例的挂载目标，
-	  if (vm.$options.el) {
-	    vm.$mount(vm.$options.el)
-	  }
+    ```
+    // 如果发现配置项上有 el 选项,则自动调用 $mount 方法
+    // el 选项为 Vue 实例的挂载目标，
+      if (vm.$options.el) {
+        vm.$mount(vm.$options.el)
+      }
+    ```
 
 - 由于我们在实例化时没有传入任何配置项，所以在 _init 的最后是不会进行挂载的，此时需要我们手动执行进行挂载，所以你才会看到例子中的new Profile().$mount('#mount-point')的挂载方法，
 
@@ -657,7 +671,7 @@
 
 #### 七、$mount 的实现原理 ####
 
-- 这里简单的介绍一下 $mount 的原理：在 vm.$mount 方法中，会根据传入的 el 参数获取到对应的 DOM 元素，然后通过 updateComponent 方法创建一个渲染 Watcher 对象，并将其挂载到 Vue 实例上。
+- 这里  简单的介绍一下 $mount 的原理：在 vm.$mount 方法中，会根据传入的 el 参数获取到对应的 DOM 元素，然后通过 updateComponent 方法创建一个渲染 Watcher 对象，并将其挂载到 Vue 实例上。
 
 - 渲染 Watcher 对象会在数据发生变化时重新渲染视图，并将渲染结果更新到对应的 DOM 元素上。
 
