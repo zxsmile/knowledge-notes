@@ -85,7 +85,7 @@
   }).$mount('#app');  // 此处都是替换，不是填充
   ```
 
-- 这个 API 可以实现很灵活的功能，比如 ElementUI 里的$message，我们使用this.$message('hello')的时候，其实就是通过这种方式创建一个组件实例，然后再将这个组件挂载到了 body 上，ElementUI里面的这个方法还可以传入虚拟节点，
+- 这个 API 可以实现很灵活的功能，比如 ElementUI 里的$message，我们使用this.$message('hello')的时候，其实就是通过这种方式创建一个组件实例，然后再将这个组件挂载到了 body 上，ElementUI里面的这个方法还可以传入虚拟节点
 
 #### 四、Vue.extend的具体使用 ####
 
@@ -430,72 +430,57 @@
   	    if (process.env.NODE_ENV !== 'production' && name) {
   	      validateComponentName(name)
   	    }
-
-
-  ​	
-  	    // 创建 Sub 构造函数，和 Vue 构造函数一样
-  	    const Sub = function VueComponent (options) {
-  	      // 调用 Vue.prototype._init，之后的流程就和首次加载保持一致
-  	      this._init(options)
-  	    }
-
-
-  ​	
-  	    // 通过原型继承的方式继承 Vue，这里的Super就是Vue
-  	    Sub.prototype = Object.create(Super.prototype)
-  	    Sub.prototype.constructor = Sub
-  	    Sub.cid = cid++
-
-
-  ​	    
-  	    // 选项合并，合并 Vue 的配置项到 自己的配置项上来
-  	    Sub.options = mergeOptions(
-  	      Super.options,   // Vue 的 options
-  	      extendOptions   //  组件的 options
-  	    )
-  	    Sub['super'] = Super
+  	    
+  	   // 创建 Sub 构造函数，和 Vue 构造函数一样
+  	  const Sub = function VueComponent (options) {
+  	  	 // 调用 Vue.prototype._init，之后的流程就和首次加载保持一致
+  	  	 this._init(options)
+  	 }
   	
-  	    // 初始化 props，将 props 配置代理到 Sub.prototype._props 对象上
-  	    // 在组件内通过 this._props 方式可以访问
+  	 // 通过原型继承的方式继承 Vue，这里的Super就是Vue
+  	  	 Sub.prototype = Object.create(Super.prototype)
+  	  	 Sub.prototype.constructor = Sub
+  	  	 Sub.cid = cid++
+  	
+  	// 选项合并，合并 Vue 的配置项到 自己的配置项上来
+  	  	 Sub.options = mergeOptions(
+  	  	   Super.options,   // Vue 的 options
+  	  	   extendOptions   //  组件的 options
+  	  	 )
+  	  	 Sub['super'] = Super 
+  	  	 
+  	// 初始化 props，将 props 配置代理到 Sub.prototype._props 对象上
+  	// 在组件内通过 this._props 方式可以访问
   	    if (Sub.options.props) {
   	      initProps(Sub)
   	    }
-
-
-  ​	
-  	    // 初始化 computed，将 computed 配置代理到 Sub.prototype 对象上
-  	    // 在组件内可以通过 this.computedKey 的方式访问
-  	    if (Sub.options.computed) {
-  	      initComputed(Sub)
-  	    }
   	
-  	    // allow further extension/mixin/plugin usage
-  	    // 继承 Vue 的 global-api：extend、mixin、use 这三个静态方法，允许在 Sub 基础上再进一步构造子类
+  	// 初始化 computed，将 computed 配置代理到 Sub.prototype 对象上
+  	// 在组件内可以通过 this.computedKey 的方式访问
+  	  	if (Sub.options.computed) {
+  	  	  initComputed(Sub)
+  	  	}
+  	// allow further extension/mixin/plugin usage
+  	// 继承 Vue 的 global-api：extend、mixin、use 这三个静态方法，允许在 Sub 基础上再进一步构造子类
   	    Sub.extend = Super.extend
   	    Sub.mixin = Super.mixin
   	    Sub.use = Super.use
   	
-  	    // 继承assets的api，比如注册组件(component)，指令(filter)，过滤器(directive) 静态方法
+  	// 继承assets的api，比如注册组件(component)，指令(filter)，过滤器(directive) 静态方法
   	    ASSET_TYPES.forEach(function (type) {
   	      Sub[type] = Super[type]
   	    })
-
-
-  ​	
-  	    // 递归组件的原理，如果组件设置了 name 属性，则将自己注册到自己的 components 选项中
-  	    if (name) {
-  	      Sub.options.components[name] = Sub
+  	// 递归组件的原理，如果组件设置了 name 属性，则将自己注册到自己的 components 选项中
+  	  	if (name) {
+  	  	  Sub.options.components[name] = Sub
   	    }
-
-
-  ​	
-  	    // 在扩展时保留对基类选项的引用。
-  	    // 稍后在实例化时，我们可以检查 Super 的选项是否具有更新
-  	    Sub.superOptions = Super.options
-  	    Sub.extendOptions = extendOptions
-  	    Sub.sealedOptions = extend({}, Sub.options)
-  	
-  	    // cache constructor 设置缓存
+  	// 在扩展时保留对基类选项的引用。
+  	// 稍后在实例化时，我们可以检查 Super 的选项是否具有更新
+  	  	Sub.superOptions = Super.options
+  	  	Sub.extendOptions = extendOptions
+  	  	Sub.sealedOptions = extend({}, Sub.options)
+  	  	
+  	  	// cache constructor 设置缓存
   	    cachedCtors[SuperId] = Sub
   	    return Sub
   	  }
@@ -514,6 +499,7 @@
   	    defineComputed(Comp.prototype, key, computed[key])
   	  }
   	}
+  	  
 
 - Vue.extend 中实现的流程如下：
 
