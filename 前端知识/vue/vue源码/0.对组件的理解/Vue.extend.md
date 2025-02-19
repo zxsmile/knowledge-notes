@@ -12,7 +12,7 @@
 
 - ```
   // 注册组件，传入一个扩展过的构造器
-  Vue.component('my-component', Vue.extend({ /* ... */ }))
+  Vue.component('my -component', Vue.extend({ /* ... */ }))
   
   // 注册组件，传入一个选项对象 (自动调用 Vue.extend)
   Vue.component('my-component', { /* ... */ })
@@ -33,11 +33,10 @@
 
 
 - **缺点**
-
   - 组件的名称都是自定义的，如果我要从接口动态渲染怎么办。【extend不用必须在初始化的时候完成，下面有实例】
-
+  
   - 所有内容都是在 #app 下渲染，注册组件都是在当前位置渲染。如果实现的是一个函数形式调用 window.alert() 全局提示组件，该如何实现呢？
-
+  
 - 这时候，Vue.extend + vm.$mount 组合就派上用场了。
 
 #### 三、Vue.extend使用方式 ####
@@ -162,7 +161,7 @@
 
   **(2)挂载 loading**
 
-     - 在loading同级目录下创建 loading.js 将组件挂载到全局
+    在loading同级目录下创建 loading.js 将组件挂载到全局
     
     	// 引入vue
     	import Vue from 'vue'
@@ -330,7 +329,7 @@
 
   **(2)挂载到全局**
 
-     - 通过 vm.$on 给组件绑定事件，这个也是平时经常用到的一个 api
+     通过 vm.$on 给组件绑定事件，这个也是平时经常用到的一个 api
     
     	import Vue from 'vue'
     	import Toast from './toast.vue'
@@ -348,7 +347,7 @@
     	  }
     	  // 创建实例
     	  instance = new ToastConstructor({
-    	    data: options,
+    	    data: options
     	  })
     	  
     	  // 注册组件的监听事件
@@ -499,8 +498,7 @@
   	    defineComputed(Comp.prototype, key, computed[key])
   	  }
   	}
-  	  
-
+  
 - Vue.extend 中实现的流程如下：
 
   1.创建一个子类构造函数 Sub，并继承父类构造函数 Super 的原型对象。
