@@ -48,19 +48,19 @@ https://es6.ruanyifeng.com/#docs
 
 		'na'.repeat(-1)
 		// RangeError
-
-    - ** 但是，如果参数是 0 到-1 之间的小数，则等同于 0，这是因为会先进行取整运算。0 到-1 之间的小数，取整以后等于-0，repeat视同为 0 **
-
+	
+    	- ** 但是，如果参数是 0 到-1 之间的小数，则等同于 0，这是因为会先进行取整运算。0 到-1 之间的小数，取整以后等于-0，repeat视同为 0 **
+	
 		'na'.repeat(-0.9) // ""
 		
-    - ** 参数NaN等同于 0 **
+    	- ** 参数NaN等同于 0 **
 
          'na'.repeat(NaN) // ""
 
-    - **如果repeat的参数是字符串，则会先转换成数字。**
-		
-		 'na'.repeat('na') // ""
-		 'na'.repeat('3') // "nanana" 
+        - **如果repeat的参数是字符串，则会先转换成数字。**
+	    
+	     'na'.repeat('na') // ""
+	     'na'.repeat('3') // "nanana" 
 
 「**3.实例方法：padStart()，padEnd()**」
 
@@ -121,7 +121,7 @@ https://es6.ruanyifeng.com/#docs
 	    s.trimRight() // "  abc"
 
 「**5.实例方法：matchAll()**」
- 
+
    - matchAll()方法返回一个正则表达式在当前字符串的所有匹配
 
 「**6.实例方法：replaceAll()**」
@@ -195,7 +195,7 @@ https://es6.ruanyifeng.com/#docs
 		
 		// $$ 指代 $
 		'abc'.replaceAll('b', '$$')
-        // 'a$c'
+	    // 'a$c'
 
    - **replaceAll()的第二个参数replacement除了为字符串，也可以是一个函数，该函数的返回值将替换掉第一个参数searchValue匹配的文本。**
 
@@ -210,7 +210,7 @@ https://es6.ruanyifeng.com/#docs
 		const regex = /(\d+)([a-z]+)(\d+)/g;
 		
 		function replacer(match, p1, p2, p3, offset, string) {
-          console.log(match,offset) //123abc456 0
+     	 console.log(match,offset) //123abc456 0
 		  return [p1, p2, p3].join(' - ');
 		}
 		
@@ -258,7 +258,7 @@ https://es6.ruanyifeng.com/#docs
    - **Number.isFinite()用来检查一个数值是否为有限的（finite），即不是Infinity。**
    
    - **注意，如果参数类型不是数值，Number.isFinite一律返回false。**
-    
+        
 		Number.isFinite(15); // true
 		Number.isFinite(0.8); // true
 		Number.isFinite(NaN); // false
@@ -271,16 +271,16 @@ https://es6.ruanyifeng.com/#docs
  （2）**Number.isNaN()**
 
     - **Number.isNaN()用来检查一个值是否为NaN。**
-
+    
     - **如果参数类型不是NaN，Number.isNaN一律返回false。**
-
-		Number.isNaN(NaN) // true
-		Number.isNaN(15) // false
-		Number.isNaN('15') // false
-		Number.isNaN(true) // false
-		Number.isNaN(9/NaN) // true
-		Number.isNaN('true' / 0) // true
-		Number.isNaN('true' / 'true') // true
+    
+    	Number.isNaN(NaN) // true
+    	Number.isNaN(15) // false
+    	Number.isNaN('15') // false
+    	Number.isNaN(true) // false
+    	Number.isNaN(9/NaN) // true
+    	Number.isNaN('true' / 0) // true
+    	Number.isNaN('true' / 'true') // true
 
 - **它们与传统的全局方法isFinite()和isNaN()的区别在于，传统方法先调用Number()将非数值的值转为数值，再进行判断，而这两个新方法只对数值有效，Number.isFinite()对于非数值一律返回false, Number.isNaN()只有对于NaN才返回true，非NaN一律返回false。**
 
@@ -445,26 +445,26 @@ https://es6.ruanyifeng.com/#docs
 **（1）Math.trunc() **
 
     - **Math.trunc方法用于去除一个数的小数部分，返回整数部分**
-
-		Math.trunc(4.1) // 4
-		Math.trunc(4.9) // 4
-		Math.trunc(-4.1) // -4
-		Math.trunc(-4.9) // -4
-		Math.trunc(-0.1234) // -0
-   
+    
+    	Math.trunc(4.1) // 4
+    	Math.trunc(4.9) // 4
+    	Math.trunc(-4.1) // -4
+    	Math.trunc(-4.9) // -4
+    	Math.trunc(-0.1234) // -0
+       
     - **对于非数值，Math.trunc内部使用Number方法将其先转为数值**
-		
-		Math.trunc('123.456') // 123
-		Math.trunc(true) //1
-		Math.trunc(false) // 0
-		Math.trunc(null) // 0
-
+    	
+    	Math.trunc('123.456') // 123
+    	Math.trunc(true) //1
+    	Math.trunc(false) // 0
+    	Math.trunc(null) // 0
+    
     - **对于空值和无法截取整数的值，返回NaN。**
-		
-		Math.trunc(NaN);      // NaN
-		Math.trunc('foo');    // NaN
-		Math.trunc();         // NaN
-		Math.trunc(undefined) // NaN
+    	
+    	Math.trunc(NaN);      // NaN
+    	Math.trunc('foo');    // NaN
+    	Math.trunc();         // NaN
+    	Math.trunc(undefined) // NaN
 
    - **对于没有部署这个方法的环境，可以用下面的代码模拟。**
 
@@ -478,7 +478,7 @@ https://es6.ruanyifeng.com/#docs
 
    - **它会返回五种值**
 
-  	    - 参数为正数，返回+1；
+    	    - 参数为正数，返回+1；
 		
         - 参数为负数，返回-1；
 		
@@ -776,12 +776,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - 如果此时，全局变量x不存在，就会报错。
 
-		function f(y = x) {
-		  let x = 2;
-		  console.log(y);
-		}
-		
-		f() // ReferenceError: x is not defined
+   function f(y = x) {
+   	  let x = 2;
+   	  console.log(y);
+   	}
+   	
+
+   	f() // ReferenceError: x is not defined
 
 - 下面这样写，也会报错。
 
@@ -809,14 +810,14 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 - 上面代码中，函数bar的参数func的默认值是一个匿名函数，返回值为变量foo。函数参数形成的单独作用域里面，并没有定义变量foo，所以foo指向外层的全局变量foo，因此输出outer。
 
 	    var x = 1;
-		function foo(x, y = function() { x = 2; }) {
-		  var x = 3;
-		  y();
-		  console.log(x);
-		}
-		
-		foo() // 3
-		x // 1
+	    function foo(x, y = function() { x = 2; }) {
+	      var x = 3;
+	      y();
+	      console.log(x);
+	    }
+	    
+	    foo() // 3
+	    x // 1
 
 - 上面代码中，函数foo的参数形成一个单独作用域。这个作用域里面，首先声明了变量x，然后声明了变量y，y的默认值是一个匿名函数。这个匿名函数内部的变量x，指向同一个作用域的第一个参数x。函数foo内部又声明了一个内部变量x，该变量与第一个参数x由于不是同一个作用域，所以不是同一个变量，因此执行y后，内部变量x和外部全局变量x的值都没变。
 
@@ -1092,37 +1093,37 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 （1）什么是尾调用？
 
      - 指某个函数的最后一步是调用另一个函数。
-
-		function f(x){
-		  return g(x);
-		}
-
+    
+    	function f(x){
+    	  return g(x);
+    	}
+    
      - 上面代码中，函数f的最后一步是调用函数g，这就叫尾调用。
-
+    
      - 以下三种情况，都不属于尾调用。
-
-		// 情况一
-		function f(x){
-		  let y = g(x);
-		  return y;
-		}
-		
-		// 情况二
-		function f(x){
-		  return g(x) + 1;
-		}
-		
-		// 情况三
-		function f(x){
-		  g(x);
-		}
-
+    
+    	// 情况一
+    	function f(x){
+    	  let y = g(x);
+    	  return y;
+    	}
+    	
+    	// 情况二
+    	function f(x){
+    	  return g(x) + 1;
+    	}
+    	
+    	// 情况三
+    	function f(x){
+    	  g(x);
+    	}
+    
     - 上面代码中，**情况一是调用函数g之后，还有赋值操作，所以不属于尾调用，即使语义完全一样。情况二也属于调用后还有操作，即使写在一行内。情况三等同于下面的代码。**
-
-		function f(x){
-		  g(x);
-		  return undefined;
-		}
+    
+    	function f(x){
+    	  g(x);
+    	  return undefined;
+    	}
 
    - **尾调用不一定出现在函数尾部，只要是最后一步操作即可。**
 
@@ -1138,15 +1139,15 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 #### 五、数组的扩展 ####
 
 ** 1.扩展运算符(...) **
-   
+
   （1）扩展运算符可以将数组转为将**逗号隔开的参数序列**
-   
+
   （2）任意定义了**iterator（遍历器）**接口的对象都可是使用扩展运算符转为真正的数组
 
 		        var str = 'hello'
 		        var array = [...str]
 		        console.log(array) // ['h','e','l','l','o']
-   
+
   （3）**如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错**
 
 				const [...butLast, last] = [1, 2, 3, 4, 5];
@@ -1162,17 +1163,17 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
         - **类似数组的对象即具有length属性的对象**
         
         - **可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）**
-
-	            var obj = {
-	                '0':'a',
-	                '1':'b',
-	                '2':'c',
-	                length:3
-	            }
-	
-	            // ES5 的写法
+    
+                var obj = {
+                    '0':'a',
+                    '1':'b',
+                    '2':'c',
+                    length:3
+                }
+    
+                // ES5 的写法
                 var arr1 = [].slice.call(obj); // ['a', 'b', 'c']
-
+    
                 // ES6 的写法
                 let arr2 = Array.from(obj); // ['a', 'b', 'c']
 
@@ -1206,7 +1207,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 3.Array.of() **
 
 - Array.of() 方法创建一个具有可变数量参数的新数组实例，而不考虑参数的数量或类型。
-   
+  
 - 这个方法的主要目的是弥补构造函数Array()的不足。**Array.of(3)创建一个具有单个元素 3 的数组，而 Array(3) 创建一个长度为3的空数组（注意： 这是指一个有 3 个空位(empty)的数组，而不是由3个undefined组成的数组，打印出单独项的值是undefined）。**
 
        Array.of('s','ss','s') // ['s','ss','s']
@@ -1237,24 +1238,24 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - end（可选）：**到该位置前停止读取数据（数值-1），默认等于数组长度。如果为负值，表示从末尾开始计算（-1表示最后一个元素的位置。负值大于数组长度，重置为0，正值大于数组长度，默认等于数组长度。**
         
       - 这三个值都为数值，如果不是则会自动转为数值
-
-		    var array=[1,2,3,4,5,6]
-		    var newArray = array.copyWithin(0,3) 
-		    console.log(newArray) // [4,5,6,4,5,6]
-		    console.log(array)  // [4,5,6,4,5,6]
+    
+    	    var array=[1,2,3,4,5,6]
+    	    var newArray = array.copyWithin(0,3) 
+    	    console.log(newArray) // [4,5,6,4,5,6]
+    	    console.log(array)  // [4,5,6,4,5,6]
 
  (3)**使用这个方法，会修改当前数组。**
 
 ** 5.find()和findIndex() **
 
    (1)数组实例的find方法用于找出**第一个符合条件的数组成员**。**它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为true的成员，然后返回该成员。如果没有符合条件的成员，则返回undefined。**
-   
+
    (2)回调函数接收三个参数，依次为当前的值、当前的位置和原数组。
      
 		        [1,2,3].find(function(value,index,arr){
 		            return value>0
 		        }) // 1
-		      
+
    (3) **数组实例的findIndex方法的用法与find方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回-1**
 
 		        [1, 5, 10, 15].findIndex(function(value, index, arr) {
@@ -1276,8 +1277,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		        [NaN].findIndex(y => Object.is(NaN, y))
 		        // 0
-
-    - 上面代码中，indexOf方法无法识别数组的NaN成员，但是findIndex方法可以借助Object.is方法做到。
+	
+	- 上面代码中，indexOf方法无法识别数组的NaN成员，但是findIndex方法可以借助Object.is方法做到。
 
    (6)find()和findIndex()都是从数组的0号位，依次向后检查。ES2022 新增了两个方法**findLast()和findLastIndex()，从数组的最后一个成员开始，依次向前检查，其他都保持不变。**
 
@@ -1290,7 +1291,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 			
 			array.findLast(n => n.value % 2 === 1); // { value: 3 }
 			array.findLastIndex(n => n.value % 2 === 1); // 2
- 
+
   - 上面示例中，findLast()和findLastIndex()从数组结尾开始，寻找第一个value属性为奇数的成员。结果，该成员是{ value: 3 }，位置是2号位。
 
 ** 6.fill() **
@@ -1298,7 +1299,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    (1)**fill方法使用给定值，填充一个数组，若数组中本来有值则会被覆盖**
 
              [1,2,3].fill(7) //[7,7,7]
-        
+
    (2)**fill方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。**
 
              [1,2,3].fill(7,1,2)  //[1,7,3]
@@ -1313,7 +1314,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 7.entries()，keys() 和 values() **
 
  (1)用于遍历数组。它们都返回一个遍历器对象,可以用for...of循环进行遍历
- 
+
  (2)keys()是对键名的遍历、values()是对键值的遍历，entries()是对键值对的遍历。
 
 	        for (let index of ['a', 'b'].keys()) {
@@ -1357,7 +1358,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		[1, 2, 3].includes(3, -1); // true
 
  （3）没有该方法之前，我们通常使用数组的indexOf方法，检查是否包含某个值。
- 
+
   - indexOf方法有两个缺点：
 
      - **一是不够语义化，它的含义是找到参数值的第一个出现位置，所以要去比较是否不等于-1，表达起来不够直观。**
@@ -1383,7 +1384,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - **Set 结构的has方法，是用来查找值的**，比如Set.prototype.has(value)、WeakSet.prototype.has(value)。
 
 ** 8.实例方法：flat()，flatMap()  **
-  
+
   (1)flat
         
       - flat方法是将嵌套的数组拉平，**返回一个新数组，对原来的数组没有影响**
@@ -1393,7 +1394,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - **如果不管有多少层嵌套，都要转成一维数组，可以用Infinity关键字作为参数**
       
       - **如果原数组有空位，flat()方法会跳过空位。**
-
+    
              [1,,[2,[3,4],5],6].flat() //[1, 2, [3,4], 5, 6]
              [1,,[2,[3,4],5],6].flat(Infinity) //[1, 2, 3, 4, 5, 6]
 
@@ -1406,11 +1407,11 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
        - **flatMap()方法还可以有第二个参数，用来绑定遍历函数里面的this**
        
        - **flatMap()只能展开一层数组。**
-
+    
        相当于 [[2, 4], [3, 6], [4, 8]].flat()
        [2, 3, 4].flatMap((x) => [x, x * 2])
        // [2, 4, 3, 6, 4, 8]
-
+    
        // 相当于 [[[2]], [[4]], [[6]], [[8]]].flat()
        [1, 2, 3, 4].flatMap(x => [[x * 2]])
        // [[2], [4], [6], [8]]
@@ -1478,40 +1479,40 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 10.实例方法：toReversed()，toSorted()，toSpliced()，with() **
 
     - **它们可以根据分组函数的运行结果，将数组成员分组。**
-
+    
     - **group()的参数是一个分组函数，原数组的每个成员都会依次执行这个函数，确定自己是哪一个组。**
-
-		const array = [1, 2, 3, 4, 5];
-		
-		array.group((num, index, array) => {
-		  return num % 2 === 0 ? 'even': 'odd';
-		});
-		// { odd: [1, 3, 5], even: [2, 4] }
-
+    
+    	const array = [1, 2, 3, 4, 5];
+    	
+    	array.group((num, index, array) => {
+    	  return num % 2 === 0 ? 'even': 'odd';
+    	});
+    	// { odd: [1, 3, 5], even: [2, 4] }
+    
     - **group()的分组函数可以接受三个参数，依次是数组的当前成员、该成员的位置序号、原数组（上例是num、index和array）。分组函数的返回值应该是字符串（或者可以自动转为字符串），以作为分组后的组名。**
-
+    
     - **group()的返回值是一个对象，该对象的键名就是每一组的组名，即分组函数返回的每一个字符串（上例是even和odd）；该对象的键值是一个数组，包括所有产生当前键名的原数组成员。**
-
-		   [6.1, 4.2, 6.3].group(Math.floor)
-		// { '4': [4.2], '6': [6.1, 6.3] }
-
+    
+    	   [6.1, 4.2, 6.3].group(Math.floor)
+    	// { '4': [4.2], '6': [6.1, 6.3] }
+    
     - 上面示例中，Math.floor作为分组函数，对原数组进行分组。它的返回值原本是数值，这时会自动转为字符串，作为分组的组名。原数组的成员根据分组函数的运行结果，进入对应的组。
-
+    
     - **group()还可以接受一个对象，作为第二个参数。该对象会绑定分组函数（第一个参数）里面的this，不过如果分组函数是一个箭头函数，该对象无效，因为箭头函数内部的this是固化的。**
-
+    
     - **groupToMap()的作用和用法与group()完全一致，唯一的区别是返回值是一个 Map 结构，而不是对象。Map 结构的键名可以是各种值，所以不管分组函数返回什么值，都会直接作为组名（Map 结构的键名），不会强制转为字符串。这对于分组函数返回值是对象的情况，尤其有用。**
-
-		const array = [1, 2, 3, 4, 5];
-		
-		const odd  = { odd: true };
-		const even = { even: true };
-		array.groupToMap((num, index, array) => {
-		  return num % 2 === 0 ? even: odd;
-		});
-		//  Map { {odd: true}: [1, 3, 5], {even: true}: [2, 4] }
-
+    
+    	const array = [1, 2, 3, 4, 5];
+    	
+    	const odd  = { odd: true };
+    	const even = { even: true };
+    	array.groupToMap((num, index, array) => {
+    	  return num % 2 === 0 ? even: odd;
+    	});
+    	//  Map { {odd: true}: [1, 3, 5], {even: true}: [2, 4] }
+    
     - 上面示例返回的是一个 Map 结构，它的键名就是分组函数返回的两个对象odd和even。
-
+    
     - **总之，按照字符串分组就使用group()，按照对象分组就使用groupToMap()**
 
 ** 11.数组的空位 **
@@ -1529,30 +1530,30 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
      - map()会跳过空位，但会保留这个值
          
      - join()和toString()会将空位视为undefined，而undefined和null会被处理成空字符串。
-
-		            forEach方法
-		            [,'a'].forEach((x,i) => console.log(i)); // 1
-		
-		            // filter方法
-		            ['a',,'b'].filter(x => true) // ['a','b']
-		
-		            // every方法
-		            [,'a'].every(x => x==='a') // true
-		
-		            // reduce方法
-		            [1,,2].reduce((x,y) => x+y) // 3
-		
-		            // some方法
-		            [,'a'].some(x => x !== 'a') // false
-		
-		            // map方法
-		            [,'a'].map(x => 1) // [,1]
-		
-		            // join方法
-		            [,'a',undefined,null].join('#') // "#a##"
-		
-		            // toString方法
-		            [,'a',undefined,null].toString() // ",a,,"
+    
+    	            forEach方法
+    	            [,'a'].forEach((x,i) => console.log(i)); // 1
+    	
+    	            // filter方法
+    	            ['a',,'b'].filter(x => true) // ['a','b']
+    	
+    	            // every方法
+    	            [,'a'].every(x => x==='a') // true
+    	
+    	            // reduce方法
+    	            [1,,2].reduce((x,y) => x+y) // 3
+    	
+    	            // some方法
+    	            [,'a'].some(x => x !== 'a') // false
+    	
+    	            // map方法
+    	            [,'a'].map(x => 1) // [,1]
+    	
+    	            // join方法
+    	            [,'a',undefined,null].join('#') // "#a##"
+    	
+    	            // toString方法
+    	            [,'a',undefined,null].toString() // ",a,,"
 
    (3)**es6则是明确将空位转成undefined**
 
@@ -1656,14 +1657,14 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 	                 return 'offer!'   => 
 	               }
 	             }
-
-       let obj = {fn() {
+	
+	   let obj = {fn() {
 	                 return 'offer!'  
 	               }
 	             }
-
-    - ** 简写的对象方法不能用作构造函数，会报错 **
-
+	
+	- ** 简写的对象方法不能用作构造函数，会报错 **
+	
 		const obj = {
 		  f() {
 		    this.foo = 'bar';
@@ -1671,9 +1672,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		};
 		
 		new obj.f() // 报错
+	
+	- 上面代码中，f是一个简写的对象方法，所以obj.f不能当作构造函数使用。
 
-    - 上面代码中，f是一个简写的对象方法，所以obj.f不能当作构造函数使用。
-    
 
 ** 2.属性名表达式 ** 
 
@@ -1694,25 +1695,25 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  abc: 123
 		};
 
-    - **ES6 允许字面量定义对象时，用方法二（表达式）作为对象的属性名，即把表达式放在方括号内。**
-
-		let propKey = 'foo';
-		
-		let obj = {
-		  [propKey]: true,
-		  ['a' + 'bc']: 123
-		};
-
-    - **注意，属性名表达式与简洁表示法，不能同时使用，会报错。**
-
-		// 报错
-		const foo = 'bar';
-		const bar = 'abc';
-		const baz = { [foo] };
-		
-		// 正确
-		const foo = 'bar';
-		const baz = { [foo]: 'abc'};
+        - **ES6 允许字面量定义对象时，用方法二（表达式）作为对象的属性名，即把表达式放在方括号内。**
+    
+	    let propKey = 'foo';
+	    
+	    let obj = {
+	      [propKey]: true,
+	      ['a' + 'bc']: 123
+	    };
+    
+        - **注意，属性名表达式与简洁表示法，不能同时使用，会报错。**
+    
+	    // 报错
+	    const foo = 'bar';
+	    const bar = 'abc';
+	    const baz = { [foo] };
+	    
+	    // 正确
+	    const foo = 'bar';
+	    const baz = { [foo]: 'abc'};
 
    - **注意，属性名表达式如果是一个对象，默认情况下会自动将对象转为字符串[object Object]，这一点要特别小心。**
 
@@ -1732,13 +1733,14 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
    - 函数的name属性，返回函数名。对象方法也是函数，因此也有name属性。
 
-		const person = {
-		  sayName() {
-		    console.log('hello!');
-		  },
-		};
-		
-		person.sayName.name   // "sayName"
+      const person = {
+      	  sayName() {
+      	    console.log('hello!');
+      	  },
+      	};
+      	
+
+      	person.sayName.name   // "sayName"
 
   - 上面代码中，方法的name属性返回函数名（即方法名）。
 
@@ -1838,7 +1840,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
      - ** Object.getOwnPropertySymbols(obj) **
 
          - Object.getOwnPropertySymbols返回一个数组，包含对象自身的所有 Symbol 属性的键名。
- 
+
      - ** Reflect.ownKeys(obj) **
 
         - Reflect.ownKeys返回一个数组，包含对象自身的（不含继承的）所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。
@@ -1919,156 +1921,156 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
  （1）**解构赋值**
 
     - 对象的解构赋值用于从一个对象取值，相当于将目标对象** 自身的所有可遍历的**、但尚未被读取的属性，分配到指定的对象上面。** 所有的键和它们的值都会拷贝到新对象上面 **
-
-		let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
-		x // 1
-		y // 2
-		z // { a: 3, b: 4 }
-
+    
+    	let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+    	x // 1
+    	y // 2
+    	z // { a: 3, b: 4 }
+    
     - 上面代码中，变量z是解构赋值所在的对象。它获取等号右边的所有尚未读取的键（a和b），将它们连同值一起拷贝过来。
-
+    
     - **由于解构赋值要求等号右边是一个对象，所以如果等号右边是undefined或null，就会报错，因为它们无法转为对象。**
-
-		let { ...z } = null; // 运行时错误
-		let { ...z } = undefined; // 运行时错误
-
+    
+    	let { ...z } = null; // 运行时错误
+    	let { ...z } = undefined; // 运行时错误
+    
     - **解构赋值必须是最后一个参数，否则会报错。**
-		
-		let { ...x, y, z } = someObject; // 句法错误
-		let { x, ...y, ...z } = someObject; // 句法错误
-
+    	
+    	let { ...x, y, z } = someObject; // 句法错误
+    	let { x, ...y, ...z } = someObject; // 句法错误
+    
     - 上面代码中，解构赋值不是最后一个参数，所以会报错。
-
+    
     - **注意，解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，而不是这个值的副本。**
-
-		let obj = { a: { b: 1 } };
-		let { ...x } = obj;
-		obj.a.b = 2;
-		x.a.b // 2
-
+    
+    	let obj = { a: { b: 1 } };
+    	let { ...x } = obj;
+    	obj.a.b = 2;
+    	x.a.b // 2
+    
     - 上面代码中，x是解构赋值所在的对象，拷贝了对象obj的a属性。a属性引用了一个对象，修改这个对象的值，会影响到解构赋值对它的引用。
-
+    
     - ** 扩展运算符的解构赋值，不能复制继承自原型对象的属性。(只能复制自身的属性) **
-
-			let o1 = { a: 1 };
-			let o2 = { b: 2 };
-			o2.__proto__ = o1;
-			let { ...o3 } = o2;
-			o3 // { b: 2 }
-			o3.a // undefined
-
+    
+    		let o1 = { a: 1 };
+    		let o2 = { b: 2 };
+    		o2.__proto__ = o1;
+    		let { ...o3 } = o2;
+    		o3 // { b: 2 }
+    		o3.a // undefined
+    
      - 上面代码中，对象o3复制了o2，但是只复制了o2自身的属性，没有复制它的原型对象o1的属性。
-
-			const o = Object.create({ x: 1, y: 2 });
-			o.z = 3;
-			
-			let { x, ...newObj } = o;
-			let { y, z } = newObj;
-			x // 1
-			y // undefined
-			z // 3
-
+    
+    		const o = Object.create({ x: 1, y: 2 });
+    		o.z = 3;
+    		
+    		let { x, ...newObj } = o;
+    		let { y, z } = newObj;
+    		x // 1
+    		y // undefined
+    		z // 3
+    
      - 上面代码中，**变量x是单纯的解构赋值，所以可以读取对象o继承的属性；变量y和z是扩展运算符的解构赋值，只能读取对象o自身的属性，所以变量z可以赋值成功，变量y取不到值。**
      
      - ES6 规定，**变量声明语句之中，如果使用解构赋值，扩展运算符后面必须是一个变量名，而不能是一个解构赋值表达式**，所以上面代码引入了中间变量newObj，如果写成下面这样会报错。
-
-			let { x, ...{ y, z } } = o;
-			// SyntaxError: ... must be followed by an identifier in declaration contexts
-
+    
+    		let { x, ...{ y, z } } = o;
+    		// SyntaxError: ... must be followed by an identifier in declaration contexts
+    
       - 解构赋值的一个用处，是扩展某个函数的参数，引入其他操作。
-
-			function baseFunction({ a, b }) {
-			  // ...
-			}
-			function wrapperFunction({ x, y, ...restConfig }) {
-			  // 使用 x 和 y 参数进行操作
-			  // 其余参数传给原始函数
-			  return baseFunction(restConfig);
-			}
-
+    
+    		function baseFunction({ a, b }) {
+    		  // ...
+    		}
+    		function wrapperFunction({ x, y, ...restConfig }) {
+    		  // 使用 x 和 y 参数进行操作
+    		  // 其余参数传给原始函数
+    		  return baseFunction(restConfig);
+    		}
+    
        - 上面代码中，原始函数baseFunction接受a和b作为参数，函数wrapperFunction在baseFunction的基础上进行了扩展，能够接受多余的参数，并且保留原始函数的行为。
 
 （2）** 扩展运算符 **
 
     - **对象的扩展运算符（...）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。**
-
-			let z = { a: 3, b: 4 };
-			let n = { ...z };
-			n // { a: 3, b: 4 }
-
+    
+    		let z = { a: 3, b: 4 };
+    		let n = { ...z };
+    		n // { a: 3, b: 4 }
+    
     - **由于数组是特殊的对象，所以对象的扩展运算符也可以用于数组。**
-
-			let foo = { ...['a', 'b', 'c'] };
-			foo
-			// {0: "a", 1: "b", 2: "c"}
-
+    
+    		let foo = { ...['a', 'b', 'c'] };
+    		foo
+    		// {0: "a", 1: "b", 2: "c"}
+    
     - **如果扩展运算符后面是一个空对象，则没有任何效果。**
-
-			{...{}, a: 1}
-			// { a: 1 }
-
+    
+    		{...{}, a: 1}
+    		// { a: 1 }
+    
     - **如果扩展运算符后面不是对象，则会自动将其转为对象。**
-		
-		// 等同于 {...Object(1)}
-		{...1} // {}
-		
+    	
+    	// 等同于 {...Object(1)}
+    	{...1} // {}
+    	
     - 上面代码中，扩展运算符后面是整数1，会自动转为数值的包装对象Number{1}。由于该对象没有自身属性，所以返回一个空对象。
-		
-		下面的例子都是类似的道理。
-		
-		// 等同于 {...Object(true)}
-		{...true} // {}
-		
-		// 等同于 {...Object(undefined)}
-		{...undefined} // {}
-		
-		// 等同于 {...Object(null)}
-		{...null} // {}
-
+    	
+    	下面的例子都是类似的道理。
+    	
+    	// 等同于 {...Object(true)}
+    	{...true} // {}
+    	
+    	// 等同于 {...Object(undefined)}
+    	{...undefined} // {}
+    	
+    	// 等同于 {...Object(null)}
+    	{...null} // {}
+    
      - **但是，如果扩展运算符后面是字符串，它会自动转成一个类似数组的对象，因此返回的不是空对象。**
-
-		{...'hello'}
-		// {0: "h", 1: "e", 2: "l", 3: "l", 4: "o"}
-
+    
+    	{...'hello'}
+    	// {0: "h", 1: "e", 2: "l", 3: "l", 4: "o"}
+    
      - **对象的扩展运算符，只会返回参数对象自身的、可枚举的属性，**这一点要特别小心，尤其是用于类的实例对象时。
-
-		class C {
-		  p = 12;
-		  m() {}
-		}
-		
-		let c = new C();
-		let clone = { ...c };
-		
-		clone.p; // ok
-		clone.m(); // 报错
-
+    
+    	class C {
+    	  p = 12;
+    	  m() {}
+    	}
+    	
+    	let c = new C();
+    	let clone = { ...c };
+    	
+    	clone.p; // ok
+    	clone.m(); // 报错
+    
     - 上面示例中，c是C类的实例对象，对其进行扩展运算时，只会返回c自身的属性c.p，而不会返回c的方法c.m()，因为这个方法定义在C的原型对象上（详见 Class 的章节）。
-
+    
     - 对象的扩展运算符等同于使用Object.assign()方法。
-
-		let aClone = { ...a };
-		// 等同于
-		let aClone = Object.assign({}, a);
-
+    
+    	let aClone = { ...a };
+    	// 等同于
+    	let aClone = Object.assign({}, a);
+    
      - **上面的例子只是拷贝了对象实例的属性，如果想完整克隆一个对象，还拷贝对象原型的属性，可以采用下面的写法。**
-
-		// 写法一
-		const clone1 = {
-		  __proto__: Object.getPrototypeOf(obj),
-		  ...obj
-		}; 
-
+    
+    	// 写法一
+    	const clone1 = {
+    	  __proto__: Object.getPrototypeOf(obj),
+    	  ...obj
+    	}; 
+    
         - Object.getPrototypeOf(obj)获取obj的原型对象，将这个原型对象作为clone1的原型对象
-		
-		// 写法二
-		const clone2 = Object.assign(
-		  Object.create(Object.getPrototypeOf(obj)),
-		  obj
-		);
+    	
+    	// 写法二
+    	const clone2 = Object.assign(
+    	  Object.create(Object.getPrototypeOf(obj)),
+    	  obj
+    	);
          
         - Object.getPrototypeOf(obj)获取obj的原型对象，Object.create(Object.getPrototypeOf(obj))生成一个obj原型对象的实例对象，Object.assign(Object.create(Object.getPrototypeOf(obj)),obj)将obj的所有**可枚举属性**复制到该实例对象。
-
+    
         - **所以此方法，clone2是Object.getPrototypeOf(obj)的实例对象，并且合并了obj这个实例对象的属性**
 
 
@@ -2077,34 +2079,34 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  Object.getPrototypeOf(obj),
 		  Object.getOwnPropertyDescriptors(obj)
 		) 
-
-        - **Object.getOwnPropertyDescriptors()方法返回指定对象所有自身属性（非继承属性）的描述对象。**
-
-        - Object.create()是**使用指定的原型对象及其属性(添加的新属性)去创建一个新的对象。**
-
-        - 所以这个方法是使用obj的原型对象作为clone3的原型对象，并给clone3添加了新的属性，也就是obj的属性。** 注意这里的新属性，只是加给新生成的实例对象，不会加给原型对象 **
-        
-        - 上面代码中，写法一的__proto__属性在非浏览器的环境不一定部署，因此推荐使用写法二和写法三。
-
-      - ** 扩展运算符可以用于合并两个对象 **
-
+	
+	    - **Object.getOwnPropertyDescriptors()方法返回指定对象所有自身属性（非继承属性）的描述对象。**
+	
+	    - Object.create()是**使用指定的原型对象及其属性(添加的新属性)去创建一个新的对象。**
+	
+	    - 所以这个方法是使用obj的原型对象作为clone3的原型对象，并给clone3添加了新的属性，也就是obj的属性。** 注意这里的新属性，只是加给新生成的实例对象，不会加给原型对象 **
+	    
+	    - 上面代码中，写法一的__proto__属性在非浏览器的环境不一定部署，因此推荐使用写法二和写法三。
+	
+	  - ** 扩展运算符可以用于合并两个对象 **
+	
 	        let ab = { ...a, ...b };
 			// 等同于
 			let ab = Object.assign({}, a, b);
-
-      - **如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性会被覆盖掉。**
-     
+	
+	  - **如果用户自定义的属性，放在扩展运算符后面，则扩展运算符内部的同名属性会被覆盖掉。**
+	 
 			let aWithOverrides = { ...a, x: 1, y: 2 };
-
-      - **与数组的扩展运算符一样，对象的扩展运算符后面可以跟表达式。**
-
+	
+	  - **与数组的扩展运算符一样，对象的扩展运算符后面可以跟表达式。**
+	
 			const obj = {
 			  ...(x > 1 ? {a: 1} : {}),
 			  b: 2,
 			};
-
-       - **扩展运算符的参数对象之中，如果有取值函数get，这个函数是会执行的。**
-
+	
+	   - **扩展运算符的参数对象之中，如果有取值函数get，这个函数是会执行的。**
+	
 			let a = {
 			  get x() {
 			    throw new Error('not throw yet');
@@ -2112,8 +2114,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 			}
 			
 			let aWithXGetter = { ...a }; // 报错
-
-        - 上面例子中，取值函数get在扩展a对象时会自动执行，导致报错。
+	
+	    - 上面例子中，取值函数get在扩展a对象时会自动执行，导致报错。
 
 
 ** 7.AggregateError错误对象 **
@@ -2181,7 +2183,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 #### 七、对象的新增方法 ####
 
 ** 1.Object.is()**
-  
+
     -**这个方法用来判断两个值是否相等**
     
     -在es5中判断两个值是否相等，只有两个运算符：相等运算符(=)和严格相等运算符(===)，它们都有缺点：
@@ -2189,79 +2191,79 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - 相等运算符是会转换数据类型，严格相等运算符的NaN不等于自身且+0和-0相等
       
       - **Object.is方法使用了Same-value equality”（同值相等）算法，和严格相等运算符行为基本一致，并且改正了严格相等运算符的缺点**
-
-		    Object.is(NaN,NaN) // true
-		    Object.is(+0,-0)   // false  
-
+    
+    	    Object.is(NaN,NaN) // true
+    	    Object.is(+0,-0)   // false  
+    
      - **ES5 可以通过下面的代码，部署Object.is**
-
-			Object.defineProperty(Object, 'is', {
-			  value: function(x, y) {
-			    if (x === y) {
-			      // 针对+0 不等于 -0的情况
-			      return x !== 0 || 1 / x === 1 / y;
-			    }
-			    // 针对NaN的情况
-			    return x !== x && y !== y;
-			  },
-			  configurable: true,
-			  enumerable: false,
-			  writable: true
-			});
+    
+    		Object.defineProperty(Object, 'is', {
+    		  value: function(x, y) {
+    		    if (x === y) {
+    		      // 针对+0 不等于 -0的情况
+    		      return x !== 0 || 1 / x === 1 / y;
+    		    }
+    		    // 针对NaN的情况
+    		    return x !== x && y !== y;
+    		  },
+    		  configurable: true,
+    		  enumerable: false,
+    		  writable: true
+    		});
 
 **2.Object.assign()**
-   
-      - 该方法用于对象的合并，将源对象的所有**可枚举属性**，**复制到目标对象，该方法的第一个参数是目标对象，后边的参数全是源对象**
 
+      - 该方法用于对象的合并，将源对象的所有**可枚举属性**，**复制到目标对象，该方法的第一个参数是目标对象，后边的参数全是源对象**
+    
                 let target = {}
                 let source1 = {a:1},source2={b:2},source3={c:3}
                 Object.assign(target,source1,source2,source3)
                 console.log(target) // {a:1,b:2,c:3}
-
+    
       - **若目标对象与源对象，或者多个源对象有同名的属性，则后面的属性会覆盖前面的属性**
       
                 let target = {}
                 let source1 = {a:1},source2={a:'xx',b:2},source3={b:'pp',c:3}
                 Object.assign(target,source1,source2,source3)
                 console.log(target) // {a: 'xx', b: 'pp', c: 3}
-
+    
       - **若Object.assign方法只有一个参数（目标对象），则会直接返回该参数。如果该参数不是对象，会先转换为对象然后再返回，由于null和undefined不能转换成对象，所以用作第一个参数会报错**
             
-	            let obj = {a:1}
-	            Object.assign(obj)===obj  //true
-	
-	            typeof Object.assign(2)  //'object'
-	
-	            Object.assign(null)  // 报错
-	            Object.assign(undefined) // 报错
-
+                let obj = {a:1}
+                Object.assign(obj)===obj  //true
+    
+                typeof Object.assign(2)  //'object'
+    
+                Object.assign(null)  // 报错
+                Object.assign(undefined) // 报错
+    
        - **如果非对象参数出现在源对象位置，则处理方式有所不同，会先转化为对象，如果不能转化为对象，则会跳过，这意味着，如果undefined和null不在首参数（目标对象位置），就不会报错。**
        
        - **其它类型的值(即数值，字符串，布尔值)，不在首参数（目标对象位置），也不会报错，但是除了字符串会以数组的形式拷贝到目标对象，其他值都不会产生效果(因为只有字符串的的包装对象会产生可枚举属性)**
-
-		        let obj = {}
-		        Object.assign(obj,2,{a:1},true,undefined,'string')
-		        console.log(obj) // {0: 's', 1: 't', 2: 'r', 3: 'i', 4: 'n', 5: 'g', a: 1}
+    
+    	        let obj = {}
+    	        Object.assign(obj,2,{a:1},true,undefined,'string')
+    	        console.log(obj) // {0: 's', 1: 't', 2: 'r', 3: 'i', 4: 'n', 5: 'g', a: 1}
     
                 - **这里属性顺序的问题，参考快慢属性**
-
+    
        - Objcet.assign方法**只拷贝源对象自身的属性，不拷贝继承属性，也不拷贝不可枚举的属性（enumerable:false）**
-
-		            let obj = {a:1}
-		            let source = {}
-		            Object.defineProperty(source,'foo',{
-		                value:'hello',
-		                enumerable:false
-		            })
-		            Object.assign(obj,source)
-		            console.log(obj) //{a:1}
-
+    
+    	            let obj = {a:1}
+    	            let source = {}
+    	            Object.defineProperty(source,'foo',{
+    	                value:'hello',
+    	                enumerable:false
+    	            })
+    	            Object.assign(obj,source)
+    	            console.log(obj) //{a:1}
+    
         - **属性名为Symbol值的属性，也会被Object.assign拷贝**
     
-		            let obj = {a:1}
-		            let source = {[Symbol('c')]:'d'}
-		            Object.assign(obj,source)
-		            console.log(obj) // {a:1,[Symbol(c)]：'d'}
+    	            let obj = {a:1}
+    	            let source = {[Symbol('c')]:'d'}
+    	            Object.assign(obj,source)
+    	            console.log(obj) // {a:1,[Symbol(c)]：'d'}
 
    - **注意点**
 
@@ -2269,30 +2271,31 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       
       - 该方法可以用来处理数组，只不过**会把数组当作对象处理**
             
-                Object.assign([1,2,3],[4,5]) //[4,5,3]
+            
+            Object.assign([1,2,3],[4,5]) //[4,5,3]
         
        - 上面代码中，Object.assign()把数组视为属性名为 0、1、2 的对象，因此源数组的 0 号属性4覆盖了目标数组的 0 号属性1。
-       
-       - 该方法**只能进行值的复制**，如果要复制的值是一个取值函数，那么将求值后的再复制
-
+      
+ - 该方法**只能进行值的复制**，如果要复制的值是一个取值函数，那么将求值后的再复制
+      
                  const source = {
                      get foo() {return 1}
-                 }
-
-                 Object.assign({},source)  // {foo:1}
-
+           }
+      
+           Object.assign({},source)  // {foo:1}
+    
     - **用途**
-
-       - 为对象添加属性
-
+      
+ - 为对象添加属性
+      
                 class Point {
                     constructor(x, y) {
                         Object.assign(this, {x, y});
                     }
                 }
             
-       - 为对象添加方法
-
+ - 为对象添加方法
+      
                 Object.assign(SomeClass.prototype, {
                 someMethod(arg1, arg2) {
                     ···
@@ -2300,48 +2303,48 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
                 anotherMethod() {
                     ···
                 }
-                });
-
+          });
+      
                 // 等同于下面的写法
                 SomeClass.prototype.someMethod = function (arg1, arg2) {
                 ···
                 };
                 SomeClass.prototype.anotherMethod = function () {
                 ···
-                };
-
-         - 克隆对象
-
+          };
+      
+   - 克隆对象
+      
                 function(obj){
                     Object.assign({},obj)
                 }
-                这样只能克隆该对象自身的属性，要想保持继承链，可用以下代码
-
-                function clone(origin){
-
+          这样只能克隆该对象自身的属性，要想保持继承链，可用以下代码
+          
+          function clone(origin){
+          
                     let originProto = Object.getPrototypeOf(origin) //获取origin的原型对象
                     Object.assign(Object.create(originProto),origin) //Object.create(originProto)生成originProto的实例对象，则就继承了origin原型上的对象
-                } 
-
+          } 
+      
           - 合并多个对象
             
                 let merge =(target,...source)=>{
                     Object.assign(target,...source)
-                }
-
-          - 为属性指定默认值
-
+          }
+      
+    - 为属性指定默认值
+      
                 const DEFAULTS = {
                 logLevel: 0,
                 outputFormat: 'html'
-                };
-
+          };
+      
                 function processContent(options) {
                 options = Object.assign({}, DEFAULTS, options);
                 console.log(options);
                 // ...
-                }
-
+          }
+      
                 上面代码中，DEFAULTS对象是默认值，options对象是用户提供的参数。Object.assign方法将DEFAULTS和options合并成一个新对象，如果两者有同名属性，则options的属性值会覆盖DEFAULTS的属性值。
 
 
@@ -2456,9 +2459,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    foo: 123,
 		  }
 		);
-
-    - **有了Object.getOwnPropertyDescriptors()，我们就有了另一种写法。**
-
+	
+    	- **有了Object.getOwnPropertyDescriptors()，我们就有了另一种写法。**
+	
 		const obj = Object.create(
 		  prot,
 		  Object.getOwnPropertyDescriptors({
@@ -2571,21 +2574,21 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
     - **返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值**
        
     - **Object.values会过滤属性名为 Symbol 值的属性**
-
-			Object.values({ [Symbol()]: 123, foo: 'abc' });
-			// ['abc']
+    
+    		Object.values({ [Symbol()]: 123, foo: 'abc' });
+    		// ['abc']
        
     - **如果Object.values方法的参数是一个字符串，会返回各个字符组成的一个数组**
     
-			Object.values('foo')
-			// ['f', 'o', 'o']
-
+    		Object.values('foo')
+    		// ['f', 'o', 'o']
+    
          - 上面代码中，字符串会先转成一个类似数组的对象。字符串的每个字符，就是该对象的一个属性。因此，Object.values返回每个属性的键值，就是各个字符组成的一个数组。
-
+    
     - **如果参数不是对象，Object.values会先将其转为对象。由于数值和布尔值的包装对象，都不会为实例添加非继承的属性。所以，Object.values会返回空数组。**
-
-			Object.values(42) // []
-			Object.values(true) // []
+    
+    		Object.values(42) // []
+    		Object.values(true) // []
 
  (2)Object.entries()
 
@@ -2764,29 +2767,29 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		 .querySelectorAll('div')
 		 .forEach(div => set.add(div));
 		set.size // 56
-
-    - **Set可以用来数组去重，也可以用于去除字符串里面的重复字符。**
-
-       [...new Set(array)]
-       [...new Set('ababbc')].join('') // "abc"
-
-    - **向 Set 加入值的时候，不会发生类型转换，所以5和"5"是两个不同的值。**
-    
-    - **Set 内部判断两个值是否不同，使用的算法叫做“Same-value-zero equality”，它类似于精确相等运算符（===），主要的区别是向 Set 加入值时认为NaN等于自身，而精确相等运算符认为NaN不等于自身。**
-
+	
+	- **Set可以用来数组去重，也可以用于去除字符串里面的重复字符。**
+	
+	   [...new Set(array)]
+	   [...new Set('ababbc')].join('') // "abc"
+	
+	- **向 Set 加入值的时候，不会发生类型转换，所以5和"5"是两个不同的值。**
+	
+	- **Set 内部判断两个值是否不同，使用的算法叫做“Same-value-zero equality”，它类似于精确相等运算符（===），主要的区别是向 Set 加入值时认为NaN等于自身，而精确相等运算符认为NaN不等于自身。**
+	
 		let set = new Set();
 		let a = NaN;
 		let b = NaN;
 		set.add(a);
 		set.add(b);
 		set // Set {NaN}
-
-     - **Array.from()方法可以将 Set 结构转为数组**
-
+	
+	 - **Array.from()方法可以将 Set 结构转为数组**
+	
 		const items = new Set([1, 2, 3, 4, 5]);
 		const array = Array.from(items);
-
-     - **这就提供了去除数组重复成员的另一种方法。**
+	
+	 - **这就提供了去除数组重复成员的另一种方法。**
 		
 		function dedupe(array) {
 		  return Array.from(new Set(array));
@@ -2799,156 +2802,157 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 （1）Set 结构的实例有以下属性。
 
      - **Set.prototype.constructor：构造函数，默认就是Set函数。**
-
+    
      - **Set.prototype.size：返回Set实例的成员总数。**
 
 （2）Set 实例的方法分为两大类：操作方法（用于操作数据）和遍历方法（用于遍历成员）。下面先介绍四个操作方法。
 
     - 操作方法：
-
+    
       - **Set.prototype.add(value)：添加某个值，返回 Set 结构本身。**
-
+    
       - **Set.prototype.delete(value)：删除某个值，返回一个布尔值，表示删除是否成功。**
-
+    
       - **Set.prototype.has(value)：返回一个布尔值，表示该值是否为Set的成员。**
-
+    
       - **Set.prototype.clear()：清除所有成员，没有返回值。**
-
-			s.add(1).add(2).add(2);
-			// 注意2被加入了两次
-			
-			s.size // 2
-			
-			s.has(1) // true
-			s.has(2) // true
-			s.has(3) // false
-			
-			s.delete(2) // true
-			s.has(2) // false
-
+    
+    		s.add(1).add(2).add(2);
+    		// 注意2被加入了两次
+    		
+    		s.size // 2
+    		
+    		s.has(1) // true
+    		s.has(2) // true
+    		s.has(3) // false
+    		
+    		s.delete(2) // true
+    		s.has(2) // false
+    
      - 遍历方法：
- 
+     
         - **Set.prototype.keys()：返回键名的遍历器**
-			
+    		
         - **Set.prototype.values()：返回键值的遍历器**
-			
+    		
         - **Set.prototype.entries()：返回键值对的遍历器**
-			
+    		
         - **Set.prototype.forEach()：使用回调函数遍历每个成员**
-
+    
      - **需要特别指出的是，Set的遍历顺序就是插入顺序。这个特性有时非常有用，比如使用 Set 保存一个回调函数列表，调用时就能保证按照添加顺序调用。**
 
-     
+
+​     
 
      - **keys()，values()，entries()**
-
+    
        - **keys方法、values方法、entries方法返回的都是遍历器对象（详见《Iterator 对象》一章）。由于 Set 结构没有键名，只有键值（或者说键名和键值是同一个值），所以keys方法和values方法的行为完全一致。**
-
-			let set = new Set(['red', 'green', 'blue']);
-			
-			for (let item of set.keys()) {
-			  console.log(item);
-			}
-			// red
-			// green
-			// blue
-			
-			for (let item of set.values()) {
-			  console.log(item);
-			}
-			// red
-			// green
-			// blue
-			
-			for (let item of set.entries()) {
-			  console.log(item);
-			}
-			// ["red", "red"]
-			// ["green", "green"]
-			// ["blue", "blue"]
-
+    
+    		let set = new Set(['red', 'green', 'blue']);
+    		
+    		for (let item of set.keys()) {
+    		  console.log(item);
+    		}
+    		// red
+    		// green
+    		// blue
+    		
+    		for (let item of set.values()) {
+    		  console.log(item);
+    		}
+    		// red
+    		// green
+    		// blue
+    		
+    		for (let item of set.entries()) {
+    		  console.log(item);
+    		}
+    		// ["red", "red"]
+    		// ["green", "green"]
+    		// ["blue", "blue"]
+    
         - **Set 结构的实例默认可遍历，它的默认遍历器生成函数就是它的values方法。**
-
-		     Set.prototype[Symbol.iterator] === Set.prototype.values //true
-
+    
+    	     Set.prototype[Symbol.iterator] === Set.prototype.values //true
+    
         - **这意味着，可以省略values方法，直接用for...of循环遍历 Set。**
-
-				let set = new Set(['red', 'green', 'blue']);
-				
-				for (let x of set) {
-				  console.log(x);
-				}
-				// red
-				// green
-				// blue
-
+    
+    			let set = new Set(['red', 'green', 'blue']);
+    			
+    			for (let x of set) {
+    			  console.log(x);
+    			}
+    			// red
+    			// green
+    			// blue
+    
      - **forEach()**
-
+    
        - Set 结构的实例与数组一样，也拥有forEach方法，用于对每个成员执行某种操作，没有返回值。
-
-			let set = new Set([1, 4, 9]);
-			set.forEach((value, key) => console.log(key + ' : ' + value))
-			// 1 : 1
-			// 4 : 4
-			// 9 : 9
-
+    
+    		let set = new Set([1, 4, 9]);
+    		set.forEach((value, key) => console.log(key + ' : ' + value))
+    		// 1 : 1
+    		// 4 : 4
+    		// 9 : 9
+    
         - **forEach方法还可以有第二个参数，表示绑定处理函数内部的this对象。**
-
+    
      - **遍历的应用**
-
+    
         - **扩展运算符（...）内部使用for...of循环**，所以也可以用于 Set 结构。
-
-			let set = new Set(['red', 'green', 'blue']);
-			let arr = [...set];
-			// ['red', 'green', 'blue']
-
+    
+    		let set = new Set(['red', 'green', 'blue']);
+    		let arr = [...set];
+    		// ['red', 'green', 'blue']
+    
         - **扩展运算符和 Set 结构相结合，就可以去除数组的重复成员。**
-
-			let arr = [3, 5, 2, 2, 5, 5];
-			let unique = [...new Set(arr)];
-			// [3, 5, 2]
-			
+    
+    		let arr = [3, 5, 2, 2, 5, 5];
+    		let unique = [...new Set(arr)];
+    		// [3, 5, 2]
+    		
         - **而且，数组的map和filter方法也可以间接用于 Set 了。**
-			
-			let set = new Set([1, 2, 3]);
-			set = new Set([...set].map(x => x * 2));
-			// 返回Set结构：{2, 4, 6}
-			
-			let set = new Set([1, 2, 3, 4, 5]);
-			set = new Set([...set].filter(x => (x % 2) == 0));
-			// 返回Set结构：{2, 4}
-
+    		
+    		let set = new Set([1, 2, 3]);
+    		set = new Set([...set].map(x => x * 2));
+    		// 返回Set结构：{2, 4, 6}
+    		
+    		let set = new Set([1, 2, 3, 4, 5]);
+    		set = new Set([...set].filter(x => (x % 2) == 0));
+    		// 返回Set结构：{2, 4}
+    
          - **因此使用 Set 可以很容易地实现并集（Union）、交集（Intersect）和差集（Difference）。**
-
-			let a = new Set([1, 2, 3]);
-			let b = new Set([4, 3, 2]);
-			
-			// 并集
-			let union = new Set([...a, ...b]);
-			// Set {1, 2, 3, 4}
-			
-			// 交集
-			let intersect = new Set([...a].filter(x => b.has(x)));
-			// set {2, 3}
-			
-			// （a 相对于 b 的）差集
-			let difference = new Set([...a].filter(x => !b.has(x)));
-			// Set {1}
-
+    
+    		let a = new Set([1, 2, 3]);
+    		let b = new Set([4, 3, 2]);
+    		
+    		// 并集
+    		let union = new Set([...a, ...b]);
+    		// Set {1, 2, 3, 4}
+    		
+    		// 交集
+    		let intersect = new Set([...a].filter(x => b.has(x)));
+    		// set {2, 3}
+    		
+    		// （a 相对于 b 的）差集
+    		let difference = new Set([...a].filter(x => !b.has(x)));
+    		// Set {1}
+    
          - **如果想在遍历操作中，同步改变原来的 Set 结构，目前没有直接的方法，但有两种变通方法。一种是利用原 Set 结构映射出一个新的结构，然后赋值给原来的 Set 结构；另一种是利用Array.from方法。**
-			
-			// 方法一
-			let set = new Set([1, 2, 3]);
-			set = new Set([...set].map(val => val * 2));
-			// set的值是2, 4, 6
-			
-			// 方法二
-			let set = new Set([1, 2, 3]);
-			set = new Set(Array.from(set, val => val * 2));
-			// set的值是2, 4, 6
+    		
+    		// 方法一
+    		let set = new Set([1, 2, 3]);
+    		set = new Set([...set].map(val => val * 2));
+    		// set的值是2, 4, 6
+    		
+    		// 方法二
+    		let set = new Set([1, 2, 3]);
+    		set = new Set(Array.from(set, val => val * 2));
+    		// set的值是2, 4, 6
 
 ** 3.weakSet **
-  
+
 （1）含义
 
    - WeakSet 结构与 Set 类似，也是**不重复的值的集合**。但是，它与 Set 有两个区别。
@@ -2985,24 +2989,24 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		const ws = new WeakSet(b);
 		// Uncaught TypeError: Invalid value used in weak set(…)
 
-    - 上面代码中，数组b的成员不是对象，加入 WeakSet 就会报错。
+        - 上面代码中，数组b的成员不是对象，加入 WeakSet 就会报错。
 
 （3）方法
 
     - **WeakSet.prototype.add(value)**：向 WeakSet 实例添加一个新成员，返回 WeakSet 结构本身。
-
+    
     - **WeakSet.prototype.delete(value)**：清除 WeakSet 实例的指定成员，清除成功返回true，如果在 WeakSet 中找不到该成员或该成员不是对象，返回false。
-
+    
     - **WeakSet.prototype.has(value)**：返回一个布尔值，表示某个值是否在 WeakSet 实例之中。
-
+    
     - **WeakSet 没有size属性，没有办法遍历它的成员。**
-		
-		ws.size // undefined
-		ws.forEach // undefined
-		
-		ws.forEach(function(item){ console.log('WeakSet has ' + item)})
-		// TypeError: undefined is not a function
-
+    	
+    	ws.size // undefined
+    	ws.forEach // undefined
+    	
+    	ws.forEach(function(item){ console.log('WeakSet has ' + item)})
+    	// TypeError: undefined is not a function
+    
     - **WeakSet 不能遍历，是因为成员都是弱引用，随时可能消失，遍历机制无法保证成员的存在，很可能刚刚遍历结束，成员就取不到了。WeakSet 的一个用处，是储存 DOM 节点，而不用担心这些节点从文档移除时，会引发内存泄漏。**
 
 
@@ -3046,25 +3050,25 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		.set(1, 'bbb');
 		
 		map.get(1) // "bbb"
-
-    - **如果读取一个未知的键，则返回undefined。**
-
+	
+    	- **如果读取一个未知的键，则返回undefined。**
+	
 		new Map().get('asfddfsasadf')
 		// undefined
-
-    - **注意，只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。**
-
+	
+    	- **注意，只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。**
+	
 		const map = new Map();
 		
 		map.set(['a'], 555);
 		map.get(['a']) // undefined
-
-    - 上面代码的set和get方法，表面是针对同一个键，但实际上这是两个不同的数组实例，内存地址是不一样的，因此get方法无法读取该键，返回undefined。
-
-    - 由上可知，**Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。**这就解决了同名属性碰撞（clash）的问题，我们扩展别人的库的时候，如果使用对象作为键名，就不用担心自己的属性与原作者的属性同名。
-
-    - **如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键。另外，undefined和null也是两个不同的键。虽然NaN不严格相等于自身，但 Map 将其视为同一个键。**
-
+	
+    	- 上面代码的set和get方法，表面是针对同一个键，但实际上这是两个不同的数组实例，内存地址是不一样的，因此get方法无法读取该键，返回undefined。
+	
+    	- 由上可知，**Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。**这就解决了同名属性碰撞（clash）的问题，我们扩展别人的库的时候，如果使用对象作为键名，就不用担心自己的属性与原作者的属性同名。
+	
+    	- **如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键。另外，undefined和null也是两个不同的键。虽然NaN不严格相等于自身，但 Map 将其视为同一个键。**
+	
 		let map = new Map();
 		
 		map.set(-0, 123);
@@ -3093,6 +3097,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		map.set('foo', true);
 		map.set('bar', false);
 		
+	
 		map.size // 2 
 
  （2）** Map.prototype.set(key, value) **
@@ -3140,7 +3145,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 
  （5）** Map.prototype.delete(key) **
-   
+
    - **delete()方法删除某个键，返回true。如果删除失败，返回false。**
 		
 		const m = new Map();
@@ -3399,7 +3404,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		const k2 = [4, 5, 6];
 		const wm2 = new WeakMap([[k1, 'foo'], [k2, 'bar']]);
 		wm2.get(k2) // "bar"
- 
+
   - WeakMap与Map的区别有两点：
 
     - **WeakMap只接受对象（null除外）和 Symbol 值作为键名，不接受其他类型的值作为键名**
@@ -3444,13 +3449,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - ** 没有遍历操作（即没有keys()、values()和entries()方法），也没有size属性 **。因为没有办法列出所有键名，某个键名是否存在完全不可预测，跟垃圾回收机制是否运行相关。这一刻可以取到键名，下一刻垃圾回收机制突然运行了，这个键名就没了，为了防止出现不确定性，就统一规定不能取到键名。
       
       - **无法清空，即不支持clear方法。因此，WeakMap只有四个方法可用：get()、set()、has()、delete()。**
-
-		const wm = new WeakMap();
-		
-		// size、forEach、clear 方法都不存在
-		wm.size // undefined
-		wm.forEach // undefined
-		wm.clear // undefined
+    
+    	const wm = new WeakMap();
+    	
+    	// size、forEach、clear 方法都不存在
+    	wm.size // undefined
+    	wm.forEach // undefined
+    	wm.clear // undefined
 
 
 （3）**WeakMap的用途**
@@ -3655,7 +3660,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		obj.time // 35
 
   - 上面代码中，proxy对象是obj对象的原型，obj对象本身并没有time属性，所以根据原型链，会在proxy对象上读取该属性，导致被拦截。
- 
+
   - **同一个拦截器函数，可以设置拦截多个操作。**
 		
 		var handler = {
@@ -3683,7 +3688,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		new fproxy(1, 2) // {value: 2}
 		fproxy.prototype === Object.prototype // true
 		fproxy.foo === "Hello, foo" // true
- 
+
 - 对于可以设置、但没有设置拦截的操作，则直接落在目标对象上，按照原先的方式产生结果。
 
 ** 2.Proxy 实例的方法 **
@@ -3691,25 +3696,25 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
  （1）**get(target, propKey, receiver)**
 
       - **get(target, propKey, receiver)：拦截对象属性的读取**，比如proxy.foo和proxy['foo']。
-
+    
       - **接受三个参数，依次为目标对象、属性名和 proxy 实例本身（严格地说，是操作行为所针对的对象），其中最后一个参数可选。**
-
-		var person = {
-		  name: "张三"
-		};
-		
-		var proxy = new Proxy(person, {
-		  get: function(target, propKey) {
-		    if (propKey in target) {
-		      return target[propKey];
-		    } else {
-		      throw new ReferenceError("Prop name \"" + propKey + "\" does not exist.");
-		    }
-		  }
-		});
-		
-		proxy.name // "张三"
-		proxy.age // 抛出一个错误
+    
+    	var person = {
+    	  name: "张三"
+    	};
+    	
+    	var proxy = new Proxy(person, {
+    	  get: function(target, propKey) {
+    	    if (propKey in target) {
+    	      return target[propKey];
+    	    } else {
+    	      throw new ReferenceError("Prop name \"" + propKey + "\" does not exist.");
+    	    }
+    	  }
+    	});
+    	
+    	proxy.name // "张三"
+    	proxy.age // 抛出一个错误
 
    - 上面代码表示，如果访问目标对象不存在的属性，会抛出一个错误。如果没有这个拦截函数，访问不存在的属性，只会返回undefined。
 
@@ -3724,8 +3729,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		let obj = Object.create(proto);
 		obj.foo // "GET foo"
-
-    - 上面代码中，拦截操作定义在Prototype对象上面，所以如果读取obj对象继承的属性时，拦截会生效。
+	
+    	- 上面代码中，拦截操作定义在Prototype对象上面，所以如果读取obj对象继承的属性时，拦截会生效。
 
   - **如果一个属性不可配置（configurable）且不可写（writable），则 Proxy 不能修改该属性，否则通过 Proxy 对象访问该属性会报错。**
 		
@@ -3762,35 +3767,35 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
  （2）**set(target, propKey, value, receiver)**
 
       - **set(target, propKey, value, receiver)：拦截对象属性的设置**，比如proxy.foo = v或proxy['foo'] = v，返回一个布尔值。
-
+    
       - **接受四个参数，依次为目标对象、属性名、属性值和 Proxy 实例本身，其中最后一个参数可选。 **
-
+    
       - 利用set方法，还可以数据绑定，即每当对象发生变化时，会自动更新 DOM。
       
       - 有时，我们会在对象上面设置内部属性，属性名的第一个字符使用下划线开头，表示这些属性不应该被外部使用。结合get和set方法，就可以做到防止这些内部属性被外部读写。
- 
-		const handler = {
-		  get (target, key) {
-		    invariant(key, 'get');
-		    return target[key];
-		  },
-		  set (target, key, value) {
-		    invariant(key, 'set');
-		    target[key] = value;
-		    return true;
-		  }
-		};
-		function invariant (key, action) {
-		  if (key[0] === '_') {
-		    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
-		  }
-		}
-		const target = {};
-		const proxy = new Proxy(target, handler);
-		proxy._prop
-		// Error: Invalid attempt to get private "_prop" property
-		proxy._prop = 'c'
-		// Error: Invalid attempt to set private "_prop" property
+     
+    	const handler = {
+    	  get (target, key) {
+    	    invariant(key, 'get');
+    	    return target[key];
+    	  },
+    	  set (target, key, value) {
+    	    invariant(key, 'set');
+    	    target[key] = value;
+    	    return true;
+    	  }
+    	};
+    	function invariant (key, action) {
+    	  if (key[0] === '_') {
+    	    throw new Error(`Invalid attempt to ${action} private "${key}" property`);
+    	  }
+    	}
+    	const target = {};
+    	const proxy = new Proxy(target, handler);
+    	proxy._prop
+    	// Error: Invalid attempt to get private "_prop" property
+    	proxy._prop = 'c'
+    	// Error: Invalid attempt to set private "_prop" property
 
   - 上面代码中，只要读写的属性名的第一个字符是下划线，一律抛错，从而达到禁止读写内部属性的目的。
 
@@ -3832,59 +3837,59 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 （3）**apply(target, ctx, args)**
 
      - **apply(target, object, args)：拦截 Proxy 实例作为函数调用的操作**，比如proxy(...args)、proxy.call(object, ...args)、proxy.apply(...)
-
+    
      - apply方法可以接受三个参数，**分别是目标对象、目标对象的上下文对象（this）和目标对象的参数数组。**
-
-		var twice = {
-		  apply (target, ctx, args) {
-		    return Reflect.apply(...arguments) * 2;
-		  }
-		};
-		function sum (left, right) {
-		  return left + right;
-		};
-		var proxy = new Proxy(sum, twice);
-		proxy(1, 2) // 6
-		proxy.call(null, 5, 6) // 22
-		proxy.apply(null, [7, 8]) // 30
-
+    
+    	var twice = {
+    	  apply (target, ctx, args) {
+    	    return Reflect.apply(...arguments) * 2;
+    	  }
+    	};
+    	function sum (left, right) {
+    	  return left + right;
+    	};
+    	var proxy = new Proxy(sum, twice);
+    	proxy(1, 2) // 6
+    	proxy.call(null, 5, 6) // 22
+    	proxy.apply(null, [7, 8]) // 30
+    
     - 上面代码中，每当**执行proxy函数（直接调用或call和apply调用），就会被apply方法拦截**
-
+    
     - **直接调用Reflect.apply方法，也会被拦截**
-
-		Reflect.apply(proxy, null, [9, 10]) // 38
+    
+    	Reflect.apply(proxy, null, [9, 10]) // 38
 
 （4）**has(target, propKey)**
 
      - has()方法用来拦截HasProperty操作，即**判断对象是否具有某个属性时，这个方法会生效。典型的操作就是in运算符。**
-
+    
      - has()方法可以**接受两个参数，分别是目标对象、需查询的属性名。**
-
-		var handler = {
-		  has (target, key) {
-		    if (key[0] === '_') {
-		      return false;
-		    }
-		    return key in target;
-		  }
-		};
-		var target = { _prop: 'foo', prop: 'foo' };
-		var proxy = new Proxy(target, handler);
-		'_prop' in proxy // false
-
+    
+    	var handler = {
+    	  has (target, key) {
+    	    if (key[0] === '_') {
+    	      return false;
+    	    }
+    	    return key in target;
+    	  }
+    	};
+    	var target = { _prop: 'foo', prop: 'foo' };
+    	var proxy = new Proxy(target, handler);
+    	'_prop' in proxy // false
+    
     - **如果原对象不可配置或者禁止扩展，这时has()拦截会报错**
+    
+    	var obj = { a: 10 };
+    	Object.preventExtensions(obj);
+    	
+    	var p = new Proxy(obj, {
+    	  has: function(target, prop) {
+    	    return false;
+    	  }
+    	});
+    	
+    	'a' in p // TypeError is thrown
 
-		var obj = { a: 10 };
-		Object.preventExtensions(obj);
-		
-		var p = new Proxy(obj, {
-		  has: function(target, prop) {
-		    return false;
-		  }
-		});
-		
-		'a' in p // TypeError is thrown
- 
    - **值得注意的是，has()方法拦截的是HasProperty操作，而不是HasOwnProperty操作，即has()方法不判断一个属性是对象自身的属性，还是继承的属性。**
 
    - **另外，虽然for...in循环也用到了in运算符，但是has()拦截对for...in循环不生效。**
@@ -3941,7 +3946,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
        - target：**目标对象。**
 		
        - args：**构造函数的参数数组。**
-	 
+	
        - newTarget：**创造实例对象时，new命令作用的构造函数**（下面例子的p）。
 
 
@@ -4015,7 +4020,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 上面代码中，deleteProperty方法拦截了delete操作符，删除第一个字符为下划线的属性会报错。
 
   - **注意，目标对象自身的不可配置（configurable）的属性，不能被deleteProperty方法删除，否则报错。**
-  
+
 
 （6）**defineProperty(target, propKey, propDesc)**
 
@@ -4106,7 +4111,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
     - **这个方法有一个强限制，它的返回值必须与目标对象的isExtensible属性保持一致，否则就会抛出错误。**
 
        Object.isExtensible(proxy) === Object.isExtensible(target)
-  
+    
     - 下面是一个例子
 
 		var p = new Proxy({}, {
@@ -4149,17 +4154,17 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
    - **注意，使用Object.keys()方法时，有三类属性会被ownKeys()方法自动过滤，不会返回。**
 
-    - 目标对象上不存在的属性
+        - 目标对象上不存在的属性
 
-    - 属性名为 Symbol 值
-  
-    - 不可遍历（enumerable）的属性
+        - 属性名为 Symbol 值
+      
+        - 不可遍历（enumerable）的属性
 
 		let target = {
 		  a: 1,
 		  b: 2,
 		  c: 3,
-		  [Symbol.for('secret')]: '4',
+		[Symbol.for('secret')]: '4',
 		};
 		
 		Object.defineProperty(target, 'key', {
@@ -4366,18 +4371,19 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - 上面代码中，getDate()方法只能在Date对象实例上面拿到，如果this不是Date对象实例就会报错。这时，this绑定原始对象，就可以解决这个问题。
 
-		const target = new Date('2015-01-01');
-		const handler = {
-		  get(target, prop) {
-		    if (prop === 'getDate') {
-		      return target.getDate.bind(target);
-		    }
-		    return Reflect.get(target, prop);
-		  }
-		};
-		const proxy = new Proxy(target, handler);
-		
-		proxy.getDate() // 1
+   const target = new Date('2015-01-01');
+   	const handler = {
+   	  get(target, prop) {
+   	    if (prop === 'getDate') {
+   	      return target.getDate.bind(target);
+   	    }
+   	    return Reflect.get(target, prop);
+   	  }
+   	};
+   	const proxy = new Proxy(target, handler);
+   	
+
+   	proxy.getDate() // 1
 
 - **Proxy 拦截函数内部**的**this，指向的是handler对象**。
 
@@ -4448,7 +4454,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    return success;
 		  }
 		});
- 
+
   - 上面代码中，Proxy方法拦截target对象的属性赋值行为。它采用Reflect.set方法将值赋值给对象的属性，确保完成原有的行为，然后再部署额外的功能。
 
   - 下面是另一个例子。
@@ -4495,104 +4501,104 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		Reflect.getOwnPropertyDescriptor(target, name)
 		Reflect.getPrototypeOf(target)
 		Reflect.setPrototypeOf(target, prototype)
-	
+
    - 上面这些方法的作用，大部分与Object对象的同名方法的作用都是相同的，而且它与Proxy对象的方法是一一对应的。下面是对它们的解释。
- 
+
   （1）**Reflect.get(target, name, receiver)**
 
       - **Reflect.get方法查找并返回target对象的name属性，如果没有该属性，则返回undefined。**
-
-		var myObject = {
-		  foo: 1,
-		  bar: 2,
-		  get baz() {
-		    return this.foo + this.bar;
-		  },
-		}
-		
-		Reflect.get(myObject, 'foo') // 1
-		Reflect.get(myObject, 'bar') // 2
-		Reflect.get(myObject, 'baz') // 3
-
+    
+    	var myObject = {
+    	  foo: 1,
+    	  bar: 2,
+    	  get baz() {
+    	    return this.foo + this.bar;
+    	  },
+    	}
+    	
+    	Reflect.get(myObject, 'foo') // 1
+    	Reflect.get(myObject, 'bar') // 2
+    	Reflect.get(myObject, 'baz') // 3
+    
     - **如果name属性部署了读取函数（getter），则读取函数的this绑定receiver**
-
-		var myObject = {
-		  foo: 1,
-		  bar: 2,
-		  get baz() {
-		    return this.foo + this.bar;
-		  },
-		};
-		
-		var myReceiverObject = {
-		  foo: 4,
-		  bar: 4,
-		};
-		
-		Reflect.get(myObject, 'baz', myReceiverObject) // 8
-
+    
+    	var myObject = {
+    	  foo: 1,
+    	  bar: 2,
+    	  get baz() {
+    	    return this.foo + this.bar;
+    	  },
+    	};
+    	
+    	var myReceiverObject = {
+    	  foo: 4,
+    	  bar: 4,
+    	};
+    	
+    	Reflect.get(myObject, 'baz', myReceiverObject) // 8
+    
     - **如果第一个参数不是对象，Reflect.get方法会报错**
+    
+    	Reflect.get(1, 'foo') // 报错
+    	Reflect.get(false, 'foo') // 报错
 
-		Reflect.get(1, 'foo') // 报错
-		Reflect.get(false, 'foo') // 报错
-		 
   （2）**Reflect.set(target, name, value, receiver)**
 
        - **Reflect.set方法设置target对象的name属性等于value。**
-
-			var myObject = {
-			  foo: 1,
-			  set bar(value) {
-			    return this.foo = value;
-			  },
-			}
-			
-			myObject.foo // 1
-			
-			Reflect.set(myObject, 'foo', 2);
-			myObject.foo // 2
-			
-			Reflect.set(myObject, 'bar', 3)
-			myObject.foo // 3
-
+    
+    		var myObject = {
+    		  foo: 1,
+    		  set bar(value) {
+    		    return this.foo = value;
+    		  },
+    		}
+    		
+    		myObject.foo // 1
+    		
+    		Reflect.set(myObject, 'foo', 2);
+    		myObject.foo // 2
+    		
+    		Reflect.set(myObject, 'bar', 3)
+    		myObject.foo // 3
+    
      - **如果name属性设置了赋值函数，则赋值函数的this绑定receiver。**
-			 
-			var myObject = {
-			  foo: 4,
-			  set bar(value) {
-			    return this.foo = value;
-			  },
-			};
-			
-			var myReceiverObject = {
-			  foo: 0,
-			};
-			
-			Reflect.set(myObject, 'bar', 1, myReceiverObject);
-			myObject.foo // 4
-			myReceiverObject.foo // 1
-
+    		 
+    		var myObject = {
+    		  foo: 4,
+    		  set bar(value) {
+    		    return this.foo = value;
+    		  },
+    		};
+    		
+    		var myReceiverObject = {
+    		  foo: 0,
+    		};
+    		
+    		Reflect.set(myObject, 'bar', 1, myReceiverObject);
+    		myObject.foo // 4
+    		myReceiverObject.foo // 1
+    
     - **注意，如果 Proxy对象和 Reflect对象联合使用，前者拦截赋值操作，后者完成赋值的默认行为，而且传入了receiver，那么Reflect.set会触发Proxy.defineProperty拦截。**
-
-			let p = {
-			  a: 'a'
-			};
-			
-			let handler = {
-			  set(target, key, value, receiver) {
-			    console.log('set');
-			    Reflect.set(target, key, value, receiver)
-			  },
-			  defineProperty(target, key, attribute) {
-			    console.log('defineProperty');
-			    Reflect.defineProperty(target, key, attribute);
-			  }
-			};
-			
-			let obj = new Proxy(p, handler);
-			obj.a = 'A';
-			// set
-			// defineProperty
+    
+    		let p = {
+    		  a: 'a'
+    		};
+    		
+    		let handler = {
+    		  set(target, key, value, receiver) {
+    		    console.log('set');
+    		    Reflect.set(target, key, value, receiver)
+    		  },
+    		  defineProperty(target, key, attribute) {
+    		    console.log('defineProperty');
+    		    Reflect.defineProperty(target, key, attribute);
+    		  }
+    		};
+    		
+    		let obj = new Proxy(p, handler);
+    		obj.a = 'A';
+    		// set
+    		// defineProperty
 
    - 上面代码中，Proxy.set拦截里面使用了Reflect.set，而且传入了receiver，导致触发Proxy.defineProperty拦截。这是因为Proxy.set的receiver参数总是指向当前的 Proxy实例（即上例的obj），而Reflect.set一旦传入receiver，就会将属性赋值到receiver上面（即obj），导致触发defineProperty拦截。如果Reflect.set没有传入receiver，那么就不会触发defineProperty拦截。
 			
@@ -4622,7 +4628,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 
  （3）**Reflect.has(obj, name)**
- 
+
    - **Reflect.has方法对应name in obj里面的in运算符。**
 
 		var myObject = {
@@ -4649,14 +4655,14 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		// 新写法
 		Reflect.deleteProperty(myObj, 'foo');
-		
+	
    - **该方法返回一个布尔值。如果删除成功，或者被删除的属性不存在，返回true；删除失败，被删除的属性依然存在，返回false。**
 
    - **如果Reflect.deleteProperty()方法的第一个参数不是对象，会报错。**
 
 
  （5）**Reflect.construct(target,args) **
- 
+
    - **Reflect.construct方法等同于new target(...args)，这提供了一种不使用new，来调用构造函数的方法。**
 
 		function Greeting(name) {
@@ -4669,10 +4675,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		// Reflect.construct 的写法
 		const instance = Reflect.construct(Greeting, ['张三']);
 		
-    - **如果Reflect.construct()方法的第一个参数不是函数，会报错。**
+    	- **如果Reflect.construct()方法的第一个参数不是函数，会报错。**
 
  （6）**Reflect.getPrototypeOf(obj **
- 
+
    - **Reflect.getPrototypeOf方法用于读取对象的__proto__属性，对应Object.getPrototypeOf(obj)。**
 		
 		const myObj = new FancyThing();
@@ -4779,7 +4785,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		p.foo // "bar"
 
 - 上面代码中，Proxy.defineProperty对属性赋值设置了拦截，然后使用Reflect.defineProperty完成了赋值。
- 
+
 （10）**Reflect.getOwnPropertyDescriptor(target,propertyKey) **
 
   - **Reflect.getOwnPropertyDescriptor基本等同于Object.getOwnPropertyDescriptor，用于得到指定属性的描述对象，将来会替代掉后者。**
@@ -4866,18 +4872,18 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 3.使用Proxy实现观察者模式 **
 
       - **观察者模式（Observer mode）指的是函数自动观察数据对象，一旦对象有变化，函数就会自动执行。**
-
-		const queuedObservers = new Set();
-		
-		const observe = fn => queuedObservers.add(fn);
-		const observable = obj => new Proxy(obj, {set});
-		
-		function set(target, key, value, receiver) {
-		  const result = Reflect.set(target, key, value, receiver);
-		  queuedObservers.forEach(observer => observer());
-		  return result;
-		}
-
+    
+    	const queuedObservers = new Set();
+    	
+    	const observe = fn => queuedObservers.add(fn);
+    	const observable = obj => new Proxy(obj, {set});
+    	
+    	function set(target, key, value, receiver) {
+    	  const result = Reflect.set(target, key, value, receiver);
+    	  queuedObservers.forEach(observer => observer());
+    	  return result;
+    	}
+    
     - 上面代码中，先定义了一个Set集合，所有观察者函数都放进这个集合。然后，observable函数返回原始对象的代理，拦截赋值操作。拦截函数set之中，会自动执行所有观察者。
 
 
@@ -4983,24 +4989,24 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 4.Promise.prototype.then() **
 
     - Promise 实例具有then方法，也就是说，then方法是定义在原型对象Promise.prototype上的。它的作用是为 Promise 实例添加状态改变时的回调函数。前面说过，then方法的第一个参数是resolved状态的回调函数，第二个参数是rejected状态的回调函数，它们都是可选的。
-
+    
     - **then方法返回的是一个新的Promise实例（注意，不是原来那个Promise实例）。因此可以采用链式写法，即then方法后面再调用另一个then方法。**
-
-		getJSON("/posts.json").then(function(json) {
-		  return json.post;
-		}).then(function(post) {
-		  // ...
-		});
-
+    
+    	getJSON("/posts.json").then(function(json) {
+    	  return json.post;
+    	}).then(function(post) {
+    	  // ...
+    	});
+    
     - **采用链式的then，可以指定一组按照次序调用的回调函数。这时，前一个回调函数，有可能返回的还是一个Promise对象（即有异步操作），这时后一个回调函数，就会等待该Promise对象的状态发生变化，才会被调用。**
-
-		getJSON("/post/1.json").then(function(post) {
-		  return getJSON(post.commentURL);
-		}).then(function (comments) {
-		  console.log("resolved: ", comments);
-		}, function (err){
-		  console.log("rejected: ", err);
-		});
+    
+    	getJSON("/post/1.json").then(function(post) {
+    	  return getJSON(post.commentURL);
+    	}).then(function (comments) {
+    	  console.log("resolved: ", comments);
+    	}, function (err){
+    	  console.log("rejected: ", err);
+    	});
 
 ** 5.Promise.prototype.catch() **
 
@@ -5149,7 +5155,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 - 上面代码中，第二个catch()方法用来捕获前一个catch()方法抛出
 
 ** 6.Promise.prototype.finally() **
- 
+
    - **finally()方法用于指定不管 Promise 对象最后状态如何，都会执行的操作**。该方法是 ES2018 引入标准的。
 
 		promise
@@ -5269,9 +5275,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		.catch(console.error);
 
    - 上面代码中，如果 5 秒之内fetch方法无法返回结果，变量p的状态就会变为rejected，从而触发catch方法指定的回调函数。
- 
+
 ** 9.Promise.allSettled() **
-   
+
    - 有时候，我们希望等到一组异步操作都结束了，不管每一个操作是成功还是失败，再进行下一步操作。但是，现有的 Promise 方法很难实现这个要求。
 
    - **Promise.all()方法只适合所有异步操作都成功的情况，如果有一个操作失败，就无法满足要求。**
@@ -5285,13 +5291,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		} catch {
 		  console.log('至少一个请求失败，其他请求可能还没结束。');
 		}
-
-    - 上面示例中，Promise.all()可以确定所有请求都成功了，但是只要有一个请求失败，它就会报错，而不管另外的请求是否结束。
-
-    - 为了解决这个问题，ES2020 引入了**Promise.allSettled()方法，用来确定一组异步操作是否都结束了（不管成功或失败）。所以，它的名字叫做”Settled“，包含了”fulfilled“和”rejected“两种情况。**
-
-    - **Promise.allSettled()方法接受一个数组作为参数，数组的每个成员都是一个 Promise 对象，并返回一个新的 Promise 对象。只有等到参数数组的所有 Promise 对象都发生状态变更（不管是fulfilled还是rejected），返回的 Promise 对象才会发生状态变更。**
-
+	
+    	- 上面示例中，Promise.all()可以确定所有请求都成功了，但是只要有一个请求失败，它就会报错，而不管另外的请求是否结束。
+	
+    	- 为了解决这个问题，ES2020 引入了**Promise.allSettled()方法，用来确定一组异步操作是否都结束了（不管成功或失败）。所以，它的名字叫做”Settled“，包含了”fulfilled“和”rejected“两种情况。**
+	
+    	- **Promise.allSettled()方法接受一个数组作为参数，数组的每个成员都是一个 Promise 对象，并返回一个新的 Promise 对象。只有等到参数数组的所有 Promise 对象都发生状态变更（不管是fulfilled还是rejected），返回的 Promise 对象才会发生状态变更。**
+	
 		const promises = [
 		  fetch('/api-1'),
 		  fetch('/api-2'),
@@ -5326,12 +5332,12 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		// 异步操作失败时
 		{status: 'rejected', reason: reason}
 
- 
+
    - **成员对象的status属性的值只可能是字符串fulfilled或字符串rejected，用来区分异步操作是成功还是失败。如果是成功（fulfilled），对象会有value属性，如果是失败（rejected），会有reason属性，对应两种状态时前面异步操作的返回值。**
 
 
 ** 10.Promise.any() **
- 
+
    - 该方法接受一组 Promise 实例作为参数，包装成一个新的 Promise 实例返回。
 
    - **只要参数实例有一个变成fulfilled状态，包装实例就会变成fulfilled状态；如果所有参数实例都变成rejected状态，包装实例就会变成rejected状态。**
@@ -5368,74 +5374,75 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    （2）**参数是一个thenable对象**
 
         - thenable对象指的是具有then方法的对象，比如下面这个对象。
-
-			let thenable = {
-			  then: function(resolve, reject) {
-			    resolve(42);
-			  }
-			};
-			
+    
+    		let thenable = {
+    		  then: function(resolve, reject) {
+    		    resolve(42);
+    		  }
+    		};
+    		
           - Promise.resolve()方法会将这个对象转为 Promise 对象，然后就立即执行thenable对象的then()方法。
-			
-			let thenable = {
-			  then: function(resolve, reject) {
-			    resolve(42);
-			  }
-			};
-			
-			let p1 = Promise.resolve(thenable);
-			p1.then(function (value) {
-			  console.log(value);  // 42
-			});
-
+    		
+    		let thenable = {
+    		  then: function(resolve, reject) {
+    		    resolve(42);
+    		  }
+    		};
+    		
+    		let p1 = Promise.resolve(thenable);
+    		p1.then(function (value) {
+    		  console.log(value);  // 42
+    		});
+    
        - 上面代码中，thenable对象的then()方法执行后，对象p1的状态就变为resolved，从而立即执行最后那个then()方法指定的回调函数，输出42。
 
    （3）**参数不是具有then()方法的对象，或根本就不是对象**
 
        - 如果参数是一个原始值，或者是一个不具有then()方法的对象，则Promise.resolve()方法返回一个新的 Promise 对象，状态为resolved。
-
-		const p = Promise.resolve('Hello');
-		
-		p.then(function (s) {
-		  console.log(s)
-		});
-		// Hello
-
+    
+    	const p = Promise.resolve('Hello');
+    	
+    	p.then(function (s) {
+    	  console.log(s)
+    	});
+    	// Hello
+    
      - 上面代码生成一个新的 Promise 对象的实例p。由于字符串Hello不属于异步操作（判断方法是字符串对象不具有 then 方法），返回 Promise 实例的状态从一生成就是resolved，所以回调函数会立即执行。Promise.resolve()方法的参数，会同时传给回调函数。
 
    （4）**不带有任何参数**
 
     - Promise.resolve()方法允许调用时不带参数，直接返回一个resolved状态的 Promise对象。
-
+    
     - 所以，如果希望得到一个 Promise 对象，比较方便的方法就是直接调用Promise.resolve()方法。
-
-		const p = Promise.resolve();
-		
-		p.then(function () {
-		  // ...
-		});
-
+    
+    	const p = Promise.resolve();
+    	
+    	p.then(function () {
+    	  // ...
+    	});
+    
     - 上面代码的变量p就是一个 Promise 对象。
-
+    
     - **需要注意的是，立即resolve()的 Promise 对象，是在本轮“事件循环”（event loop）的结束时执行，而不是在下一轮“事件循环”的开始时。**
-		
-		setTimeout(function () {
-		  console.log('three');
-		}, 0);
-		
-		Promise.resolve().then(function () {
-		  console.log('two');
-		});
-		
-		console.log('one');
-		
-		// one
-		// two
-		// three
-
+    	
+    	setTimeout(function () {
+    	  console.log('three');
+    	}, 0);
+    	
+    	Promise.resolve().then(function () {
+    	  console.log('two');
+    	});
+    	
+    	console.log('one');
+    	
+    	// one
+    	// two
+    	// three
+    
     - 上面代码中，setTimeout(fn, 0)在下一轮“事件循环”开始时执行，Promise.resolve()在本轮“事件循环”结束时执行，console.log('one')则是立即执行，因此最先输出。
- 
-	
+
+
+​	
 ** 12.Promise.reject() **
 
    - **Promise.reject(reason)方法也会返回一个新的 Promise 实例，该实例的状态为rejected。**
@@ -5451,24 +5458,24 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 
     - Promise.reject()方法的参数，会原封不动地作为reject的理由，变成后续方法的参数。
-
-		Promise.reject('出错了')
-		.catch(e => {
-		  console.log(e === '出错了')
-		})
-		// true
-
+    
+    	Promise.reject('出错了')
+    	.catch(e => {
+    	  console.log(e === '出错了')
+    	})
+    	// true
+    
     - 上面代码中，Promise.reject()方法的参数是一个字符串，后面catch()方法的参数e就是这个字符串。
 
 ** 13.Promise.try() **(待理解)
 	   
     - Promise.try方法让同步函数同步执行，异步函数异步执行，并且让它们具有统一的 API
-
-		const f = () => console.log('now');
-		Promise.try(f);
-		console.log('next');
-		// now
-		// next
+    
+    	const f = () => console.log('now');
+    	Promise.try(f);
+    	console.log('next');
+    	// now
+    	// next
 
 
 #### 十四、Iterator 和 for...of 循环 ####
@@ -5554,7 +5561,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 上面的例子中，遍历器生成函数idMaker，返回一个遍历器对象（即指针对象）。但是并没有对应的数据结构，或者说，遍历器对象自己描述了一个数据结构出来。
 
 **2.默认Iterator接口**
-  
+
   - **Iterator 接口的目的，就是为所有数据结构，提供了一种统一的访问机制，即for...of循环。当使用for...of循环遍历某种数据结构时，该循环会自动去寻找 Iterator 接口。**
 
   - **一种数据结构只要部署了 Iterator 接口，我们就称这种数据结构是“可遍历的”（iterable）。**
@@ -5586,9 +5593,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    - Array
    
    - Map
- 
+
    - Set
- 
+
    - String
 
    - TypedArray（类数组：存在数值键名和length属性）
@@ -5769,7 +5776,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		str // "hi"
 
   - 上面代码中，字符串 str 的Symbol.iterator方法被修改了，所以扩展运算符（...）返回的值变成了bye，而字符串本身还是hi。
- 
+
 **5.Iterator接口与Generator函数**
 
   - Symbol.iterator()方法的最简单实现，还是使用下一章要介绍的 Generator 函数。
@@ -6030,7 +6037,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
      - **某些情况下，for...in循环会以任意顺序遍历键名。**
 
-    - **总之，for...in循环主要是为遍历对象而设计的，不适用于遍历数组。**
+        - **总之，for...in循环主要是为遍历对象而设计的，不适用于遍历数组。**
 
    - **for...of循环相比上面几种做法，有一些显著的优点。**
 
@@ -6055,7 +6062,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    - 上面的例子，会输出斐波纳契数列小于等于 1000 的项。如果当前项大于 1000，就会使用break语句跳出for...of循环。
 
 
- 
+
 ### 十五、Generator 函数的语法 ####
 
 **1.基本概念**
@@ -6113,7 +6120,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 由于 Generator 函数返回的遍历器对象，只有调用next方法才会遍历下一个内部状态，所以其实提供了一种可以暂停执行的函数。**yield表达式就是暂停标志。**
 
   - 遍历器对象的next方法的运行逻辑如下。
- 
+
      - **遇到yield表达式，就暂停执行后面的操作，并将紧跟在yield后面的那个表达式的值，作为返回的对象的value属性值。**
 
      - **下一次调用next方法时，再继续往下执行，直到遇到下一个yield表达式。**
@@ -6133,13 +6140,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
  （2）**yield VS return**
 
     - **相似之处**：都能返回紧跟在语句后面的那个表达式的值
-
+    
     - **不同点**： 
     
        - 每次遇到yield，函数暂停执行，下一次再从该位置继续向后执行，而return语句不具备位置记忆的功能。
        
        - 一个函数里面，只能执行一次（或者说一个）return语句，但是可以执行多次（或者说多个）yield表达式。
-
+    
        - 正常函数只能返回一个值，因为只能执行一次return；Generator 函数可以返回一系列的值，因为可以有任意多个yield。从另一个角度看，也可以说 Generator 生成了一系列的值，这也就是它的名称的来历（英语中，generator 这个词是“生成器”的意思）。
 
  （3）**Generator 函数可以不用yield表达式，这时就变成了一个单纯的暂缓执行函数。**
@@ -6227,14 +6234,15 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - **由于 Generator 函数就是遍历器生成函数，因此可以把 Generator 赋值给对象的Symbol.iterator属性，从而使得该对象具有 Iterator 接口。**
 
-		var myIterable = {};
-		myIterable[Symbol.iterator] = function* () {
-		  yield 1;
-		  yield 2;
-		  yield 3;
-		};
-		
-		[...myIterable] // [1, 2, 3]
+     var myIterable = {};
+     	myIterable[Symbol.iterator] = function* () {
+     	  yield 1;
+     	  yield 2;
+     	  yield 3;
+     	};
+     	
+
+     	[...myIterable] // [1, 2, 3]
 
   - 上面代码中，Generator 函数赋值给Symbol.iterator属性，从而使得myIterable对象具有了 Iterator 接口，可以被...运算符遍历了。
 
@@ -6475,15 +6483,15 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 - **如果 Generator 函数内部和外部，都没有部署try...catch代码块，那么程序将报错，直接中断执行。**
 
 	 	    var gen = function* gen(){
-			  yield console.log('hello');
-			  yield console.log('world');
-			}
-			
-			var g = gen();
-			g.next();
-			g.throw();
-			// hello
-			// Uncaught undefined
+	    	  yield console.log('hello');
+	    	  yield console.log('world');
+	    	}
+	    	
+	    	var g = gen();
+	    	g.next();
+	    	g.throw();
+	    	// hello
+	    	// Uncaught undefined
 
 - **throw方法抛出的错误要被内部捕获，前提是必须至少执行过一次next方法。**
 
@@ -6782,6 +6790,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  yield* ["a", "b", "c"];
 		}
 		
+	
 		gen().next() // { value:"a", done:false }
 
 
@@ -7134,7 +7143,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		// foo 3
 		// bar 7
- 
+
   - 上述代码中，myObj是一个普通对象，通过iterEntries函数，就有了 Iterator 接口。也就是说，可以在任意对象上部署next方法。
 
 （4）**作为数据结构**
@@ -7246,7 +7255,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    - 传统的编程语言，早有异步编程的解决方案（其实是多任务的解决方案）。其中有一种叫做"协程"（coroutine），意思是多个线程互相协作，完成异步任务。
 
    - **协程有点像函数，又有点像线程。它的运行流程大致如下。**
-    
+        
       - 第一步，协程A开始执行。
 		
       - 第二步，协程A执行到一半，进入暂停，执行权转移到协程B。
@@ -7255,9 +7264,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
       - 第四步，协程A恢复执行。
 		
-    - **上面流程的协程A，就是异步任务，因为它分成两段（或多段）执行。**
+        - **上面流程的协程A，就是异步任务，因为它分成两段（或多段）执行。**
 
-    - 举例来说，读取文件的协程写法如下。
+        - 举例来说，读取文件的协程写法如下。
 
 		function* asyncJob() {
 		  // ...其他代码
@@ -7265,10 +7274,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  // ...其他代码
 		}
 
-    - 上面代码的函数asyncJob是一个协程，**它的奥妙就在其中的yield命令。它表示执行到此处，执行权将交给其他协程。也就是说，yield命令是异步两个阶段的分界线。**
+        - 上面代码的函数asyncJob是一个协程，**它的奥妙就在其中的yield命令。它表示执行到此处，执行权将交给其他协程。也就是说，yield命令是异步两个阶段的分界线。**
 
-    - **协程遇到yield命令就暂停，等到执行权返回，再从暂停的地方继续往后执行。它的最大优点，就是代码的写法非常像同步操作，如果去除yield命令，简直一模一样。**
-  
+        - **协程遇到yield命令就暂停，等到执行权返回，再从暂停的地方继续往后执行。它的最大优点，就是代码的写法非常像同步操作，如果去除yield命令，简直一模一样。**
+
  （2）**协程的Generator函数实现**
 
    - Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。
@@ -7354,47 +7363,47 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 可以看到，虽然 Generator 函数将异步操作表示得很简洁，但是流程管理却不方便（即何时执行第一阶段、何时执行第二阶段）。
 
 ** 5.Thunk函数 **
- 
+
    - Thunk 函数是自动执行 Generator 函数的一种方法。
-   
+
   （1）**参数的求值策略**
 
        - Thunk 函数早在上个世纪 60 年代就诞生了。
-
+    
        - 那时，编程语言刚刚起步，计算机学家还在研究，编译器怎么写比较好。**一个争论的焦点是"求值策略"，即函数的参数到底应该何时求值。**
-
-		var x = 1;
-		
-		function f(m) {
-		  return m * 2;
-		}
-		
-		f(x + 5)
-
+    
+    	var x = 1;
+    	
+    	function f(m) {
+    	  return m * 2;
+    	}
+    	
+    	f(x + 5)
+    
       - 上面代码先定义函数f，然后向它传入表达式x + 5。请问，这个表达式应该何时求值？
-
+    
       - **一种意见是"传值调用"（call by value），即在进入函数体之前，就计算x + 5的值（等于 6），再将这个值传入函数f。C 语言就采用这种策略。**
-
-		f(x + 5)
-		// 传值调用时，等同于
-		f(6)
-
+    
+    	f(x + 5)
+    	// 传值调用时，等同于
+    	f(6)
+    
      - **另一种意见是“传名调用”（call by name），即直接将表达式x + 5传入函数体，只在用到它的时候求值。Haskell 语言采用这种策略。**
-
-		f(x + 5)
-		// 传名调用时，等同于
-		(x + 5) * 2
-
+    
+    	f(x + 5)
+    	// 传名调用时，等同于
+    	(x + 5) * 2
+    
     - **传值调用和传名调用，哪一种比较好？**
-
+    
     - **回答是各有利弊。传值调用比较简单，但是对参数求值的时候，实际上还没用到这个参数，有可能造成性能损失。**
-
-		function f(a, b){
-		  return b;
-		}
-		
-		f(3 * x * x - 2 * x - 1, x);
-
+    
+    	function f(a, b){
+    	  return b;
+    	}
+    	
+    	f(3 * x * x - 2 * x - 1, x);
+    
      - 上面代码中，函数f的第一个参数是一个复杂的表达式，但是函数体内根本没用到。对这个参数求值，实际上是不必要的。**因此，有一些计算机学家倾向于"传名调用"，即只在执行时求值。**
 
   （2）**Thunk函数的含义**
@@ -7474,6 +7483,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 		const ft = Thunk(f);
 		
+	
 		ft(1)(console.log) // 1
 
 
@@ -7542,35 +7552,35 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   （5）Generator函数的流程管理
 
     - 你可能会问， Thunk 函数有什么用？回答是以前确实没什么用，但是 ES6 有了 Generator 函数，**Thunk 函数现在可以用于 Generator 函数的自动流程管理。**
-
+    
     - Generator 函数可以自动执行。
-
-		function* gen() {
-		  // ...
-		}
-		
-		var g = gen();
-		var res = g.next();
-		
-		while(!res.done){
-		  console.log(res.value);
-		  res = g.next();
-		}
-
+    
+    	function* gen() {
+    	  // ...
+    	}
+    	
+    	var g = gen();
+    	var res = g.next();
+    	
+    	while(!res.done){
+    	  console.log(res.value);
+    	  res = g.next();
+    	}
+    
     - 上面代码中，Generator 函数gen会自动执行完所有步骤。
-  
+      
     - **但是，这不适合异步操作。如果必须保证前一步执行完，才能执行后一步，上面的自动执行就不可行。这时，Thunk 函数就能派上用处。**以读取文件为例。下面的 Generator 函数封装了两个异步操作。
-
-		var fs = require('fs');
-		var thunkify = require('thunkify');
-		var readFileThunk = thunkify(fs.readFile);
-		
-		var gen = function* (){
-		  var r1 = yield readFileThunk('/etc/fstab');
-		  console.log(r1.toString());
-		  var r2 = yield readFileThunk('/etc/shells');
-		  console.log(r2.toString());
-		};
+    
+    	var fs = require('fs');
+    	var thunkify = require('thunkify');
+    	var readFileThunk = thunkify(fs.readFile);
+    	
+    	var gen = function* (){
+    	  var r1 = yield readFileThunk('/etc/fstab');
+    	  console.log(r1.toString());
+    	  var r2 = yield readFileThunk('/etc/shells');
+    	  console.log(r2.toString());
+    	};
 
    - 上面代码中，yield命令用于将程序的执行权移出 Generator 函数，那么就需要一种方法，将执行权再交还给 Generator 函数。
 
@@ -7663,39 +7673,39 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   （2）co模块的原理
 
     - 为什么 co 可以自动执行 Generator 函数？
-
+    
     - 前面说过，Generator 就是一个异步操作的容器。**它的自动执行需要一种机制，当异步操作有了结果，能够自动交回执行权。**
-
+    
     - 两种方法可以做到这一点。
-
+    
       - （1）**回调函数。将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。**
-
+    
       - （2）**Promise 对象。将异步操作包装成 Promise 对象，用then方法交回执行权。**
-
+    
     - **co 模块其实就是将两种自动执行器（Thunk 函数和 Promise 对象），包装成一个模块。使用 co 的前提条件是，Generator 函数的yield命令后面，只能是 Thunk 函数或 Promise 对象。如果数组或对象的成员，全部都是 Promise 对象，也可以使用 co。**
 
 
   （3）**基于Promise对象的自动执行**
 
     - 首先，把fs模块的readFile方法包装成一个 Promise 对象。
-
-		var fs = require('fs');
-		
-		var readFile = function (fileName){
-		  return new Promise(function (resolve, reject){
-		    fs.readFile(fileName, function(error, data){
-		      if (error) return reject(error);
-		      resolve(data);
-		    });
-		  });
-		};
-		
-		var gen = function* (){
-		  var f1 = yield readFile('/etc/fstab');
-		  var f2 = yield readFile('/etc/shells');
-		  console.log(f1.toString());
-		  console.log(f2.toString());
-		};
+    
+    	var fs = require('fs');
+    	
+    	var readFile = function (fileName){
+    	  return new Promise(function (resolve, reject){
+    	    fs.readFile(fileName, function(error, data){
+    	      if (error) return reject(error);
+    	      resolve(data);
+    	    });
+    	  });
+    	};
+    	
+    	var gen = function* (){
+    	  var f1 = yield readFile('/etc/fstab');
+    	  var f2 = yield readFile('/etc/shells');
+    	  console.log(f1.toString());
+    	  console.log(f2.toString());
+    	};
 
    - 然后，手动执行上面的 Generator 函数。
 
@@ -7731,49 +7741,49 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   （4）**co模块的源码**
 
     - co 就是上面那个自动执行器的扩展，它的源码只有几十行，非常简单。
-
+    
     - 首先，co 函数接受 Generator 函数作为参数，返回一个 Promise 对象。
-
-		function co(gen) {
-		  var ctx = this;
-		
-		  return new Promise(function(resolve, reject) {
-		  });
-		}
-
+    
+    	function co(gen) {
+    	  var ctx = this;
+    	
+    	  return new Promise(function(resolve, reject) {
+    	  });
+    	}
+    
     - 在返回的 Promise 对象里面，co 先检查参数gen是否为 Generator 函数。如果是，就执行该函数，得到一个内部指针对象；如果不是就返回，并将 Promise 对象的状态改为resolved。
-
-		function co(gen) {
-		  var ctx = this;
-		
-		  return new Promise(function(resolve, reject) {
-		    if (typeof gen === 'function') gen = gen.call(ctx);
-		    if (!gen || typeof gen.next !== 'function') return resolve(gen);
-		  });
-		}
-
+    
+    	function co(gen) {
+    	  var ctx = this;
+    	
+    	  return new Promise(function(resolve, reject) {
+    	    if (typeof gen === 'function') gen = gen.call(ctx);
+    	    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+    	  });
+    	}
+    
     - 接着，co 将 Generator 函数的内部指针对象的next方法，包装成onFulfilled函数。这主要是为了能够捕捉抛出的错误。
+    
+    	function co(gen) {
+    	  var ctx = this;
+    	
+    	  return new Promise(function(resolve, reject) {
+    	    if (typeof gen === 'function') gen = gen.call(ctx);
+    	    if (!gen || typeof gen.next !== 'function') return resolve(gen);
+    	
+    	    onFulfilled();
+    	    function onFulfilled(res) {
+    	      var ret;
+    	      try {
+    	        ret = gen.next(res);
+    	      } catch (e) {
+    	        return reject(e);
+    	      }
+    	      next(ret);
+    	    }
+    	  });
+    	}
 
-		function co(gen) {
-		  var ctx = this;
-		
-		  return new Promise(function(resolve, reject) {
-		    if (typeof gen === 'function') gen = gen.call(ctx);
-		    if (!gen || typeof gen.next !== 'function') return resolve(gen);
-		
-		    onFulfilled();
-		    function onFulfilled(res) {
-		      var ret;
-		      try {
-		        ret = gen.next(res);
-		      } catch (e) {
-		        return reject(e);
-		      }
-		      next(ret);
-		    }
-		  });
-		}
- 
    - 最后，就是关键的next函数，它会反复调用自身。
 
 		function next(ret) {
@@ -7797,83 +7807,83 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - 第二行，确保每一步的返回值，是 Promise 对象。
 
       - 第三行，使用then方法，为返回值加上回调函数，然后通过onFulfilled函数再次调用next函数。
- 
+
       - 第四行，在参数不符合要求的情况下（参数非 Thunk 函数和 Promise 对象），将 Promise 对象的状态改为rejected，从而终止执行。
 
 
   （5）**处理并发的异步操作**
 
     - co 支持并发的异步操作，即允许某些操作同时进行，等到它们全部完成，才进行下一步。
-
+    
     - 这时，要把并发的操作都放在数组或对象里面，跟在yield语句后面。
-
-		// 数组的写法
-		co(function* () {
-		  var res = yield [
-		    Promise.resolve(1),
-		    Promise.resolve(2)
-		  ];
-		  console.log(res);
-		}).catch(onerror);
-		
-		// 对象的写法
-		co(function* () {
-		  var res = yield {
-		    1: Promise.resolve(1),
-		    2: Promise.resolve(2),
-		  };
-		  console.log(res);
-		}).catch(onerror);
-
+    
+    	// 数组的写法
+    	co(function* () {
+    	  var res = yield [
+    	    Promise.resolve(1),
+    	    Promise.resolve(2)
+    	  ];
+    	  console.log(res);
+    	}).catch(onerror);
+    	
+    	// 对象的写法
+    	co(function* () {
+    	  var res = yield {
+    	    1: Promise.resolve(1),
+    	    2: Promise.resolve(2),
+    	  };
+    	  console.log(res);
+    	}).catch(onerror);
+    
     - 下面是另一个例子。
-
-		co(function* () {
-		  var values = [n1, n2, n3];
-		  yield values.map(somethingAsync);
-		});
-		
-		function* somethingAsync(x) {
-		  // do something async
-		  return y
-		}
+    
+    	co(function* () {
+    	  var values = [n1, n2, n3];
+    	  yield values.map(somethingAsync);
+    	});
+    	
+    	function* somethingAsync(x) {
+    	  // do something async
+    	  return y
+    	}
 
    - 上面的代码允许并发三个somethingAsync异步操作，等到它们全部完成，才会进行下一步
 
  （6）**实例：处理Stream**
 
     - Node 提供 Stream 模式读写数据，特点是一次只处理数据的一部分，数据分成一块块依次处理，就好像“数据流”一样。这对于处理大规模数据非常有利。Stream 模式使用 EventEmitter API，会释放三个事件。
-
+    
        - data事件：下一块数据块已经准备好了。
-  
+      
        - end事件：整个“数据流”处理完了。
-		
+    	
        - error事件：发生错误。
-
+    
      - 使用Promise.race()函数，可以判断这三个事件之中哪一个最先发生，只有当data事件最先发生时，才进入下一个数据块的处理。从而，我们可以通过一个while循环，完成所有数据的读取。
-
-		const co = require('co');
-		const fs = require('fs');
-		
-		const stream = fs.createReadStream('./les_miserables.txt');
-		let valjeanCount = 0;
-		
-		co(function*() {
-		  while(true) {
-		    const res = yield Promise.race([
-		      new Promise(resolve => stream.once('data', resolve)),
-		      new Promise(resolve => stream.once('end', resolve)),
-		      new Promise((resolve, reject) => stream.once('error', reject))
-		    ]);
-		    if (!res) {
-		      break;
-		    }
-		    stream.removeAllListeners('data');
-		    stream.removeAllListeners('end');
-		    stream.removeAllListeners('error');
-		    valjeanCount += (res.toString().match(/valjean/ig) || []).length;
-		  }
-		  console.log('count:', valjeanCount); // count: 1120
-		});
+    
+    	const co = require('co');
+    	const fs = require('fs');
+    	
+    	const stream = fs.createReadStream('./les_miserables.txt');
+    	let valjeanCount = 0;
+    	
+    	co(function*() {
+    	  while(true) {
+    	    const res = yield Promise.race([
+    	      new Promise(resolve => stream.once('data', resolve)),
+    	      new Promise(resolve => stream.once('end', resolve)),
+    	      new Promise((resolve, reject) => stream.once('error', reject))
+    	    ]);
+    	    if (!res) {
+    	      break;
+    	    }
+    	    stream.removeAllListeners('data');
+    	    stream.removeAllListeners('end');
+    	    stream.removeAllListeners('error');
+    	    valjeanCount += (res.toString().match(/valjean/ig) || []).length;
+    	  }
+    	  console.log('count:', valjeanCount); // count: 1120
+    	});
 
   - 上面代码采用 Stream 模式读取《悲惨世界》的文本文件，对于每个数据块都使用stream.once方法，在data、end、error三个事件上添加一次性回调函数。变量res只有在data事件发生时才有值，然后累加每个数据块之中valjean这个词出现的次数。
 
@@ -7895,7 +7905,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    });
 		  });
 		};
-
+	
 		const gen = function* () {
 		  const f1 = yield readFile('/etc/fstab');
 		  const f2 = yield readFile('/etc/shells');
@@ -7919,11 +7929,11 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   （1）**内置执行器。**
 
     - Generator 函数的执行必须靠执行器，所以才有了co模块，而async函数自带执行器。也就是说，async函数的执行，与普通函数一模一样，只要一行。
-
+    
      asyncReadFile();
 
    - **上面的代码调用了asyncReadFile函数，然后它就会自动执行，输出最后结果。这完全不像 Generator 函数，需要调用next方法，或者用co模块，才能真正执行，得到最后结果。**
- 
+
 
   （2）**更好的语义。**
 
@@ -7936,7 +7946,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    （4）**返回值是Promise**
 
      - **async函数的返回值是Promise对象**这比 Generator 函数的返回值是 Iterator 对象方便多了。你可以用then方法指定下一步的操作。
-
+    
      - 进一步说，async函数完全可以看作多个异步操作，包装成的一个 Promise 对象，而await命令就是内部then命令的语法糖。
 
 **2.基本用法**
@@ -7950,7 +7960,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - **async函数返回一个Promise对象**
   
   - **async函数内部return语句返回的值，会成为then方法回调函数的参数**
-   
+
 
 		async function f() {
 		  return 'hello world';
@@ -8194,7 +8204,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 上面代码有三个模块，最后的z.js加载x.js和y.js，打印结果是X1、Y、X2、Z。这说明，z.js并没有等待x.js加载完成，再去加载y.js。
 
   - 顶层的await命令有点像，交出代码的执行权给其他的模块加载，等异步操作完成后，再拿回执行权，继续向下执行。
-  
+
 
 ####  十八、Class 的基本语法 ####
 
@@ -8268,6 +8278,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		class B {}
 		const b = new B();
 		
+	
 		b.constructor === B.prototype.constructor // true
 
 
@@ -8397,7 +8408,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		p1.__proto__ === p2.__proto__
 		//true
- 
+
  - 上面代码中，p1和p2都是Point的实例，它们的原型都是Point.prototype，所以__proto__属性是相等的。
 
 **4.实例属性的新写法**
@@ -8629,7 +8640,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 	
 	Bar.classMethod() // "hello, too"
 
- 
+
 **9.静态属性**
 
  - 静态属性指的是 Class 本身的属性，即Class.propName，而不是定义在实例对象（this）上的属性。
@@ -8650,7 +8661,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  constructor() {
 		    console.log(MyClass.myStaticProp); // 42
 		  }
-
+	
 		}
 - 这个新写法大大方便了静态属性的表达。
 
@@ -8753,6 +8764,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  }
 		}
 		
+	
 		Foo.getPrivateValue(new Foo()); // 42
 
 
@@ -8884,10 +8896,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
    - 上面代码中，类的内部有一个 static 代码块，这就是静态块。它的好处是将静态属性y和z的初始化逻辑，写入了类的内部，而且只运行一次。
 
-    - **每个类允许有多个静态块，每个静态块中只能访问之前声明的静态属性。另外，静态块的内部不能有return语句。**
+        - **每个类允许有多个静态块，每个静态块中只能访问之前声明的静态属性。另外，静态块的内部不能有return语句。**
 
-    - **静态块内部可以使用类名或this，指代当前类。**
- 
+        - **静态块内部可以使用类名或this，指代当前类。**
+
 			class C {
 			  static x = 1;
 			  static {
@@ -8911,8 +8923,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 		
 		console.log(getX(new C())); // 1
-
-    - 上面示例中，#x是类的私有属性，如果类外部的getX()方法希望获取这个属性，以前是要写在类的constructor()方法里面，这样的话，每次新建实例都会定义一次getX()方法。现在可以写在静态块里面，这样的话，只在类生成时定义一次。
+	
+    	- 上面示例中，#x是类的私有属性，如果类外部的getX()方法希望获取这个属性，以前是要写在类的constructor()方法里面，这样的话，每次新建实例都会定义一次getX()方法。现在可以写在静态块里面，这样的话，只在类生成时定义一次。
 
 
 **13.类的注意点**
@@ -8945,7 +8957,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		class Point {}
 		Point.name // "Point"
 
-    - **name属性总是返回紧跟在class关键字后面的类名。**
+        - **name属性总是返回紧跟在class关键字后面的类名。**
 
  （4）**Generator方法**
 
@@ -8993,51 +9005,51 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 
     - 一个比较简单的解决方法是，**在构造方法中绑定this，**这样就不会找不到print方法了。
-
-		class Logger {
-		  constructor() {
-		    this.printName = this.printName.bind(this);
-		  }
-		
-		  // ...
-		}
+    
+    	class Logger {
+    	  constructor() {
+    	    this.printName = this.printName.bind(this);
+    	  }
+    	
+    	  // ...
+    	}
 
 
     - **另一种解决方法是使用箭头函数。**
-
-		class Obj {
-		  constructor() {
-		    this.getThis = () => this;
-		  }
-		}
-		
-		const myObj = new Obj();
-		myObj.getThis() === myObj // true
-
+    
+    	class Obj {
+    	  constructor() {
+    	    this.getThis = () => this;
+    	  }
+    	}
+    	
+    	const myObj = new Obj();
+    	myObj.getThis() === myObj // true
+    
     - **箭头函数内部的this总是指向定义时所在的对象。**上面代码中，箭头函数位于构造函数内部，它的定义生效的时候，是在构造函数执行的时候。这时，箭头函数所在的运行环境，肯定是实例对象，所以this会总是指向实例对象。
 
 
     - **还有一种解决方法是使用Proxy，获取方法的时候，自动绑定this。**
-
-		function selfish (target) {
-		  const cache = new WeakMap();
-		  const handler = {
-		    get (target, key) {
-		      const value = Reflect.get(target, key);
-		      if (typeof value !== 'function') {
-		        return value;
-		      }
-		      if (!cache.has(value)) {
-		        cache.set(value, value.bind(target));
-		      }
-		      return cache.get(value);
-		    }
-		  };
-		  const proxy = new Proxy(target, handler);
-		  return proxy;
-		}
-		
-		const logger = selfish(new Logger());
+    
+    	function selfish (target) {
+    	  const cache = new WeakMap();
+    	  const handler = {
+    	    get (target, key) {
+    	      const value = Reflect.get(target, key);
+    	      if (typeof value !== 'function') {
+    	        return value;
+    	      }
+    	      if (!cache.has(value)) {
+    	        cache.set(value, value.bind(target));
+    	      }
+    	      return cache.get(value);
+    	    }
+    	  };
+    	  const proxy = new Proxy(target, handler);
+    	  return proxy;
+    	}
+    	
+    	const logger = selfish(new Logger());
 
 **14.new.target 属性**
 
@@ -9078,9 +9090,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 
 		var obj = new Rectangle(3, 4); // 输出 true
-
-    - **需要注意的是，子类继承父类时，new.target会返回子类。**
-
+	
+    	- **需要注意的是，子类继承父类时，new.target会返回子类。**
+	
 		class Rectangle {
 		  constructor(length, width) {
 		    console.log(new.target === Rectangle);
@@ -9095,11 +9107,11 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 		
 		var obj = new Square(3); // 输出 false
-
-    - 上面代码中，new.target会返回子类。
-
-    - **利用这个特点，可以写出不能独立使用、必须继承后才能使用的类。**
-
+	
+    	- 上面代码中，new.target会返回子类。
+	
+    	- **利用这个特点，可以写出不能独立使用、必须继承后才能使用的类。**
+	
 			class Shape {
 			  constructor() {
 			    if (new.target === Shape) {
@@ -9117,13 +9129,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 			
 			var x = new Shape();  // 报错
 			var y = new Rectangle(3, 4);  // 正确
+	
+    	- 上面代码中，Shape类不能被实例化，只能用于继承。
+	
+    	- **注意，在函数外部，使用new.target会报错。**
 
-    - 上面代码中，Shape类不能被实例化，只能用于继承。
-
-    - **注意，在函数外部，使用new.target会报错。**
-    
 ####  十九、Class 的继承 #### 
- 
+
 ** 1.简介 **
 
    - Class可以通过**extends关键字实现继承**，让子类继承父类的属性和方法。
@@ -9142,9 +9154,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   （1）**super作为函数调用**
 
     - **super在这里表示父类的构造函数，用来新建一个父类的实例对象。**
-
+    
     - **注意，这里的super虽然代表了父类的构造函数，但是因为返回的是子类的this（即子类的实例对象），所以super内部的this代表子类的实例，而不是父类的实例，这里的super()相当于A.prototype.constructor.call(this)（在子类的this上运行父类的构造函数）。**
-
+    
     - **为什么子类的构造函数，一定要调用super()？**
     
         - **原因就在于 ES6 的继承机制，与 ES5 完全不同。**
@@ -9152,42 +9164,42 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
         - **ES5 的继承机制，是先创造一个独立的子类的实例对象，然后再将父类的方法添加到这个对象上面，即“实例在前，继承在后”。**
       
         - **ES6 的继承机制，则是先将父类的属性和方法，加到一个空的对象上面，然后再将该对象作为子类的实例，即“继承在前，实例在后”。这就是为什么 ES6 的继承必须先调用super()方法，因为这一步会生成一个继承父类的this对象，没有这一步就无法继承父类。**
-
+    
     - **调用super()的作用是形成子类的this对象，把父类的实例属性和方法放到这个this对象上面。子类在调用super()之前，是没有this对象的，任何对this的操作都要放在super()的后面。**
-
+    
     - **ES6 规定，子类必须在constructor()方法中调用super()，否则就会报错。这是因为子类自己的this对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，添加子类自己的实例属性和方法。如果不调用super()方法，子类就得不到自己的this对象。**
-
-		class Point { /* ... */ }
-		
-		class ColorPoint extends Point {
-		  constructor() {
-		  }
-		}
-		
-		let cp = new ColorPoint(); // ReferenceError
+    
+    	class Point { /* ... */ }
+    	
+    	class ColorPoint extends Point {
+    	  constructor() {
+    	  }
+    	}
+    	
+    	let cp = new ColorPoint(); // ReferenceError
     
         - 上面代码中，ColorPoint继承了父类Point，但是它的构造函数没有调用super()，导致新建实例时报错。
 
 
     - **注意，这意味着新建子类实例时，父类的构造函数必定会先运行一次。**
-
-		class Foo {
-		  constructor() {
-		    console.log(1);
-		  }
-		}
-		
-		class Bar extends Foo {
-		  constructor() {
-		    super();
-		    console.log(2);
-		  }
-		}
-		
-		const bar = new Bar();
-		// 1
-		// 2
-
+    
+    	class Foo {
+    	  constructor() {
+    	    console.log(1);
+    	  }
+    	}
+    	
+    	class Bar extends Foo {
+    	  constructor() {
+    	    super();
+    	    console.log(2);
+    	  }
+    	}
+    	
+    	const bar = new Bar();
+    	// 1
+    	// 2
+    
      - 上面示例中，子类 Bar 新建实例时，会输出1和2。原因就是子类构造函数调用super()时，会执行一次父类构造函数。
 
    - 另一个需要注意的地方是，**在子类的构造函数中，只有调用super()之后，才可以使用this关键字，否则会报错。这是因为子类实例的构建，必须先完成父类的继承，只有super()方法才能让子类实例继承父类。**
@@ -9249,7 +9261,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - 上面示例中，最后一行输出的是A，而不是B，原因就在于super()执行时，B的name属性还没有绑定到this，所以this.name拿到的是A类的name属性。
 
- 
+
   - **作为函数时，super()只能用在子类的构造函数之中，用在其他地方就会报错。**
 
 		class A {}
@@ -9302,7 +9314,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		b.m // undefined
 
   - 上面代码中，p是父类A实例的属性，super.p就引用不到它。
- 
+
   - **如果属性定义在父类的原型对象上，super就可以取到。**
 
 		class A {}
@@ -9456,11 +9468,12 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  }
 		};
 		
+	
 		obj.toString(); // MyObject: [object Object]
 
 
 ** 3.私有属性和私有方法的继承 **
-  
+
    - **父类所有的属性和方法，都会被子类继承，除了私有的属性和方法。**
 
    - **子类无法继承父类的私有属性，或者说，私有属性只能在定义它的class里面使用**
@@ -9538,7 +9551,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
   - 上面示例中，A.foo的值是一个对象，浅拷贝导致B.foo和A.foo指向同一个对象。所以，子类B修改这个对象的属性值，会影响到父类A。
 
 ** 5.Object.getPrototypeOf() **
-  
+
    - **Object.getPrototypeOf()方法可以用来从子类上获取父类。**
 
 		class Point { /*...*/ }
@@ -9553,7 +9566,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 ** 6.类的prototype属性和__proto__属性 **
 
    - 大多数浏览器的 ES5 实现之中，每一个对象都有__proto__属性，指向对应的构造函数的prototype属性。**Class 作为构造函数的语法糖，同时有prototype属性和__proto__属性，因此同时存在两条继承链。**
- 
+
   （1）**子类的__proto__属性，表示构造函数的继承，总是指向父类。**
 
   （2）**子类prototype属性的__proto__属性，表示方法的继承，总是指向父类的prototype属性。**
@@ -9616,7 +9629,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 
   - 上面代码的A，只要是一个有prototype属性的函数，就能被B继承。由于函数都有prototype属性（除了Function.prototype函数），因此A可以是任意函数。
- 
+
   - 下面，讨论两种情况。**第一种，子类继承Object类。**
 
 		class A extends Object {
@@ -9646,10 +9659,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 	
 	class B extends A {
 	}
-    
+
     let p1 = new A()
     let p2 = new B()
-
+    
     B.__proto = A
     B.prototype.__proto__ = A.prototype
     p2.__proto__ = B.prototype
@@ -9663,7 +9676,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
      - Boolean()
 		
      - Number()
-	 
+	
      - String()
 		
      - Array()
@@ -9783,7 +9796,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    }
 		  }
 		}
- 
+
 - 上面代码的mix函数，可以将多个对象合成为一个类。使用的时候，只要继承这个类即可。
 
 		class DistributedEdit extends mix(Loggable, Serializable) {
@@ -9809,7 +9822,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - **上面代码的实质是整体加载fs模块（即加载fs的所有方法），生成一个对象（_fs），然后再从这个对象上面读取 3 个方法。这种加载称为“运行时加载”，因为只有运行时才能得到这个对象，导致完全没办法在编译时做“静态优化”。**
 
-  
+
   - **ES6 模块不是对象，而是通过export命令显式指定输出的代码，再通过import命令输入。**
 
 		// ES6模块
@@ -9868,7 +9881,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 - 上面这些限制，模块都必须遵守。其中，尤其需要注意this的限制。ES6 模块之中，顶层的this指向undefined，即不应该在顶层代码使用this。
 
 **3.export命令**
- 
+
   - **模块功能主要由两个命令构成：export和import。export命令用于规定模块的对外接口，import命令用于输入其他模块提供的功能。**
 
   - **一个模块就是一个独立的文件。该文件内部的所有变量，外部无法获取。如果你希望外部能够读取模块内部的某个变量，就必须使用export关键字输出该变量。**
@@ -9885,6 +9898,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		var lastName = 'Jackson';
 		var year = 1958;
 		
+	
 		export { firstName, lastName, year };
 
 
@@ -9985,15 +9999,17 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - **import命令输入的变量都是只读的，因为它的本质是输入接口。也就是说，不允许在加载模块的脚本里面，改写接口。**
 
-		import {a} from './xxx.js'
-		
-		a = {}; // Syntax Error : 'a' is read-only;
+     import {a} from './xxx.js'
+     	
+
+     	a = {}; // Syntax Error : 'a' is read-only;
 
  - 上面代码中，脚本加载了变量a，对其重新赋值就会报错，因为a是一个只读的接口。但是，**如果a是一个对象，改写a的属性是允许的。**
 
-		import {a} from './xxx.js'
-		
-		a.foo = 'hello'; // 合法操作
+    import {a} from './xxx.js'
+    	
+
+    	a.foo = 'hello'; // 合法操作
 
  - **import后面的from指定模块文件的位置，可以是相对路径，也可以是绝对路径。如果不带有路径，只是一个模块名，那么必须有配置文件，告诉 JavaScript 引擎该模块的位置。**
 
@@ -10003,9 +10019,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - **注意，import命令具有提升效果，会提升到整个模块的头部，首先执行。**
 
-		foo();
-		
-		import { foo } from 'my_module';
+   foo();
+   	
+
+   	import { foo } from 'my_module';
 
 - 上面的代码不会报错，因为import的执行早于foo的调用。**这种行为的本质是，import命令是编译阶段执行的，在代码运行之前。**
 
