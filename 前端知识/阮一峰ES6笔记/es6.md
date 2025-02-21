@@ -48,12 +48,12 @@ https://es6.ruanyifeng.com/#docs
 
 		'na'.repeat(-1)
 		// RangeError
-	
-    	- ** 但是，如果参数是 0 到-1 之间的小数，则等同于 0，这是因为会先进行取整运算。0 到-1 之间的小数，取整以后等于-0，repeat视同为 0 **
-	
+		
+    		- ** 但是，如果参数是 0 到-1 之间的小数，则等同于 0，这是因为会先进行取整运算。0 到-1 之间的小数，取整以后等于-0，repeat视同为 0 **
+		
 		'na'.repeat(-0.9) // ""
 		
-    	- ** 参数NaN等同于 0 **
+    		- ** 参数NaN等同于 0 **
 
          'na'.repeat(NaN) // ""
 
@@ -258,7 +258,7 @@ https://es6.ruanyifeng.com/#docs
    - **Number.isFinite()用来检查一个数值是否为有限的（finite），即不是Infinity。**
    
    - **注意，如果参数类型不是数值，Number.isFinite一律返回false。**
-        
+     
 		Number.isFinite(15); // true
 		Number.isFinite(0.8); // true
 		Number.isFinite(NaN); // false
@@ -478,7 +478,7 @@ https://es6.ruanyifeng.com/#docs
 
    - **它会返回五种值**
 
-    	    - 参数为正数，返回+1；
+        	    - 参数为正数，返回+1；
 		
         - 参数为负数，返回-1；
 		
@@ -1696,16 +1696,16 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		};
 
         - **ES6 允许字面量定义对象时，用方法二（表达式）作为对象的属性名，即把表达式放在方括号内。**
-    
+        
 	    let propKey = 'foo';
 	    
 	    let obj = {
-	      [propKey]: true,
-	      ['a' + 'bc']: 123
+	    [propKey]: true,
+	    ['a' + 'bc']: 123
 	    };
-    
+        
         - **注意，属性名表达式与简洁表示法，不能同时使用，会报错。**
-    
+        
 	    // 报错
 	    const foo = 'bar';
 	    const bar = 'abc';
@@ -2272,22 +2272,24 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
       - 该方法可以用来处理数组，只不过**会把数组当作对象处理**
             
             
+        
             Object.assign([1,2,3],[4,5]) //[4,5,3]
         
        - 上面代码中，Object.assign()把数组视为属性名为 0、1、2 的对象，因此源数组的 0 号属性4覆盖了目标数组的 0 号属性1。
       
  - 该方法**只能进行值的复制**，如果要复制的值是一个取值函数，那么将求值后的再复制
-      
+   
                  const source = {
                      get foo() {return 1}
            }
-      
+            
            Object.assign({},source)  // {foo:1}
+        
     
     - **用途**
-      
+    
  - 为对象添加属性
-      
+   
                 class Point {
                     constructor(x, y) {
                         Object.assign(this, {x, y});
@@ -2295,7 +2297,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
                 }
             
  - 为对象添加方法
-      
+   
                 Object.assign(SomeClass.prototype, {
                 someMethod(arg1, arg2) {
                     ···
@@ -2304,7 +2306,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
                     ···
                 }
           });
-      
+            
                 // 等同于下面的写法
                 SomeClass.prototype.someMethod = function (arg1, arg2) {
                 ···
@@ -2312,9 +2314,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
                 SomeClass.prototype.anotherMethod = function () {
                 ···
           };
-      
+            
    - 克隆对象
-      
+     
                 function(obj){
                     Object.assign({},obj)
                 }
@@ -2459,9 +2461,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    foo: 123,
 		  }
 		);
-	
-    	- **有了Object.getOwnPropertyDescriptors()，我们就有了另一种写法。**
-	
+		
+    		- **有了Object.getOwnPropertyDescriptors()，我们就有了另一种写法。**
+		
 		const obj = Object.create(
 		  prot,
 		  Object.getOwnPropertyDescriptors({
@@ -3050,25 +3052,25 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		.set(1, 'bbb');
 		
 		map.get(1) // "bbb"
-	
-    	- **如果读取一个未知的键，则返回undefined。**
-	
+		
+    		- **如果读取一个未知的键，则返回undefined。**
+		
 		new Map().get('asfddfsasadf')
 		// undefined
-	
-    	- **注意，只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。**
-	
+		
+    		- **注意，只有对同一个对象的引用，Map 结构才将其视为同一个键。这一点要非常小心。**
+		
 		const map = new Map();
 		
 		map.set(['a'], 555);
 		map.get(['a']) // undefined
-	
-    	- 上面代码的set和get方法，表面是针对同一个键，但实际上这是两个不同的数组实例，内存地址是不一样的，因此get方法无法读取该键，返回undefined。
-	
-    	- 由上可知，**Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。**这就解决了同名属性碰撞（clash）的问题，我们扩展别人的库的时候，如果使用对象作为键名，就不用担心自己的属性与原作者的属性同名。
-	
-    	- **如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键。另外，undefined和null也是两个不同的键。虽然NaN不严格相等于自身，但 Map 将其视为同一个键。**
-	
+		
+    		- 上面代码的set和get方法，表面是针对同一个键，但实际上这是两个不同的数组实例，内存地址是不一样的，因此get方法无法读取该键，返回undefined。
+		
+    		- 由上可知，**Map 的键实际上是跟内存地址绑定的，只要内存地址不一样，就视为两个键。**这就解决了同名属性碰撞（clash）的问题，我们扩展别人的库的时候，如果使用对象作为键名，就不用担心自己的属性与原作者的属性同名。
+		
+    		- **如果 Map 的键是一个简单类型的值（数字、字符串、布尔值），则只要两个值严格相等，Map 将其视为一个键，比如0和-0就是一个键，布尔值true和字符串true则是两个不同的键。另外，undefined和null也是两个不同的键。虽然NaN不严格相等于自身，但 Map 将其视为同一个键。**
+		
 		let map = new Map();
 		
 		map.set(-0, 123);
@@ -3729,8 +3731,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		
 		let obj = Object.create(proto);
 		obj.foo // "GET foo"
-	
-    	- 上面代码中，拦截操作定义在Prototype对象上面，所以如果读取obj对象继承的属性时，拦截会生效。
+		
+    		- 上面代码中，拦截操作定义在Prototype对象上面，所以如果读取obj对象继承的属性时，拦截会生效。
 
   - **如果一个属性不可配置（configurable）且不可写（writable），则 Proxy 不能修改该属性，否则通过 Proxy 对象访问该属性会报错。**
 		
@@ -4157,7 +4159,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
         - 目标对象上不存在的属性
 
         - 属性名为 Symbol 值
-      
+        
         - 不可遍历（enumerable）的属性
 
 		let target = {
@@ -4675,7 +4677,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		// Reflect.construct 的写法
 		const instance = Reflect.construct(Greeting, ['张三']);
 		
-    	- **如果Reflect.construct()方法的第一个参数不是函数，会报错。**
+    		- **如果Reflect.construct()方法的第一个参数不是函数，会报错。**
 
  （6）**Reflect.getPrototypeOf(obj **
 
@@ -5291,13 +5293,13 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		} catch {
 		  console.log('至少一个请求失败，其他请求可能还没结束。');
 		}
-	
-    	- 上面示例中，Promise.all()可以确定所有请求都成功了，但是只要有一个请求失败，它就会报错，而不管另外的请求是否结束。
-	
-    	- 为了解决这个问题，ES2020 引入了**Promise.allSettled()方法，用来确定一组异步操作是否都结束了（不管成功或失败）。所以，它的名字叫做”Settled“，包含了”fulfilled“和”rejected“两种情况。**
-	
-    	- **Promise.allSettled()方法接受一个数组作为参数，数组的每个成员都是一个 Promise 对象，并返回一个新的 Promise 对象。只有等到参数数组的所有 Promise 对象都发生状态变更（不管是fulfilled还是rejected），返回的 Promise 对象才会发生状态变更。**
-	
+		
+    		- 上面示例中，Promise.all()可以确定所有请求都成功了，但是只要有一个请求失败，它就会报错，而不管另外的请求是否结束。
+		
+    		- 为了解决这个问题，ES2020 引入了**Promise.allSettled()方法，用来确定一组异步操作是否都结束了（不管成功或失败）。所以，它的名字叫做”Settled“，包含了”fulfilled“和”rejected“两种情况。**
+		
+    		- **Promise.allSettled()方法接受一个数组作为参数，数组的每个成员都是一个 Promise 对象，并返回一个新的 Promise 对象。只有等到参数数组的所有 Promise 对象都发生状态变更（不管是fulfilled还是rejected），返回的 Promise 对象才会发生状态变更。**
+		
 		const promises = [
 		  fetch('/api-1'),
 		  fetch('/api-2'),
@@ -6065,7 +6067,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 ### 十五、Generator 函数的语法 ####
 
-**1.基本概念**
+###### 1.基本概念
 
   - **Generator 函数是 ES6 提供的一种异步编程解决方案**，语法行为与传统函数完全不同。
 
@@ -6074,14 +6076,18 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
      - **语法上，首先可以把它理解成，Generator 函数是一个状态机，封装了多个内部状态。执行 Generator 函数会返回一个遍历器对象，也就是说，Generator 函数除了状态机，还是一个遍历器对象生成函数。返回的遍历器对象，可以依次遍历 Generator 函数内部的每一个状态。**
 
      - **形式上，Generator 函数是一个普通函数，但是有两个特征。一是，function关键字与函数名之间有一个星号；二是，函数体内部使用yield表达式，定义不同的内部状态（yield在英语里的意思就是“产出”）。**
-		
-		function* helloWorldGenerator() {
-		  yield 'hello';
-		  yield 'world';
-		  return 'ending';
-		}
-		
-		var hw = helloWorldGenerator();
+     	
+     	```
+     	function* helloWorldGenerator() {
+     	  yield 'hello';
+     	  yield 'world';
+     	  return 'ending';
+     	}
+     	
+     	var hw = helloWorldGenerator();
+     	```
+     	
+     	
 
   - 上面代码定义了一个 Generator 函数helloWorldGenerator，它内部有两个yield表达式（hello和world），即**该函数有三个状态：hello，world 和 return 语句（结束执行）。**
 
@@ -6089,7 +6095,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - **下一步，必须调用遍历器对象的next方法，使得指针移向下一个状态。也就是说，每次调用next方法，内部指针就从函数头部或上一次停下来的地方开始执行，直到遇到下一个yield表达式（或return语句）为止。换言之，Generator 函数是分段执行的，yield表达式是暂停执行的标记，而next方法可以恢复执行。**
 
-		hw.next()
+			hw.next()
 		// { value: 'hello', done: false }
 		
 		hw.next()
@@ -6105,15 +6111,16 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - ES6 没有规定，function关键字与函数名之间的星号，写在哪个位置。这导致下面的写法都能通过。
 
-		function * foo(x, y) { ··· }
-		function *foo(x, y) { ··· }
-		function* foo(x, y) { ··· }
-		function*foo(x, y) { ··· }
+     ```
+     function * foo(x, y) { ··· }
+     function *foo(x, y) { ··· }
+     function* foo(x, y) { ··· }
+     function*foo(x, y) { ··· }
+     ```
 
   - 由于 Generator 函数仍然是普通函数，所以一般的写法是上面的第三种，即星号紧跟在function关键字后面。本书也采用这种写法。
 
-
-**2.yield表达式**
+###### 2.yield表达式
 
  （1）概述
 
@@ -6131,26 +6138,28 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - 需要注意的是，**yield表达式后面的表达式，只有当调用next方法、内部指针指向该语句时才会执行，**因此等于为 JavaScript 提供了手动的“惰性求值”（Lazy Evaluation）的语法功能。
 
-		function* gen() {
-		  yield  123 + 456;
-		}
+     ```
+     function* gen() {
+       yield  123 + 456;
+     }
+     ```
+
+     
 
   - 上面代码中，yield后面的表达式123 + 456，不会立即求值，只会在next方法将指针移到这一句时，才会求值。
 
  （2）**yield VS return**
 
-    - **相似之处**：都能返回紧跟在语句后面的那个表达式的值
-    
-    - **不同点**： 
-    
-       - 每次遇到yield，函数暂停执行，下一次再从该位置继续向后执行，而return语句不具备位置记忆的功能。
-       
-       - 一个函数里面，只能执行一次（或者说一个）return语句，但是可以执行多次（或者说多个）yield表达式。
-    
-       - 正常函数只能返回一个值，因为只能执行一次return；Generator 函数可以返回一系列的值，因为可以有任意多个yield。从另一个角度看，也可以说 Generator 生成了一系列的值，这也就是它的名称的来历（英语中，generator 这个词是“生成器”的意思）。
+  - **相似之处**：都能返回紧跟在语句后面的那个表达式的值
+
+- **不同点**： 
+
+   - 每次遇到yield，函数暂停执行，下一次再从该位置继续向后执行，而return语句不具备位置记忆的功能。
+   - 一个函数里面，只能执行一次（或者说一个）return语句，但是可以执行多次（或者说多个）yield表达式。
+   - 正常函数只能返回一个值，因为只能执行一次return；Generator 函数可以返回一系列的值，因为可以有任意多个yield。从另一个角度看，也可以说 Generator 生成了一系列的值，这也就是它的名称的来历（英语中，generator 这个词是“生成器”的意思）。
 
  （3）**Generator 函数可以不用yield表达式，这时就变成了一个单纯的暂缓执行函数。**
-		
+
 		function* f() {
 		  console.log('执行了！')
 		}
@@ -6189,10 +6198,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  console.log(f);
 		}
 
-   - 上面代码也会产生句法错误，因为forEach方法的参数是一个普通函数，但是在里面使用了yield表达式（这个函数里面还使用了yield*表达式，详细介绍见后文）。一种修改方法是改用for循环。
+   - 上面代码也会产生句法错误，因为forEach方法的参数是一个普通函数，但是在里面使用了yield表达式（这个函数里面还使用了yield*表达式，详细介绍见后文）。一种修改方法是改用for循环。	
 
-		var arr = [1, [[2, 3], 4], [5, 6]];
-		
+			var arr = [1, [[2, 3], 4], [5, 6]];
 		var flat = function* (a) {
 		  var length = a.length;
 		  for (var i = 0; i < length; i++) {
@@ -6209,82 +6217,86 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  console.log(f);
 		}
 		// 1, 2, 3, 4, 5, 6
-
+	
    - **yield表达式如果用在另一个表达式之中，必须放在圆括号里面。**
 
-		function* demo() {
-		  console.log('Hello' + yield); // SyntaxError
-		  console.log('Hello' + yield 123); // SyntaxError
 		
-		  console.log('Hello' + (yield)); // OK
-		  console.log('Hello' + (yield 123)); // OK
+		
+		function* demo() {
+		    console.log('Hello' + yield); // SyntaxError
+		    console.log('Hello' + yield 123); // SyntaxError
+		    console.log('Hello' + (yield)); // OK
+		    console.log('Hello' + (yield 123)); // OK
 		}
 
 
    - yield表达式用作函数参数或放在赋值表达式的右边，可以不加括号。
 
-		function* demo() {
-		  foo(yield 'a', yield 'b'); // OK
-		  let input = yield; // OK
-		}
+		```
+	function* demo() {
+	  foo(yield 'a', yield 'b'); // OK
+	  let input = yield; // OK
+	}
+	```
+	
+	
 
-**3.与Iterator接口的关系  **
+###### **3.与Iterator接口的关系  **
 
   - **任意一个对象的Symbol.iterator方法，等于该对象的遍历器生成函数，调用该函数会返回该对象的一个遍历器对象。**
 
   - **由于 Generator 函数就是遍历器生成函数，因此可以把 Generator 赋值给对象的Symbol.iterator属性，从而使得该对象具有 Iterator 接口。**
 
-     var myIterable = {};
+     	var myIterable = {};
      	myIterable[Symbol.iterator] = function* () {
      	  yield 1;
      	  yield 2;
      	  yield 3;
      	};
      	
-
      	[...myIterable] // [1, 2, 3]
 
   - 上面代码中，Generator 函数赋值给Symbol.iterator属性，从而使得myIterable对象具有了 Iterator 接口，可以被...运算符遍历了。
 
   - **Generator 函数执行后，返回一个遍历器对象。该对象本身也具有Symbol.iterator属性，执行后返回自身。**
 
-		function* gen(){
+			function* gen(){
 		  // some code
 		}
-		
 		var g = gen();
 		
 		g[Symbol.iterator]() === g
 		// true
-
+	
  - 上面代码中，gen是一个 Generator 函数，调用它会生成一个遍历器对象g。它的Symbol.iterator属性，也是一个遍历器对象生成函数，执行后返回它自己
 
-
-**4.next方法的参数**
+###### 4.next方法的参数
 
   - **yield表达式本身没有返回值，或者说总是返回undefined。next方法可以带一个参数，该参数就会被当作上一个yield表达式的返回值。**
 
-		function* f() {
-		  for(var i = 0; true; i++) {
-		    var reset = yield i;
-		    if(reset) { i = -1; }
-		  }
-		}
-		
-		var g = f();
-		
-		g.next() // { value: 0, done: false }
-		g.next() // { value: 1, done: false }
-		g.next(true) // { value: 0, done: false }
+     
+     	
+     	function* f() {
+     	  for(var i = 0; true; i++) {
+     	    var reset = yield i;
+     	    if(reset) { i = -1; }
+     	  }
+     	}
+     	var g = f();
+     	
+     	g.next() // { value: 0, done: false }
+     	g.next() // { value: 1, done: false }
+     	g.next(true) // { value: 0, done: false }
 
   - 上面代码先定义了一个可以无限运行的 Generator 函数f，如果next方法没有参数，每次运行到yield表达式，变量reset的值总是undefined。当next方法带一个参数true时，变量reset就被重置为这个参数（即true），因此i会等于-1，下一轮循环就会从-1开始递增。
 
+		
+		
 		function* foo(x) {
 		  var y = 2 * (yield (x + 1));
 		  var z = yield (y / 3);
 		  return (x + y + z);
 		}
-		
 		var a = foo(5);
 		a.next() // Object{value:6, done:false}
 		a.next() // Object{value:NaN, done:false}
@@ -6302,74 +6314,74 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
  - **注意，由于next方法的参数表示上一个yield表达式的返回值，所以在第一次使用next方法时，传递参数是无效的。V8 引擎直接忽略第一次使用next方法时的参数，只有从第二次使用next方法开始，参数才是有效的。从语义上讲，第一个next方法用来启动遍历器对象，所以不用带有参数。**
 
-
-**5.for...of循环**
+###### 5.for...of循环
 
   - **for...of循环可以自动遍历 Generator 函数运行时生成的Iterator对象，且此时不再需要调用next方法。**
+     	
 
-		function* foo() {
-		  yield 1;
-		  yield 2;
-		  yield 3;
-		  yield 4;
-		  yield 5;
-		  return 6;
-		}
-		
-		for (let v of foo()) {
-		  console.log(v);
-		}
-		// 1 2 3 4 5
+     	function* foo() {
+     	  yield 1;
+     	  yield 2;
+     	  yield 3;
+     	  yield 4;
+     	  yield 5;
+     	  return 6;
+     	}
+     	for (let v of foo()) {
+     	console.log(v);
+     	}
+     	// 1 2 3 4 5
 
   - 上面代码使用for...of循环，依次显示 5 个yield表达式的值。这里需要注意，**一旦next方法的返回对象的done属性为true，for...of循环就会中止，且不包含该返回对象** ，所以上面代码的return语句返回的6，不包括在for...of循环之中。
 
   - **利用for...of循环，可以写出遍历任意对象（object）的方法。原生的 JavaScript 对象没有遍历接口，无法使用for...of循环，通过 Generator 函数为它加上这个接口，就可以用了。**
 
-		function* objectEntries(obj) {
-		  let propKeys = Reflect.ownKeys(obj);
 		
-		  for (let propKey of propKeys) {
-		    yield [propKey, obj[propKey]];
-		  }
+		
+		function* objectEntries(obj) {
+		    let propKeys = Reflect.ownKeys(obj);
+			for (let propKey of propKeys) {
+			 yield [propKey, obj[propKey]];
+			}
 		}
 		
 		let jane = { first: 'Jane', last: 'Doe' };
 		
 		for (let [key, value] of objectEntries(jane)) {
-		  console.log(`${key}: ${value}`);
+		   console.log(`${key}: ${value}`);
 		}
 		// first: Jane
 
 
   - **加上遍历器接口的另一种写法是，将 Generator 函数加到对象的Symbol.iterator属性上面。**
 
-		function* objectEntries() {
-		  let propKeys = Object.keys(this);
-		
-		  for (let propKey of propKeys) {
-		    yield [propKey, this[propKey]];
-		  }
-		}
-		
-		let jane = { first: 'Jane', last: 'Doe' };
-		
-		jane[Symbol.iterator] = objectEntries;
-		
-		for (let [key, value] of jane) {
-		  console.log(`${key}: ${value}`);
-		}
-		// first: Jane
-		// last: Doe
+     
+     	
+     	function* objectEntries() {
+     	  let propKeys = Object.keys(this);
+     	  for (let propKey of propKeys) {
+     	    yield [propKey, this[propKey]];
+     	  }
+     	}
+     	
+     	let jane = { first: 'Jane', last: 'Doe' };
+     	
+     	jane[Symbol.iterator] = objectEntries;
+     	
+     	for (let [key, value] of jane) {
+     	  console.log(`${key}: ${value}`);
+     	}
+     	// first: Jane
+     	// last: Doe
 
  - **除了for...of循环以外，扩展运算符（...）、解构赋值和Array.from方法内部调用的，都是遍历器接口。这意味着，它们都可以将 Generator 函数返回的 Iterator 对象，作为参数。**
-		
-		function* numbers () {
+	
+			function* numbers () {
 		  yield 1
 		  yield 2
 		  return 3
 		  yield 4
 		}
-		
 		// 扩展运算符
 		[...numbers()] // [1, 2]
 		
@@ -6390,40 +6402,38 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 **6.Generator.prototype.throw()**
 
-  - Generator 函数返回的遍历器对象，都有一个throw方法，可以在函数体外抛出错误，然后在 Generator 函数体内捕获。
+  - Generator 函数返回的遍历器对象，都有一个throw方法，可以在函数体外抛出错误，然后在 Generator 函数体内捕获
 
-		var g = function* () {
+			var g = function* () {
 		  try {
 		    yield;
 		  } catch (e) {
 		    console.log('内部捕获', e);
 		  }
 		};
-		
 		var i = g();
 		i.next();
 		
 		try {
-		  i.throw('a');
-		  i.throw('b');
+		i.throw('a');
+		i.throw('b');
 		} catch (e) {
-		  console.log('外部捕获', e);
+		console.log('外部捕获', e);
 		}
 		// 内部捕获 a
 		// 外部捕获 b
-
+	
   - 上面代码中，遍历器对象i连续抛出两个错误。第一个错误被 Generator 函数体内的catch语句捕获。i第二次抛出错误，由于 Generator 函数内部的catch语句已经执行过了，不会再捕捉到这个错误了，所以这个错误就被抛出了 Generator 函数体，被函数体外的catch语句捕获。
 
   - **throw方法可以接受一个参数，该参数会被catch语句接收，建议抛出Error对象的实例。**
 
-		var g = function* () {
+			var g = function* () {
 		  try {
 		    yield;
 		  } catch (e) {
 		    console.log(e);
 		  }
 		};
-		
 		var i = g();
 		i.next();
 		i.throw(new Error('出错了！'));
@@ -6432,7 +6442,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - **注意，不要混淆遍历器对象的throw方法和全局的throw命令。上面代码的错误，是用遍历器对象的throw方法抛出的，而不是用throw命令抛出的。后者只能被函数体外的catch语句捕获。**
 
-		var g = function* () {
+			var g = function* () {
 		  while (true) {
 		    try {
 		      yield;
@@ -6442,15 +6452,14 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    }
 		  }
 		};
-		
 		var i = g();
 		i.next();
 		
 		try {
-		  throw new Error('a');
-		  throw new Error('b');
+		throw new Error('a');
+		throw new Error('b');
 		} catch (e) {
-		  console.log('外部捕获', e);
+		console.log('外部捕获', e);
 		}
 		// 外部捕获 [Error: a]
 
@@ -6459,24 +6468,23 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - **如果 Generator 函数内部没有部署try...catch代码块，那么throw方法抛出的错误，将被外部try...catch代码块捕获。**
 
-		var g = function* () {
+			var g = function* () {
 		  while (true) {
 		    yield;
 		    console.log('内部捕获', e);
 		  }
 		};
-		
 		var i = g();
 		i.next();
 		
 		try {
-		  i.throw('a');
-		  i.throw('b');
+		i.throw('a');
+		i.throw('b');
 		} catch (e) {
-		  console.log('外部捕获', e);
+		console.log('外部捕获', e);
 		}
 		// 外部捕获 a
-
+	
 - 上面代码中，Generator 函数g内部没有部署try...catch代码块，所以抛出的错误直接被外部catch代码块捕获。
 
 
@@ -6495,23 +6503,23 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - **throw方法抛出的错误要被内部捕获，前提是必须至少执行过一次next方法。**
 
-		function* gen() {
-		  try {
-		    yield 1;
-		  } catch (e) {
-		    console.log('内部捕获');
-		  }
-		}
-		
-		var g = gen();
-		g.throw(1);
-		// Uncaught 1
+   	function* gen() {
+   	  try {
+   	    yield 1;
+   	  } catch (e) {
+   	    console.log('内部捕获');
+   	  }
+   	}
+   	var g = gen();
+   	g.throw(1);
+   	// Uncaught 1
 
 - 上面代码中，g.throw(1)执行时，next方法一次都没有执行过。这时，抛出的错误不会被内部捕获，而是直接在外部抛出，导致程序出错。这种行为其实很好理解，**因为第一次执行next方法，等同于启动执行 Generator 函数的内部代码，否则 Generator 函数还没有开始执行，这时throw方法抛错只可能抛出在函数外部。**
 *
 
 - **throw方法被内部捕获以后，会附带执行到下一条yield表达式，这种情况下等同于执行一次next方法。**
 
+	```
 	var gen = function* gen(){
 	  try {
 	    yield 1;
@@ -6526,38 +6534,42 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 	g.throw() // { value:2, done:false }
 	g.next() // { value:3, done:false }
 	g.next() // { value:undefined, done:true }
+	```
+	
+	
 
 
 - **Generator 函数体外抛出的错误，可以在函数体内捕获；反过来，Generator 函数体内抛出的错误，也可以被函数体外的catch捕获。**
 
-		function* foo() {
-		  var x = yield 3;
-		  var y = x.toUpperCase();
-		  yield y;
-		}
-		
-		var it = foo();
-		
-		it.next(); // { value:3, done:false }
-		
-		try {
-		  it.next(42);
-		} catch (err) {
-		  console.log(err);
-		}
+   
+   	
+   	function* foo() {
+   		  var x = yield 3;
+   		  var y = x.toUpperCase();
+   		  yield y;
+   	}
+   	var it = foo();
+   	
+   	it.next(); // { value:3, done:false }
+   	
+   	try {
+   	  it.next(42);
+   	} catch (err) {
+   	  console.log(err);
+   	}
 
 - 上面代码中，第二个next方法向函数体内传入一个参数 42，数值是没有toUpperCase方法的，所以会抛出一个 TypeError 错误，被函数体外的catch捕获。
 
 - **一旦 Generator 执行过程中抛出错误，且没有被内部捕获，就不会再执行下去了。如果此后还调用next方法，将返回一个value属性等于undefined、done属性等于true的对象，即 JavaScript 引擎认为这个 Generator 已经运行结束了。**
 
-		function* g() {
-		  yield 1;
-		  console.log('throwing an exception');
-		  throw new Error('generator broke!');
-		  yield 2;
-		  yield 3;
-		}
-		
+			function* g() {
+			  yield 1;
+			  console.log('throwing an exception');
+			  throw new Error('generator broke!');
+			  yield 2;
+			  yield 3;
+			}
+			
 		function log(generator) {
 		  var v;
 		  console.log('starting generator');
@@ -6597,7 +6609,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - Generator 函数返回的遍历器对象，还有一个return()方法，可以返回给定的值，并且终结遍历 Generator 函数。
 
-		function* gen() {
+			function* gen() {
 		  yield 1;
 		  yield 2;
 		  yield 3;
@@ -6614,12 +6626,11 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
   - **如果return()方法调用时，不提供参数，则返回值的value属性为undefined。**
 
-		function* gen() {
+			function* gen() {
 		  yield 1;
 		  yield 2;
 		  yield 3;
 		}
-		
 		var g = gen();
 		
 		g.next() // { value: 1, done: false }
@@ -6629,24 +6640,25 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 
 - **如果 Generator 函数内部有try...finally代码块，且正在执行try代码块，那么return()方法会导致立刻进入finally代码块，执行完以后，整个函数才会结束。**
 
-
-		function* numbers () {
-		  yield 1;
-		  try {
-		    yield 2;
-		    yield 3;
-		  } finally {
-		    yield 4;
-		    yield 5;
-		  }
-		  yield 6;
-		}
-		var g = numbers();
-		g.next()       // { value: 1, done: false }
-		g.next()       // { value: 2, done: false }
-		g.return(7)   // { value: 4, done: false }
-		g.next()     // { value: 5, done: false }
-		g.next()    // { value: 7, done: true }
+  ```
+  function* numbers () {
+    yield 1;
+    try {
+      yield 2;
+      yield 3;
+    } finally {
+      yield 4;
+      yield 5;
+    }
+    yield 6;
+  }
+  var g = numbers();
+  g.next()       // { value: 1, done: false }
+  g.next()       // { value: 2, done: false }
+  g.return(7)   // { value: 4, done: false }
+  g.next()     // { value: 5, done: false }
+  g.next()    // { value 7, done: true }
+  ```
 
 - 上面代码中，调用return()方法后，就开始执行finally代码块，不执行try里面剩下的代码了，然后**等到finally代码块执行完，再返回return()方法指定的返回值。**
 
@@ -7255,7 +7267,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
    - 传统的编程语言，早有异步编程的解决方案（其实是多任务的解决方案）。其中有一种叫做"协程"（coroutine），意思是多个线程互相协作，完成异步任务。
 
    - **协程有点像函数，又有点像线程。它的运行流程大致如下。**
-        
+     
       - 第一步，协程A开始执行。
 		
       - 第二步，协程A执行到一半，进入暂停，执行权转移到协程B。
@@ -7905,7 +7917,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		    });
 		  });
 		};
-	
+		
 		const gen = function* () {
 		  const f1 = yield readFile('/etc/fstab');
 		  const f2 = yield readFile('/etc/shells');
@@ -8661,7 +8673,7 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		  constructor() {
 		    console.log(MyClass.myStaticProp); // 42
 		  }
-	
+		
 		}
 - 这个新写法大大方便了静态属性的表达。
 
@@ -8923,8 +8935,8 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 		
 		console.log(getX(new C())); // 1
-	
-    	- 上面示例中，#x是类的私有属性，如果类外部的getX()方法希望获取这个属性，以前是要写在类的constructor()方法里面，这样的话，每次新建实例都会定义一次getX()方法。现在可以写在静态块里面，这样的话，只在类生成时定义一次。
+		
+    		- 上面示例中，#x是类的私有属性，如果类外部的getX()方法希望获取这个属性，以前是要写在类的constructor()方法里面，这样的话，每次新建实例都会定义一次getX()方法。现在可以写在静态块里面，这样的话，只在类生成时定义一次。
 
 
 **13.类的注意点**
@@ -9090,9 +9102,9 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 
 		var obj = new Rectangle(3, 4); // 输出 true
-	
-    	- **需要注意的是，子类继承父类时，new.target会返回子类。**
-	
+		
+    		- **需要注意的是，子类继承父类时，new.target会返回子类。**
+		
 		class Rectangle {
 		  constructor(length, width) {
 		    console.log(new.target === Rectangle);
@@ -9107,11 +9119,11 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 		}
 		
 		var obj = new Square(3); // 输出 false
-	
-    	- 上面代码中，new.target会返回子类。
-	
-    	- **利用这个特点，可以写出不能独立使用、必须继承后才能使用的类。**
-	
+		
+    		- 上面代码中，new.target会返回子类。
+		
+    		- **利用这个特点，可以写出不能独立使用、必须继承后才能使用的类。**
+		
 			class Shape {
 			  constructor() {
 			    if (new.target === Shape) {
@@ -9129,10 +9141,10 @@ asm.js 里面，|0跟在一个数值的后面会返回一个32位整数。根据
 			
 			var x = new Shape();  // 报错
 			var y = new Rectangle(3, 4);  // 正确
-	
-    	- 上面代码中，Shape类不能被实例化，只能用于继承。
-	
-    	- **注意，在函数外部，使用new.target会报错。**
+		
+    		- 上面代码中，Shape类不能被实例化，只能用于继承。
+		
+    		- **注意，在函数外部，使用new.target会报错。**
 
 ####  十九、Class 的继承 #### 
 
