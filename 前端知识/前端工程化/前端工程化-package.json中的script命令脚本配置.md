@@ -1,4 +1,4 @@
-## 一、npm run xx 命令
+##  一、npm run xx 命令
 
 - package.json文件中的scripts属性是用来运行npm run 命令的，凡是配置了的属性xx，都可以用npm run xx进行运行，这个xx代表你可以随意写什么名字，但是我们一般都按照一个规范写，比如开发运行：dev，构建：build，测试：test等。
 
@@ -80,7 +80,7 @@
 
 - 如何在其他脚本中访问
 
-  -  前面提到，在scripts命令中注入的NODE_ENV只能被webpack的构建脚本访问，而被webpack打包的源码中是无法访问到的，此时可以借助webpack的DefinePlugin插件，创建全局变量。
+  -  前面提到，**在scripts命令中注入的NODE_ENV只能被webpack的构建脚本访问，而被webpack打包的源码中是无法访问到的**，此时可以借助webpack的DefinePlugin插件，创建全局变量。
 
     ```
     const webpack = require('webpack');
@@ -96,7 +96,7 @@
   - 当然DefinePlugin不仅仅可以定义process.env.NODE_ENV，你也可以根据自己的需要定义其他的全局变量。定义完成之后，就可以在项目代码中直接使用了。
         
 
-  -  所以就解决了上面的疑问，在写 Vue 项目时，在客户端侧代码中，只有以 VUE_APP_ 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中，你才可以在应用的代码中访问它们；当然，还有两个特殊的变量也可以在应用中访问：NODE_ENV 和 BASE_URL；同样在 React 应用中，除了一些内置变量（ NODE_ENV 和 PUBLIC_URL ）之外，变量名必须以 REACT_APP_ 开头才能使用。
+  -  所以就解决了上面的疑问，在**写 Vue 项目时，在客户端侧代码中，只有以 VUE_APP_ 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中，你才可以在应用的代码中访问它们**；当然，还有两个特殊的变量也可以在应用中访问：NODE_ENV 和 BASE_URL；同样在 React 应用中，除了一些内置变量（ NODE_ENV 和 PUBLIC_URL ）之外，变量名必须以 REACT_APP_ 开头才能使用。
 
 #### 3.跨平台的cross-env
 
@@ -122,7 +122,7 @@
 
  - 如果需要配置的环境变量太多，全部设置在scripts命令中既不美观也不容易维护，此时将环境变量配置在.env文件中，然后使用dotenv插件来加载.env配置文件。
 
- - dotenv 是一个零依赖包，可将环境变量从 .env 文件加载到 process.env；其原理是将 .env 文件解析为 json 对象，并对其中的 key-value 对通过 process.env 将其赋值为环境变量，之后便可通过 process.env[key] 来使用。dotenv的默认策略是如果.evn文件中存在与系统中相同的环境变量, 那么将跳过该变量的加载
+ - dotenv 是一个零依赖包，可将环境变量从 .env 文件加载到 process.env；其原理是将 .env 文件解析为 json 对象，并对其中的 key-value 对通过 process.env 将其赋值为环境变量，之后便可通过 process.env[key] 来使用。dotenv的默认策略是如果.env文件中存在与系统中相同的环境变量, 那么将跳过该变量的加载
 
  - 安装dotenv
 
@@ -149,7 +149,7 @@
 
 ##### 4.vue-cli也可以读取.env文件
 
-- vue-cli为我们提供了--mode参数可以让我们读取不同环境的env文件
+- vue-cli为我们提供了**--mode参数**可以让我们**读取不同环境的env文件**
 
   ```
   "scripts": {
@@ -182,7 +182,7 @@
   }
   ```
 
-- 在vue.config.js中打印process.env可以看到，但是在前端代码中打印只能看到NODE_ENV和VUE_APP_NAME，因为上面我们也说了，在scripts命令中注入的属性只能被webpack的构建脚本访问，而被webpack打包的源码中是无法访问到的，此时可以借助webpack的DefinePlugin插件，创建全局变量，写 Vue 项目时，在客户端侧代码中，只有以 VUE_APP_ 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中，你才可以在应用的代码中访问它们；当然，还有两个特殊的变量也可以在应用中访问：NODE_ENV 和 BASE_URL。
+- **在vue.config.js中打印process.env可以看到，但是在前端代码中打印只能看到NODE_ENV和VUE_APP_NAME**，因为上面我们也说了，**在scripts命令中注入的属性只能被webpack的构建脚本访问，而被webpack打包的源码中是无法访问到的，此时可以借助webpack的DefinePlugin插件，创建全局变量，写 Vue 项目时，在客户端侧代码中，只有以 VUE_APP_ 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中，你才可以在应用的代码中访问它们；当然，还有两个特殊的变量也可以在应用中访问：NODE_ENV 和 BASE_URL。**
 
 #### 5.模式和环境变量
 
