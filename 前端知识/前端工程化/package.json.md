@@ -419,17 +419,17 @@
 
 #### 3、总结 `devDependencies` 和 `dependencies` 的区别
 
-- 结论：`devDependencies` 和 `dependencies`的区别核心体现在 **npm包** 中。只要开发的项目是**发npm包**提供给外部、其他业务项目使用的，需要非常注意依赖的安装地方，因为搞不好很容易在业务使用中会出现bug。而如果只是自己项目用，**不需要发npm包**的话，把依赖安装到 `devDependencies` 或者 `dependencies` 中，实质上是没有任何区别的。
-- 为什么在开发 npm包 的时候 不严格区分 `devDependencies` 、 `dependencies` 进行装包可能会导致业务项目的使用中出现bug呢？笔者举一个例子来加深理解：
+- 结论：`devDependencies` 和 `dependencies`的区别核心体现在 **`npm`包** 中。只要开发的项目是**发`npm`包**提供给外部、其他业务项目使用的，需要非常注意依赖的安装地方，因为搞不好很容易在业务使用中会出现bug。而如果只是自己项目用，**不需要发`npm`包**的话，把依赖安装到 `devDependencies` 或者 `dependencies` 中，实质上是没有任何区别的。
+- 为什么在开发 `npm`包 的时候 不严格区分 `devDependencies` 、 `dependencies` 进行装包可能会导致业务项目的使用中出现bug呢？笔者举一个例子来加深理解：
 
   - 假设npm包开发者不小心把 vue3 的依赖写到了 `dependencies` 中（用于开发调试的），版本是 `3.0.36`。
   - 业务项目自身用了 `vue@3.0.0` 的情况下，安装了这个 npm包 ，由于 npm包 中的 `dependencies` 有 `vue@3.0.36` 这个依赖，此时会在装 npm包 的同时安装36版本的vue。
   - 由于 npm包中会用到vue，代码是这样引入的：`import { onMount } from 'vue'`，此时，npm包会在自己内部的 `node_modules` 中找到 `vue@3.0.36` 的包并使用，此时就会产生 2 个 vue3 实例，就很容易出现一些奇怪的bug。（业务项目的`vue@3.0.0` 和 npm包的`vue@3.0.36`）
   - 业务引用vue3，那么业务代码根目录下的node_module就会装vue3的包（ 根目录/node_modules/vue3），然后业务侧npm包依赖vue2并且写在dependencies中的话，就会在这个npm包的node_modules目录下装vue2包（根目录/node_modules/依赖的npm包/node_modules/vue2），所以就有2个版本的vue了，之所以这个依赖的npm包内import { xxx api } from vue 找不到是因为全局只有一个vue实例，也就是业务侧main.js里create-app出来的Vue3实例，依赖的那个npm包都没有Vue实例创建的的代码，自然用的是Vue3实例，找不到Vue2 api。
 - **这里还要注意一点就是 `externals`** 。有同学可能会说，npm包打包的时候会 `externals` 掉第三方的库，比如上述中的 vue3 ，`externals` 只是保证 vue3 的代码不打包进 npm包 的代码中而已。
-  
+- **`npm install/i  packageName  -S/--save `表示将该模块写入dependencies属性，`npm install/i packageName -D/--save-dev` 表示将该模块写入devDependencies属性。**
 
-## 十九、peerDependencies字段
+## 十九、`peerDependencies`字段
 
 - 当我们开发一个模块的时候，如果当前模块与所依赖的模块同时依赖一个第三方模块，并且依赖的是两个不兼容的版本时就会出现问题。
 
