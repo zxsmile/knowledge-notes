@@ -147,7 +147,7 @@
 
 - .env中配置的字段同样也会给process.env注入该字段的属性，但是如果script中和.env有同样名字的属性，script中的优先级更高
 
-##### 4.vue-cli也可以读取.env文件
+#### 5.vue-cli也可以读取.env文件
 
 - vue-cli为我们提供了**--mode参数**可以让我们**读取不同环境的env文件**
 
@@ -184,7 +184,7 @@
 
 - **在vue.config.js中打印process.env可以看到，但是在前端代码中打印只能看到NODE_ENV和VUE_APP_NAME**，因为上面我们也说了，**在scripts命令中注入的属性只能被webpack的构建脚本访问，而被webpack打包的源码中是无法访问到的，此时可以借助webpack的DefinePlugin插件，创建全局变量，写 Vue 项目时，在客户端侧代码中，只有以 VUE_APP_ 开头的变量会被 webpack.DefinePlugin 静态嵌入到客户端侧的包中，你才可以在应用的代码中访问它们；当然，还有两个特殊的变量也可以在应用中访问：NODE_ENV 和 BASE_URL。**
 
-#### 5.模式和环境变量
+#### 6.模式和环境变量
 
   - 模式是 Vue CLI 项目中一个重要的概念。默认情况下，一个 Vue CLI 项目有三个模式：
 
