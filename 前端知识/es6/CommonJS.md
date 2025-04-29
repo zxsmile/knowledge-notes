@@ -101,25 +101,28 @@
  - `require`加载规则：
 
       - 当`require`当中的参数字符串以`./`（从当前目录出发）或`../`（从上一级目录出发）开头，表示按照相对路径，从当前文件所在的文件夹开始寻找要载入的模块文件。
-      
+
       - 当`require`当中的参数字符串以`/`开头，则表示从系统根目录开始寻找该模块文件
 
       - 如果参数字符串不以`./`或`/`或`../`开头，说明要加载的不是一个文件，而是一个默认提供的核心模块。
-  
-        - 此时则先在`node`平台所提供的核心模块当中找，然后再寻找`NPM`模块（即第三方模块包，或自己写的模块包）
-      - 在寻找`NPM`模块包时，会从当前目录出发，向上搜索各级当中的`node_modules`文件夹当中的文件，但若有两个同名文件，则遵循就近原则
         
-           脚本/home/user/projects/foo.js执行了require('bar.js')命令，Node会依次搜索以下文件：
-            
-            /usr/local/lib/node/bar.js
-                    /home/user/projects/node_modules/bar.js
-              /home/user/node_modules/bar.js
-                    /home/node_modules/bar.js
-                    /node_modules/bar.js
+        - 此时则先在`node`平台所提供的核心模块当中找，然后再寻找`NPM`模块（即第三方模块包，或自己写的模块包）
+        - 在寻找`NPM`模块包时，会从当前目录出发，向上搜索各级当中的`node_modules`文件夹当中的文件，但若有两个同名文件，则遵循就近原则
+        - 脚本`/home/user/projects/foo.js`执行了`require('bar.js')`命令，`Node`会依次搜索以下文件：
+        
+        ```
+        /usr/local/lib/node/bar.js
+        /home/user/projects/node_modules/bar.js
+        /home/user/node_modules/bar.js
+        /home/node_modules/bar.js
+        /node_modules/bar.js
+        ```
+        
+        
 
 - `node`的系统模块的优先级最高，一旦有第三方模块包与系统模块重名，则以系统模块为准。
-- 之前在使用`require`的方式来加载一个文件时，如果该文件在当前目录当中，则参数字符串当中必须以`./`开头，不能直接写文件名，若在参数字符串当中直接写文件名，则代表载入的是一个模块包，模块包必须放在一个特定名字的文件夹当中，即node_modules。
-- 使用require来加载文件时可以省略扩展名。比如`require('./module')`，则对应的加载顺序为：
+- 之前在使用`require`的方式来加载一个文件时，如果该文件在当前目录当中，则参数字符串当中必须以`./`开头，不能直接写文件名，若在参数字符串当中直接写文件名，则代表载入的是一个模块包，模块包必须放在一个特定名字的文件夹当中，即`node_modules`。
+- 使用`require`来加载文件时可以省略扩展名。比如`require('./module')`，则对应的加载顺序为：
      - 按`js`文件来执行（先找对应路径当中的`module.js`文件来加载）
      - 按`json`文件来解析（若上面的`js`文件找不到时，则找对应路径当中的`module.json`文件来加载）
      - 按照预编译好的c++模块来执行（寻找对应路径当中的`module.node`文件来加载）
@@ -167,9 +170,9 @@
 ## 7、模块的循环加载
 
  - `CommonJS`模块的重要特性是加载时执行，即脚本代码在`require`的时候，就会全部执行，一旦出现某个模块被循环加载，就只输出已执行的部分，还未执行的部分不会输出
-     
+   
  - 下面一个例子：
-     
+   
   ```
      // a.js
      
@@ -178,8 +181,8 @@
      console.log('在 a.js 之中，b.done ='+ b.done);
      exports.done = true;
      console.log('a.js 执行完毕');
-     ```
-     
+  ```
+
 - 上面代码之中，`a.js`脚本先输出一个done变量，然后加载另一个脚本文件`b.js`，注意，此时`a.js`代码就停在这里，等待`b.js`执行完毕，再往下执行
 
      ```
