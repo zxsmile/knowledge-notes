@@ -166,6 +166,8 @@ console.log(book.edition);
 
 - 可以使用`Object.getOwnPropertyDescriptor()`查看属性的描述符，它接收两个参数，第一个参数为对象，第二个参数为需要查看描述符的属性。
 
+- `Object.getOwnPropertyDescriptor()`方法只能用于实例属性，要取得原型属性的描述符，必须直接在原型对象上调用`Object.getOwnPropertyDescriptor()`方法
+
   ```
   	const o = { name: "wang" }
   		

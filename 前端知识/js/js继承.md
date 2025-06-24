@@ -100,14 +100,18 @@
 
 
   * **特点：**
-* 实例可继承的属性有：实例的构造函数的属性，父类构造函数属性，父类原型的属性。（新实例不会继承父类实例的属性！）
-    
-  * **缺点：**
-* 新实例无法向父类构造函数传参
-    * 所有新实例都会共享父类实例的属性（原型上的属性是共享的，**对于引用类型，一个实例修改了原型属性，另一个实例的原型属性也会被修改！**）
-    * 构造函数被篡改：在上面的例子中，`Child.prototype.constructor`现在指向的是`Person`，而不是`Child`。
 
-  - **因此这个方法适用于确定自己不会去修改原型上的属性，并且不需要传参**
+
+    * 实例可继承的属性有：实例的构造函数的属性，父类构造函数属性，父类原型的属性。（新实例不会继承父类实例的属性！）
+
+* **缺点：**
+  
+  
+  * 新实例无法向父类构造函数传参
+      * 所有新实例都会共享父类实例的属性（原型上的属性是共享的，**对于引用类型，一个实例修改了原型属性，另一个实例的原型属性也会被修改！**）
+      * 构造函数被篡改：在上面的例子中，`Child.prototype.constructor`现在指向的是`Person`，而不是`Child`。
+  
+    - **因此这个方法适用于确定自己不会去修改原型上的属性，并且不需要传参**
 
 #### 2.构造函数继承
 
@@ -115,7 +119,7 @@
 
  - 通过**在子类型的构造函数中调用父类型的构造函数，可以实现父类型的属性继承。**
 
- - **每个实例都有独立的属性，但无法继承父类型原型上的方法。**
+ - **每个实例都有独立的属性，但无法继承父类原型上的方法。**
 
 
 ```
@@ -147,97 +151,87 @@
 
  - 这里主要是在**子构造函数`Child`中通过`Parent.call(this, name)`调用了父构造函数`Parent`，这样使得`Child`的实例能够拥有自己的`name`属性和独立的`colors`数组，而不是简单地从`Parent`的原型链上继承这些属性，从而确保了每个`Child`实例的数据独立性，避免了实例间的属性污染。**
 
-
-
   - **特点：**
-- 只继承了父类构造函数的属性，没有继承父类原型的属性。
+
+    - 只继承了父类构造函数的属性，没有继承父类原型的属性。
     - **每个实例的数据都是独立的（多个实例对象，this是各自指向各自，已经没有公用的原型了）**
     - 可以继承多个构造函数属性（call多个）
     - 在子实例中可向父实例传参。
 
-  * **缺点：**
-* 只能继承父类构造函数的属性，无法继承父类原型上的属性
+- **缺点：**
+
+    - 只能继承父类构造函数的属性，无法继承父类原型上的属性
+
     * 无法实现构造函数的复用（每次用每次都要重新调用）
-    * 每个新实例都有父类构造函数的副本，臃肿。
-      
+    * 子类实例对象身上会出现父类实例对象的属性方法的副本，这显然是没有必要的。
 #### 3.组合继承(原型链+构造函数)
 
 * **原理：原型链可以继承原型对象的属性和方法，构造函数可以继承实例的属性且可以给父类传参**
 	
-		
-		 
 		 function Person(name){
-			 this.name = name
-		     this.colors = ["red", "blue", "green"]
+		 	this.name = name
+		 	 	this.colors = ["red", "blue", "green"]
 		}
-		 Person.prototype.sayName=function(){
-		   console.log(this.name)
-		 }
-		 
-		 function Child(name){
 		
-		    Person.call(this,name)  //第二次调用父类构造函数
-		    this.age = 18
+		Person.prototype.sayName=function(){
+			console.log(this.name)
+		}
 		
-		 }
+		function Child(name){
+		
+			Person.call(this,name)  //第二次调用父类构造函数
+			this.age = 18
+		
+		}
 		  
-		 Child.prototype = new Person() //第一次调用父类构造函数
-	 Child.prototype.constructor = Child;//修正constructor
-		
-		 Child.prototype.sayAge=function(){
-		   console.log(this.age)
-		 } 
-		 
-	 var child = new Child('milk')
+		Child.prototype = new Person() //第一次调用父类构造函数
+		Child.prototype.constructor = Child;//修正constructor
+		Child.prototype.sayAge=function(){
+			console.log(this.age)
+		}
+		var child = new Child('milk')
 	
-* 特点：
+* **特点：**
 
    - **可以继承父类原型上的属性，可以传参，可复用**
    - **每个新实例引入的构造函数属性是私有的**
 
-  * 缺点：
+* **缺点：**
 
-    - **调用了两次父类构造函数,一次是在子类构造函数中，另一次是在设置子类原型时。这会产生多余的性能开销**
-    
-      - **子类的构造函数会代替原型上的那个父类构造函数**
-    
-          - 在第一次调用`Person`构造函数时，`Child.prototype`会得到两个属性： `name`和`colors`； 他们都是`Person`的实例属性，只不过现在位于`Child`的原型中。当调用`Child`构造函数时，又会调用一次`Person`构造函数，这一次又在新对象上创建了实例属性`name`和`colors`。于是这两个属性就屏蔽了原型中的两个同名属性
-    
+   - **调用了两次父类构造函数,一次是在子类构造函数中，另一次是在设置子类原型时。这会产生多余的性能开销**
+   - **子类实例对象上会存在父类实例对象的属性或方法的副本，其原型对象是父类实例对象，若将子类实例副本属性删除后，再次调用该属性依然存在，这就会造成问题**
+     - 在第一次调用`Person`构造函数时，`Child.prototype`会得到两个属性： `name`和`colors`； 他们都是`Person`的实例属性，只不过现在位于`Child`的原型中。当调用`Child`构造函数时，又会调用一次`Person`构造函数，这一次又在新对象上创建了实例属性`name`和`colors`。于是这两个属性就屏蔽了原型中的两个同名属性
 
 #### 4.原型式继承
 
-
+- **原理：不采用构造函数的形式，借助原型可以基于现有方法来创建对象，`var B = Object.create(A)` 以`A`对象为原型，生成`A`对象，`B`继承了`A`的所有属性和方法。**
 
 ```
-function object(o){
-  function F(){}
-  F.prototype = o
-  return new F()
+function object(o,name){
+ let F = Object.create(o)
+ F.name = name
+ return F
 }
 person={
     age:18，
     friends:['Shelby','Court','Van']
 }
 
-var per=object(person)
+var per=object(person,'MILK')
 
 console.log(per.age) //18
 ```
-  * 在`object`函数内部，先创建一个临时性的构造函数，然后将传入的对象作为这个构造函数的原型，最后返回这个临时构造函数的一个新实例
   * 本质上来说，`object`是对传入的`person`对象实行了一次浅复制
   * 这种模式下，必须有一个对象作为另一个对象的基础
 
     * 在这个例子下，`person`作为另一个对象的基础，把`person`传入`object`中，该函数就会返回一个新的对象
     * 这个新对象将`person`作为原型，所以它的原型中就包含一个基本类型和一个引用类型
     * 所以意味着如果还有另外一个对象关联了`person`，`anotherPerson`修改数组`friends`的时候，也会体现在这个对象中
-
   * **特点：**
-* **类似于复制一个对象，用函数来包装。**
-    
-  * 缺点：
-
-     * **所有实例都会继承原型上的属性。修改引用类型的值会影响到别的实例**
-     * **无法实现复用（新实例属性都是后面添加的）**
+    * **类似于复制一个对象，用函数来包装。**
+    * **没有严格意义上的构造函数，借助原型可以基于已有对象创建新对象**
+* **缺点：**
+  * **所有实例都会继承原型上的属性。修改引用类型的值会影响到别的实例**
 
 （1）**`Object.create()`**
 
@@ -252,72 +246,76 @@ console.log(per.age) //18
 - **实现`Object.create`**
 
         Object.prototype.MyCreate = function(proto,properties){
-    	    //if(! (proto instanceof Object) && typeof proto !== 'object'){
-    	      // throw 'error'
+            //if(! (proto instanceof Object) && typeof proto !== 'object'){
+              // throw 'error'
              // 类型校验
                throw new TypeError("proto必须为对象或者函数");
-    	    //}
-    	    
+            //}
+            
           if (typeof proto !== "object" && typeof proto !== "function") {
            // 类型校验
            throw new TypeError("proto必须为对象或者函数");
           }
           if ( defineProperties === null ) {
-    	      throw new TypeError('Cannot convert undefined or null to object')
-    	    }
-    
-    	    function F(){}
-    	    F.prototype = proto  //也可以使用 Object.setPrototypeOf(result, proto);// 将该对象的原型设置为proto
-       
-    	    let obj = new F()
-    	    if(properties){
-    	       Object.defineProperties(obj,properties)
-    	    }
-    	    if(proto === null){
-    	       obj.__proto__ = null
-    	    }
-    	    return obj
-    	}
+              throw new TypeError('Cannot convert undefined or null to object')
+            }
+        
+            function F(){}
+            F.prototype = proto  //也可以使用 Object.setPrototypeOf(result, proto);// 将该对象的原型设置为proto
+           
+            let obj = new F()
+            if(properties){
+               Object.defineProperties(obj,properties)
+            }
+            if(proto === null){
+               obj.__proto__ = null
+            }
+            return obj
+        }
 
 - **在没有必要兴师动众地创建构造函数，而只想让一个对象与另一个对象保持类似的情况下，原型式继承是完全可以胜任的。**
 
 #### 5.寄生式继承
+
+- **原理： 创建新对象，浅拷贝一份目标对象（这一步也就是原型式继承方式）,在对新对象进行增强，添加一些处理方法**
 
 - **在原型式继承中，一个新对象是基于另一个对象创建的，但所有实例共享原型对象上的属性，尤其是引用类型属性，这可能导致数据污染。**
 
 - **寄生式继承则通过创建一个仅用来继承的函数，然后在返回新对象之前，对这个新对象进行增强，以此确保每个实例都有其独立的属性副本,可以让子对象默认具有自己的属性。**
 
 - **有点像把传入的对象浅拷贝了一份，所谓增强就是添加属性，返回对象**
-- **所有代码用的同一个属性，也没涉及到原型**
 
 * 与寄生构造函数和工厂模式类似，创建一个仅用于封装继承过程的函数，该函数在内部以某种方式来增强对象，最后返回对象
 
-   	function createAnother(original){
-   	    var clone = Object.create(original);    //通过调用函数创建一个新对象
-   	      //或者
-   	    var clone = Object.create(person);  
-   	    clone.sayHi = function(){               //以某种方式来增强这个对象
-   	       console.log("Hi");
-   	    };
-   	    return clone;                        //返回这个对象
-   	}
-   	
-   	var person = {
-   	    name: "Bob",
-   	    friends: ["Shelby", "Court", "Van"]
-   	};
-   	var anotherPerson = createAnother(person);
-   	anotherPerson.sayHi();
+    ```
+    function createAnother(original){
+        var clone = Object.create(original);    //通过调用函数创建一个新对象
+          //或者
+        var clone = Object.create(person);  
+        clone.sayHi = function(){               //以某种方式来增强这个对象
+           console.log("Hi");
+        };
+        return clone;                        //返回这个对象
+    }
+    
+    var person = {
+        name: "Bob",
+        friends: ["Shelby", "Court", "Van"]
+    };
+    var anotherPerson = createAnother(person);
+    anotherPerson.sayHi();
+    ```
+
+    
 
 * **优点：**
 
   * **没有创建自定义类型，因为只是套了个壳子返回对象（这个），这个函数顺理成章就成了创建的新对象**
 
-  * **缺点：**
-    * **没用到原型，无法复用**
-    
-* **创建的实例共用同一个对象，修改引用类型的值会影响到别的实例**
-    
+* **缺点：**
+
+    * **创建的实例共用同一个对象，修改引用类型的值会影响到别的实例**
+    * **每次创建对象都会创建一遍实例属性，跟借助构造函数模式一样。**
 
 #### 6.寄生组合式继承
 
@@ -394,14 +392,15 @@ console.log(per.age) //18
 
 - 在`ES6`中，类继承通过`extends`关键字实现，子类可以继承父类的属性和方法，并且可以使用`super`关键字来调用父类的构造函数和方法。
 
-			class Parent {
-			  constructor(name) {
-			    this.name = name;
-			  }
-			  getName() {
-			    return this.name;
-			  }
-			}
+				class Parent {
+		  constructor(name) {
+		    this.name = name;
+		  }
+		  getName() {
+		    return this.name;
+		  }
+		}
+		
 		class Child extends Parent {
 		  constructor(name) {//继承父类属性
 		    super(name);//super里不传参数的话就是把父类里的属性都继承过来
