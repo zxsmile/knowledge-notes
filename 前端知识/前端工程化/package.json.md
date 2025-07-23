@@ -90,9 +90,9 @@
 
 - 先行版本号可以加到**主版本号.次版本号.修订号**的后面，通过**-**号连接一连串以句点分隔的标识符和版本编译信息：
 
-  - 内部版本(alpha)
-  - 公测版本(beta)
-  - 正式版本的候选版本rc（即 Release candiate）
+  - 内部版本(`alpha`)
+  - 公测版本(`beta`)
+  - 正式版本的候选版本`rc`（即 `Release candiate`）
 
 - 我们可以执行以下命令查看模块的版本：
 
@@ -104,8 +104,8 @@
 - 版本说明
 
   - 固定版本: 比如`5.38.1`，安装时只安装指定版本。 
-  - 波浪号: 比如`~5.38.1`, 表示安装5.38.x的最新版本（不低于5.38.1），但是不安装5.39.x，也就是说安装时不改变大版本号和次要版本号。 
-  - 插入号: 比如`ˆ5.38.1`, ，表示安装5.x.x的最新版本（不低于5.38.1），但是不安装6.x.x，也就是说安装时不改变大版本号。
+  - 波浪号: 比如`~5.38.1`, 表示安装`5.38.x`的最新版本（不低于`5.38.1`），但是不安装`5.39.x`，也就是说安装时不改变大版本号和次要版本号。 
+  - 插入号: 比如`ˆ5.38.1`, ，表示安装`5.x.x`的最新版本（不低于`5.38.1`），但是不安装`6.x.x`，也就是说安装时不改变大版本号。
   - 需要注意的是，如果大版本号为0，则插入号的行为与波浪号相同，这是因为此时处于开发阶段，即使是次要版本号变动，也可能带来程序的不兼容。 latest: 安装最新版本。
 
 ## 四、description字段
@@ -168,7 +168,7 @@
 
 ## 十二、bin字段
 
-- `bin`项用来指定每个内部命令对应的可执行文件的位置。如果你编写的是一个node工具的时候一定会用到`bin`字段。
+- `bin`项用来指定每个内部命令对应的可执行文件的位置。如果你编写的是一个`node`工具的时候一定会用到`bin`字段。
 
 - 当我们编写一个`cli`工具的时候，需要指定工具的运行命令，比如常用的`webpack`模块，他的运行命令就是`webpack`。
 
@@ -179,8 +179,8 @@
   ```
 
 - 当我们执行`webpack`命令的时候就会执行`bin/index.js`文件中的代码。
-- 在模块以依赖的方式被安装，如果存在`bin`选项。在`node_modules/.bin/`生成对应的文件， `Npm`会寻找这个文件，在node_modules/.bin/目录下建立符号链接。由于node_modules/.bin/目录会在运行时加入系统的PATH变量，因此在运行npm时，就可以不带路径，直接通过命令来调用这些脚本。
-- 所有node_modules/.bin/目录下的命令，都可以用npm run [命令]的格式运行。在命令行下，键入npm run，然后按tab键，就会显示所有可以使用的命令。
+- 在模块以依赖的方式被安装，如果存在`bin`选项。在`node_modules/.bin/`生成对应的文件， `Npm`会寻找这个文件，在`node_modules/.bin/目录`下建立符号链接。由于`node_modules/.bin/目录`会在运行时加入系统的`PATH`变量，因此在运行`npm`时，就可以不带路径，直接通过命令来调用这些脚本。
+- 所有`node_modules/.bin/目录`下的命令，都可以用`npm run [命令]`的格式运行。在命令行下，键入`npm run`，然后按`tab`键，就会显示所有可以使用的命令。
 
 ## 十三、man字段
 
@@ -205,9 +205,9 @@
   }
   ```
 
-## 十六、scripts字段
+## 十六、`scripts`字段
 
-- `scripts`指定了运行脚本命令的npm命令行缩写，比如start指定了运行npm run start时，所要执行的命令。
+- `scripts`指定了运行脚本命令的`npm`命令行缩写，比如`start`指定了运行`npm run start`时，所要执行的命令。
 
   ```
   "scripts": {
@@ -229,7 +229,7 @@
   // npx webpack
   ```
 
-## 十七、config字段
+## 十七、`config`字段
 
 - `config`字段用于添加命令行的环境变量。
 
@@ -253,39 +253,39 @@
   npm config set yindong:port 8000
   ```
 
-## 十八、dependencies字段, devDependencies字段
+## 十八、`dependencies`字段, `devDependencies`字段
 
-#### **1、走出 “dev” 的误区**
+#### **1、走出 “`dev`” 的误区**
 
 - 关于 “`devDependencies` 和 `dependencies` 有什么区别？” 这样的问题，我们随便百度一下都能出来很多个答案，其中**最广为流传的说法**大概就是：“ `devDependencies` 是开发环境下需要用到的依赖， `dependencies` 是生产环境下需要用到的依赖” 这样的话术，这也就是很容易让人走进误区的开端。至于为什么这么说，我们接着往下看。
 
-**（1）devDependencies 的 dev 理解误区**
+**（1）`devDependencies` 的 `dev` 理解误区**
 
 - 存在即合理，即然这是个容易让人产生误区的话术，为什么它是搜索引擎中最容易搜索到的答案呢？其实，从某种角度来看，这个说法并没有什么毛病，只是很容易让人走进误区。如果没有实践中体会过他们的区别，就**很难真正的理解这句话**，这也是让我们掉进误区的原因。
 
 - 其中最大的误区便是对 “`dev`” 的理解。这么说可能不够清晰，把它转述成一个问题：
 
-  - 安装在 `devDependencies` 中的依赖，在项目执行 `build` 的时候会不会被打包进 **dist** 产物中
+  - 安装在 `devDependencies` 中的依赖，在项目执行 `build` 的时候会不会被打包进 **`dist`** 产物中
 
-  - 针对这个问题，我们从正常的项目打包流程分析（不管是 webpack 还是 vite，打包的核心步骤都类似），**这里从最简化的进行分析，只为了针对上述问题。**
+  - 针对这个问题，我们从正常的项目打包流程分析（不管是 `webpack` 还是 `vite`，打包的核心步骤都类似），**这里从最简化的进行分析，只为了针对上述问题。**
 
     - 初始化配置
     - **项目入口**
     - **依赖解析**
-    - loader处理
+    - `loader`处理
     - ... ...
 
-  - 看到这样的打包流程（集中关注**第2、3**步），大家应该也意识到一点：**项目打包跟 `devDependencies` 这个字段并没什么关系**。这样一来，上述问题的答案也就很清晰了。**只要是项目中用到的依赖（且安装到 `node_modules` 中），不管这个依赖是放在 `devDependencies` 还是放在 `dependencies` ，都会被打包工具解析、构建，最后都打进 dist 产物中。**
+  - 看到这样的打包流程（集中关注**第2、3**步），大家应该也意识到一点：**项目打包跟 `devDependencies` 这个字段并没什么关系**。这样一来，上述问题的答案也就很清晰了。**只要是项目中用到的依赖（且安装到 `node_modules` 中），不管这个依赖是放在 `devDependencies` 还是放在 `dependencies` ，都会被打包工具解析、构建，最后都打进 `dist` 产物中。**
 
     
 
-- 总结：**生产打包 与 `devDependencies` 字段无关**。`devDependencies` 中的 `dev` **并不是**指我们 dev server 时候的 `dev` ，不能简单的把 dev 理解成当前项目的 “开发环境” 。接着往下，我们通过真实的装包来验证一下这个结论。
+- 总结：**生产打包 与 `devDependencies` 字段无关**。`devDependencies` 中的 `dev` **并不是**指我们 `dev server` 时候的 `dev` ，不能简单的把 `dev` 理解成当前项目的 “开发环境” 。接着往下，我们通过真实的装包来验证一下这个结论。
 
-**（2）验证devDependencies**
+**（2）验证`devDependencies`**
 
 
 
-- 随便用vue-cli生成一个vue2项目，目录如下。
+- 随便用`vue-cli`生成一个`vue2`项目，目录如下。
 
   ![package1](.\images\package1.png)
 
@@ -293,65 +293,65 @@
 
   ![package2](.\images\package2.png)
 
-  - 可以看到，目前的vue是放在`dependencies` 字段中。
+  - 可以看到，目前的`vue`是放在`dependencies` 字段中。
 
-- `install` 一下依赖，然后到 `node_modules` 中找到 vue 的依赖包，并且找到对应的入口文件。
+- `install` 一下依赖，然后到 `node_modules` 中找到 `vue` 的依赖包，并且找到对应的入口文件。
 
   ![package3](.\images\package3.png)
 
-- 在 vue.runtime.esm.js 中，加入一行代码。看看打包后的情况如何。
+- 在 `vue.runtime.esm.js` 中，加入一行代码。看看打包后的情况如何。
 
   ![package4](.\images\package4.png)
 
-- 执行 `build`。并对 dist 文件夹搜索。
+- 执行 `build`。并对 `dist` 文件夹搜索。
 
   ![package5](.\images\package5.png)
 
-  - 没有意外，vue2 的包给打进了该项目的 dist 包中。
+  - 没有意外，`vue2` 的包给打进了该项目的 `dist` 包中。
 
-- 接下来，把 vue 的依赖信息移动到**devDependencies**中，然后删除掉之前的 `node_modules` 目录后重新执行 `install` ，结果如图所示。
+- 接下来，把 `vue` 的依赖信息移动到**`devDependencie`s**中，然后删除掉之前的 `node_modules` 目录后重新执行 `install` ，结果如图所示。
 
   ![package6](.\images\package6.png)
 
   ![package7](.\images\package7.png)
 
-- 这时，再重复上述步骤 3、4、5 ，对 vue2 项目进行打包，再去 dist目录中**搜索**手动添加到 vue2 源码中的 `console.log` ，结果如图所示。
+- 这时，再重复上述步骤 3、4、5 ，对 `vue2` 项目进行打包，再去 `dist`目录中**搜索**手动添加到 `vue2` 源码中的 `console.log` ，结果如图所示。
 
   ![package8](.\images\package8.png)
 
-- **结果就是，放在 `devDependencies` 的 vue2 在 build 时候（mode 为 production）依然会被打包进单页应用的项目中。所以，通过这个实践，就为了搞清楚一个点，`devDependencies` 的 dev 并不是指我们在业务项目开发中的 dev 和 prod，它甚至跟打包时候的 `mode` 扯不上关系。**
+- **结果就是，放在 `devDependencies` 的 `vue2` 在 `build` 时候（`mode` 为 `production`）依然会被打包进单页应用的项目中。所以，通过这个实践，就为了搞清楚一个点，`devDependencies` 的 `dev` 并不是指我们在业务项目开发中的 `dev` 和 `prod`，它甚至跟打包时候的 `mode` 扯不上关系。**
 
-#### 2、『npm包』的 devDependencies
+#### 2、『`npm`包』的 `devDependencies`
 
-- 其实`devDependencies` 这个字段的 **dev** 的真正含义，更多是指 **npm包** 的开发阶段所需要的依赖。
+- 其实`devDependencies` 这个字段的 **`dev`** 的真正含义，更多是指 **`npm`包** 的开发阶段所需要的依赖。
 
-**（1）npm包的dev**
+**（1）`npm`包的`dev`**
 
-- 怎么理解前面提到的 npm包 开发阶段所需要的依赖？我们大概回忆一下npm包从 开发 - 发包 的流程。
+- 怎么理解前面提到的 `npm`包 开发阶段所需要的依赖？我们大概回忆一下`npm`包从 开发 - 发包 的流程。
 
-  - npm**初始化**——`package.json`。想要开发一个 npm包，最先一定是要进行初始化，执行命令 `npm init`，然后填写一些信息比如 name 、 version 、 description ...此时便会生成一个 `pakcage.json` 文件。
-  - npm包的**开发**。这个阶段，也就是对 npm包 功能实现的阶段，我们会开始编写代码。然而，我们在编写npm包的时候，可能需要用到其他的库，这个时候我们就需要去**安装其他的库**。
-  - npm包的**打包、发布**。npm包开发完成后，当然就是要对我们的项目进行打包，然后通过 `npm publish` 命令去发布我们的npm包。
+  - `npm`**初始化**——`package.json`。想要开发一个 `npm`包，最先一定是要进行初始化，执行命令 `npm init`，然后填写一些信息比如 name 、 version 、 description ...此时便会生成一个 `pakcage.json` 文件。
+  - `npm`包的**开发**。这个阶段，也就是对 `npm`包 功能实现的阶段，我们会开始编写代码。然而，我们在编写`npm`包的时候，可能需要用到其他的库，这个时候我们就需要去**安装其他的库**。
+  - `npm`包的**打包、发布**。`npm`包开发完成后，当然就是要对我们的项目进行打包，然后通过 `npm publish` 命令去发布我们的`npm`包。
 
-- 整个 npm包的实现 大概就是这么一个流程。其中第二点，笔者提到了：**如果开发过程中需要用到其他的工具库，就要把依赖安装到当前项目里**！这就涉及到本文的重点了，要怎么安装呢？-D、还是-S？不同的命令会带来怎么样不同的后果呢？
+- 整个 `npm`包的实现 大概就是这么一个流程。其中第二点，笔者提到了：**如果开发过程中需要用到其他的工具库，就要把依赖安装到当前项目里**！这就涉及到本文的重点了，要怎么安装呢？`-D`、还是`-S`？不同的命令会带来怎么样不同的后果呢？
 
 - 现在，我们来通过一个具体案例来探讨这个问题的答案。
 
-  - 场景描述：现在要开发一个基于 element-plus 的二次封装的组件库，所以在开发调试阶段，需要安装 `vue3` 、 `element-plus` ... 等等依赖，以辅助我们开发组件。
+  - 场景描述：现在要开发一个基于 `element-plus` 的二次封装的组件库，所以在开发调试阶段，需要安装 `vue3` 、 `element-plus` ... 等等依赖，以辅助我们开发组件。
 
   - 对比实验：
 
-    - 将 `vue3` 、 `element-plus` 都放在组件库package.json的 `devDependencies` 中，然后将组件库发包（vc-element-plus）。最后，在业务项目中安装该组件库，看依赖情况。
+    - 将 `vue3` 、 `element-plus` 都放在组件库`package.json`的 `devDependencies` 中，然后将组件库发包（`vc-element-plus`）。最后，在业务项目中安装该组件库，看依赖情况。
 
       ![package9](.\images\package9.png)
 
-    - 将 `vue3` 放在组件库package.json的 `devDependencies` 中，`element-plus` 放在组件库package.json的 `dependencies` 中，然后将组件库发包。最后，在业务项目中安装该组件库，看依赖情况。
+    - 将 `vue3` 放在组件库`package.json`的 `devDependencies` 中，`element-plus` 放在组件库`package.json`的 `dependencies` 中，然后将组件库发包。最后，在业务项目中安装该组件库，看依赖情况。
 
       ![package10](.\images\package10.png)
 
 **（2）对比实验1**
 
-- 首先在业务项目中安装组件库 vc-element-plus。依赖如下图：
+- 首先在业务项目中安装组件库 `vc-element-plus`。依赖如下图：
 
   ![package11](.\images\package11.png)
 
@@ -359,7 +359,7 @@
 
     ![package12](.\images\package12.png)
 
-- 看下安装的 vc-element-plus 内部的依赖安装情况。如图：
+- 看下安装的 `vc-element-plus` 内部的依赖安装情况。如图：
 
   ![package13](.\images\package13.png)
 
@@ -380,24 +380,24 @@
   }
   ```
 
-  - 根据步骤2中的图可以清晰看出，放在 `dependencies` 字段中的三个依赖包：`@element-plus/icons-vue` 、 `@xxx/vc-shared` 、 `lodash` 都被安装到组件库的 node_modules 中，而组件库位于**当前的业务项目**的 node_modules 中。换句话说，业务项目中拥有了组件库 `dependencies` 中的依赖包。
+  - 根据步骤2中的图可以清晰看出，放在 `dependencies` 字段中的三个依赖包：`@element-plus/icons-vue` 、 `@xxx/vc-shared` 、 `lodash` 都被安装到组件库的 `node_modules` 中，而组件库位于**当前的业务项目**的 `node_modules` 中。换句话说，业务项目中拥有了组件库 `dependencies` 中的依赖包。
   - 猜想，实验2中，`element-plus` 将被装到组件库的内部依赖中。紧接着，我们进行实验2验证一下猜想。
 
 **（3）对比实验2**
 
-- 首先在业务项目中安装组件库 vc-element-plus（版本号对比**实验1**已经不同）。依赖如下图：
+- 首先在业务项目中安装组件库 `vc-element-plus`（版本号对比**实验1**已经不同）。依赖如下图：
 
   ![package14](.\images\package14.png)
 
-  - 同样的，删除node_module后进行装包，操作如下：
+  - 同样的，删除`node_module`后进行装包，操作如下：
 
     ![package15](.\images\package15.png)
 
-- 看下安装的 vc-element-plus 内部的依赖安装情况。如图：
+- 看下安装的 `vc-element-plus` 内部的依赖安装情况。如图：
 
   ![package16](.\images\package16.png)
 
-  - ok，这样一对比，应该就很清晰了。很明显，实验2中安装了4个依赖，其中多出来的就是我们实验二中放进 `dependencies` 中 `element-plus`。（注意，`@element-plus`是图标那些的，跟`element-plus`不是同一个依赖源）。再次回顾 `dependencies` 字段验证一下：
+  - `ok`，这样一对比，应该就很清晰了。很明显，实验2中安装了4个依赖，其中多出来的就是我们实验二中放进 `dependencies` 中 `element-plus`。（注意，`@element-plus`是图标那些的，跟`element-plus`不是同一个依赖源）。再次回顾 `dependencies` 字段验证一下：
 
     ```
     "dependencies": {
@@ -422,24 +422,24 @@
 - 结论：`devDependencies` 和 `dependencies`的区别核心体现在 **`npm`包** 中。只要开发的项目是**发`npm`包**提供给外部、其他业务项目使用的，需要非常注意依赖的安装地方，因为搞不好很容易在业务使用中会出现bug。而如果只是自己项目用，**不需要发`npm`包**的话，把依赖安装到 `devDependencies` 或者 `dependencies` 中，实质上是没有任何区别的。
 - 为什么在开发 `npm`包 的时候 不严格区分 `devDependencies` 、 `dependencies` 进行装包可能会导致业务项目的使用中出现bug呢？笔者举一个例子来加深理解：
 
-  - 假设npm包开发者不小心把 vue3 的依赖写到了 `dependencies` 中（用于开发调试的），版本是 `3.0.36`。
-  - 业务项目自身用了 `vue@3.0.0` 的情况下，安装了这个 npm包 ，由于 npm包 中的 `dependencies` 有 `vue@3.0.36` 这个依赖，此时会在装 npm包 的同时安装36版本的vue。
-  - 由于 npm包中会用到vue，代码是这样引入的：`import { onMount } from 'vue'`，此时，npm包会在自己内部的 `node_modules` 中找到 `vue@3.0.36` 的包并使用，此时就会产生 2 个 vue3 实例，就很容易出现一些奇怪的bug。（业务项目的`vue@3.0.0` 和 npm包的`vue@3.0.36`）
-  - 业务引用vue3，那么业务代码根目录下的node_module就会装vue3的包（ 根目录/node_modules/vue3），然后业务侧npm包依赖vue2并且写在dependencies中的话，就会在这个npm包的node_modules目录下装vue2包（根目录/node_modules/依赖的npm包/node_modules/vue2），所以就有2个版本的vue了，之所以这个依赖的npm包内import { xxx api } from vue 找不到是因为全局只有一个vue实例，也就是业务侧main.js里create-app出来的Vue3实例，依赖的那个npm包都没有Vue实例创建的的代码，自然用的是Vue3实例，找不到Vue2 api。
-- **这里还要注意一点就是 `externals`** 。有同学可能会说，npm包打包的时候会 `externals` 掉第三方的库，比如上述中的 vue3 ，`externals` 只是保证 vue3 的代码不打包进 npm包 的代码中而已。
-- **`npm install/i  packageName  -S/--save `表示将该模块写入dependencies属性，`npm install/i packageName -D/--save-dev` 表示将该模块写入devDependencies属性。**
+  - 假设`npm`包开发者不小心把 `vue3` 的依赖写到了 `dependencies` 中（用于开发调试的），版本是 `3.0.36`。
+  - 业务项目自身用了 `vue@3.0.0` 的情况下，安装了这个 `npm`包 ，由于 `npm`包 中的 `dependencies` 有 `vue@3.0.36` 这个依赖，此时会在装 `npm`包 的同时安装36版本的`vue`。
+  - 由于 `npm`包中会用到`vue`，代码是这样引入的：`import { onMount } from 'vue'`，此时，`npm`包会在自己内部的 `node_modules` 中找到 `vue@3.0.36` 的包并使用，此时就会产生 2 个 `vue3` 实例，就很容易出现一些奇怪的`bug`。（业务项目的`vue@3.0.0` 和 `npm`包的`vue@3.0.36`）
+  - 业务引用`vue3`，那么业务代码根目录下的`node_module`就会装`vue3`的包（ `根目录/node_modules/vue3`），然后业务侧`npm`包依赖`vue2`并且写在`dependencies`中的话，就会在这个`npm`包的`node_modules`目录下装`vue2`包（`根目录/node_modules/依赖的npm包/node_modules/vue2`），所以就有2个版本的`vue`了，之所以这个依赖的`npm`包内**`import { xxx api } from vue`** 找不到是因为全局只有一个`vue`实例，也就是业务侧`main.js`里`create-app`出来的`Vue3`实例，依赖的那个`npm`包都没有`Vue`实例创建的的代码，自然用的是`Vue3`实例，找不到`Vue2 api`。
+- **这里还要注意一点就是 `externals`** 。有同学可能会说，`npm`包打包的时候会 `externals` 掉第三方的库，比如上述中的 `vue3` ，`externals` 只是保证 `vue3` 的代码不打包进 `npm`包 的代码中而已。
+- **`npm install/i  packageName  -S/--save `表示将该模块写入`dependencies`属性，`npm install/i packageName -D/--save-dev` 表示将该模块写入`devDependencies`属性。**
 
 ## 十九、`peerDependencies`字段
 
 - 当我们开发一个模块的时候，如果当前模块与所依赖的模块同时依赖一个第三方模块，并且依赖的是两个不兼容的版本时就会出现问题。
 
-- 比如，你的项目依赖A模块和B模块的1.0版，而A模块本身又依赖B模块的2.0版。
+- 比如，你的项目依赖`A`模块和`B`模块的1.0版，而`A`模块本身又依赖`B`模块的2.0版。
 
-- 大多数情况下，这不构成问题，B模块的两个版本可以并存，同时运行。但是，有一种情况，会出现问题，就是这种依赖关系将暴露给用户。
+- 大多数情况下，这不构成问题，`B`模块的两个版本可以并存，同时运行。但是，有一种情况，会出现问题，就是这种依赖关系将暴露给用户。
 
-- 最典型的场景就是插件，比如A模块是B模块的插件。用户安装的B模块是1.0版本，但是A插件只能和2.0版本的B模块一起使用。这时，用户要是将1.0版本的B的实例传给A，就会出现问题。因此，需要一种机制，在模板安装的时候提醒用户，如果A和B一起安装，那么B必须是2.0模块。
+- 最典型的场景就是插件，比如`A`模块是`B`模块的插件。用户安装的`B`模块是1.0版本，但是`A`插件只能和2.0版本的`B`模块一起使用。这时，用户要是将1.0版本的`B`的实例传给`A`，就会出现问题。因此，需要一种机制，在模板安装的时候提醒用户，如果`A`和`B`一起安装，那么`B`必须是2.0模块。
 
-- `peerDependencies`字段，就是用来供插件指定其所需要的主工具的版本。可以通过`peerDependencies`字段来限制，使用myless模块必须依赖less模块的3.9.x版本。
+- `peerDependencies`字段，就是用来供插件指定其所需要的主工具的版本。可以通过`peerDependencies`字段来限制，使用`myless`模块必须依赖`less`模块的`3.9.x`版本。
 
   ```
   {
@@ -450,13 +450,13 @@
   }
   ```
 
-- 注意，从npm 3.0版开始，`peerDependencies`不再会默认安装了。就是初始化的时候不会默认带出。
+- 注意，从`npm 3.0`版开始，`peerDependencies`不再会默认安装了。就是初始化的时候不会默认带出。
 
-## 二十、bundledDependencies字段
+## 二十、`bundledDependencies`字段
 
 - `bundledDependencies`指定发布的时候会被一起打包的模块。
 
-## 二十一、optionalDependencies字段
+## 二十一、`optionalDependencies`字段
 
 - 如果一个依赖模块可以被使用， 同时你也希望在该模块找不到或无法获取时`npm`继续运行，你可以把这个模块依赖放到`optionalDependencies`配置中。这个配置的写法和`dependencies`的写法一样，不同的是这里边写的模块安装失败不会导致`npm install`失败。
 

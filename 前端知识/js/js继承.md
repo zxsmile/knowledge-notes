@@ -168,11 +168,12 @@
 
 * **原理：原型链可以继承原型对象的属性和方法，构造函数可以继承实例的属性且可以给父类传参**
 	
-		 function Person(name){
-		 	this.name = name
-		 	 	this.colors = ["red", "blue", "green"]
-		}
+		 
 		
+		function Person(name){
+			this.name = name
+			this.colors = ["red", "blue", "green"]
+		}
 		Person.prototype.sayName=function(){
 			console.log(this.name)
 		}
@@ -392,15 +393,16 @@ console.log(per.age) //18
 
 - 在`ES6`中，类继承通过`extends`关键字实现，子类可以继承父类的属性和方法，并且可以使用`super`关键字来调用父类的构造函数和方法。
 
-				class Parent {
-		  constructor(name) {
-		    this.name = name;
-		  }
-		  getName() {
-		    return this.name;
-		  }
-		}
-		
+				
+		class Parent {
+			  constructor(name) {
+			    this.name = name;
+			  }
+			  getName() {
+			    return this.name;
+			  }
+			}
+			
 		class Child extends Parent {
 		  constructor(name) {//继承父类属性
 		    super(name);//super里不传参数的话就是把父类里的属性都继承过来
