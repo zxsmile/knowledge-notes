@@ -8,7 +8,7 @@
 
 ### 2、编译兼容 ###
 
-- Javascript、CSS 的语法规范在不断更新，比如Less、Sass、ES6、TypeScript，但是浏览器的兼容性却不能同步的更新即这些新语法不能直接被浏览器识别，webpack 使用 loader 对文件进行预处理。通过预处理器将 TypeScript 编译成 JavaScript、SCSS 编译成 CSS、ES6 编译成 ES5 等。
+- Javascript、CSS 的语法规范在不断更新，比如Less、Sass、ES6、TypeScript，但是浏览器的兼容性却不能同步的更新，即这些新语法不能直接被浏览器识别，webpack 使用 loader 对文件进行预处理。通过预处理器将 TypeScript 编译成 JavaScript、SCSS 编译成 CSS、ES6 编译成 ES5 等。
 
 ### 3、主流框架脚手架 ###
 
@@ -26,8 +26,8 @@
 # 二、webpack概念 #
 
    - **webpack是一种前端资源构建工具，一个静态模块打包器。**
-   - ![webpack1](..\images\webpack1.png)
 
+     ![webpack1](..\images\webpack1.png)
 - 在图中我们可以看到，webpack 将左侧错综复杂的各自不同类型文件的模板依赖关系，包括 .js、.hbs、.cjs、.sass、.jpg、.png 等类型文件，打包成 .js、.css、.jpg、.png 4 种类型的静态资源。
 - **这个过程核心完成了 内容转换 + 资源合并 两种功能，实现上包含三个阶段：初始化阶段、构建阶段、生成阶段。**
 
@@ -37,13 +37,13 @@
 
 **初始化参数**：从配置⽂件和 Shell 语句中读取与合并参数，得出最终的参数； 
 
-**开始编译**：用上一步得到的参数初始化compiler对象，注册所有配置的插件，插件监听webpack构建生命周期的事件节点，做出相应的反应，执行对象的 run 方法开始执行编译。
+**开始编译**：用上一步得到的参数初始化compiler对象，注册所有配置的插件（**plugin**），插件监听webpack构建生命周期的事件节点，做出相应的反应，执行compiler对象的 run 方法开始执行编译。
 
 **确定入口**：根据配置中的 `entry` 找出所有的入口文件；
 
 ### 2、构建阶段：
 
-**编译模块(make)**：从⼊⼝⽂件出发，调⽤所有配置的 Loader 将模块转译为标准 JS 内容，调用 JS 解释器将内容转换为 AST 对象，再找出该模块依赖的模块，再 递归本步骤直到所有入口依赖的文件都经过了本步骤的处理
+**编译模块(make)**：从⼊⼝⽂件出发，调⽤所有配置的 Loader 将模块转译为标准 JS 内容，调用 JS 解释器将内容转换为 AST 对象，再找出该模块依赖的模块，再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理
 
 **完成模块编译**：上一步使⽤ Loader 递归翻译完所有能触达到的模块后，得到了每个模块被翻译后的内容以及它们之间的 **依赖关系图**
 
@@ -59,7 +59,7 @@
 
 **`Entry`：**编译入口，webpack 编译的起点
 
-**`Compiler`：**编译管理器，webpack 启动后会创建 `compiler` 对象，该对象一直存活知道结束退出
+**`Compiler`：**编译管理器，webpack 启动后会创建 `compiler` 对象，该对象一直存活直到结束退出
 
 **`Compilation`：**单次编辑过程的管理器，比如 `watch = true` 时，运行过程中只有一个 `compiler` 但每次文件变更触发重新编译时，都会创建一个新的 `compilation` 对象
 
@@ -72,6 +72,18 @@
 **`Loader`：**资源内容转换器，其实就是实现从内容 A 转换 B 的转换器
 
 **`Plugin`：**webpack构建过程中，会在特定的时机广播对应的事件，插件监听这些事件，在特定时间点介入编译过程
+
+### 4、从资源转换角度看
+
+- `compiler.make`阶段
+  - `entry` 文件以 `dependence` 对象形式加入 `compilation` 的依赖列表 ，`dependence` 对象记录了 `entry` 的相关信息
+  - 根据 `dependency` 创建 对应的`module` 对象，之后读入 `module` 对应的文件内容， 调用 `loader-runner`对内容做转化， 转化结果若有对其他依赖则继续读入依赖资源， 重复此过程直到所有的依赖均被转换为 `module`
+- `compilation.seal` 阶段
+  - 遍历 `module` 集合， 根据 `entry`配置以及引入资源的方式， 将 `module` 分配到不同的 `Chunk`
+  - `Chunk`之间最终形成`ChunkGraph`结构
+  - 遍历`ChunkGraph` 调用 `compilation.emitAssets` 方法标记 `chunk` 的输出规则， 及转换为 `assets`集合
+- `compiler.emitAssets`阶段
+  - 将 `assets`写入文件系统
 
 # 四、构建过程详解
 
@@ -345,7 +357,7 @@ OK，上面已经把逻辑层面的构造主流程梳理完了，这里结合**�
 `compilation.seal` 阶段：
 
 - 遍历 `module` 集合，根据 `entry` 配置及引入资源的方式，将 `module` 分配到不同的 `chunk`
-- 遍历 `chunk` 集合，调用 `compilation.emitAsset` 方法标记 `chunk` 的输出规则，即转化为 `assets` 集合
+- 遍历 `chunk` 集合，调用 `compilation.emitAsset` 方法标记 `chunk` 的输出规则，即转化为 【集合
 
 `compiler.emitAssets` 阶段：
 
@@ -561,15 +573,15 @@ Loader 的作用和实现比较简单，容易理解，所以简单介绍一下�
 
 - module模块就是我们编写的代码文件，比如JavaScript文件、CSS文件、Image文件、Font文件等等，它们都是属于module模块。而module模块的一个特点，就是可以被引入使用。
 
-  #### 2.chunk ####
+#### 2.chunk ####
 
 - chunk是webpack打包过程的中间产物，webpack会根据文件的引入关系生成chunk，也就是说一个chunk是由一个module或多个module组成的，这取决于有没有引入其他的module。
 
-  #### 3.bundle ####
+#### 3.bundle ####
 
-- bundle其实是webpack的最终产物，通常来说，一个bundle对应这一个chunk也有可能是多个chunk的集合。
+- bundle其实是webpack的最终产物，通常来说，一个bundle对应着一个chunk也有可能是多个chunk的集合。
 
-  #### 4.总结 ####
+#### 4.总结 ####
 
  - 其实module、chunk和bundle可以说是同一份代码在不同转换场景的不同名称：
 
