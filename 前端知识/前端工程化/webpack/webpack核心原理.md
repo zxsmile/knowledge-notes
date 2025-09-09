@@ -2,7 +2,33 @@
 
    ### 1、模块化开发 ###
 
-- 在没有各个 webpack 搭建的脚手架（create-react-app、vue-cli 等等）之前，我们通过在 HTML5 文件里引入一个个 Javascript 文件来进行开发，这就可能导致并行请求数量过多、存在重复代码等问题。而通过 webpack，我们可以使用 import、require 来进行模块化开发。
+- 在没有各个 webpack 搭建的脚手架（create-react-app、vue-cli 等等）之前，我们通过在 HTML5 文件里引入一个个 Javascript 文件来进行开发
+
+  ```
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="utf-8" />
+      <script src="https://unpkg.com/jquery@3.5.1"></script>
+      <script src="https://unpkg.com/lodash@4.17.20"></script>
+      <script src="./src/index.js"></script>
+    </head>
+    <body>
+    </body>
+  </html>
+  ```
+
+- 这样写会导致几个问题：
+
+  - **单独看`index.js`不能清晰的找到他到底依赖哪些外部库**
+  - **`script`的顺序必须写正确，如果错了就会导致找不到依赖，直接报错**
+  - **模块间通信困难，基本都靠往`window`上注入变量来暴露给外部**
+  - **浏览器严格按照`script`标签来下载代码，有些没用到的代码也会下载下来**
+  - **当前端规模变大，JS脚本会显得很杂乱，项目管理混乱**
+
+- `webpack`的一个最基本的功能就是来解决上述的情况，允许在JS里面通过 import、require等关键字来显式申明依赖，可以引用第三方库，自己的JS代码间也可以相互引用，这样在实质上就实现了前端代码的模块化。由于历史问题，老版的JS并没有自己模块管理方案，所以社区提出了很多模块管理方案，比如`ES2015`的`import`，`CommonJS`的`require`，另外还有`AMD`，`CMD`等等。就目前我见到的情况来说，`import`因为已经成为`ES2015`标准，所以在客户端广泛使用，而`require`是`Node.js`的自带模块管理机制，也有很广泛的用途，而`AMD`和`CMD`的使用已经很少见了。
+
+- `webpack`作为一个开放的模块化工具，他是支持`ES6`，`CommonJS`和`AMD`等多种标准的，不同的模块化标准有不同的解析方法。
 
 - 在 webpack 中一切皆模块，js、css、图片、字体都是模块，而且支持静态解析、按需打包、动态加载、代码分离等功能，帮助我们优化代码，提升性能。
 
@@ -49,7 +75,7 @@
 
 ### 3、生成阶段：
 
-**输出资源(seal)**：根据入口和模块之间的依赖关系，组装成一个个包含多个模块的 `Chunk`，再把每个 `Chunk` 转换成一个单独的文件加入到输出列表，这步是可以修改输出内容的最后机会
+**输出资源(seal)**：根据入口和模块之间的依赖关系，生成一个个包含多个模块的 `Chunk`，再把每个 `Chunk` 转换成一个单独的文件加入到输出列表，这步是可以修改输出内容的最后机会
 
 **输出完成 / 写入文件系统(emitAssets)**：在确定好输出内容后，根据配置确定输出的路径和文件名，把文件内容写入到文件系统
 
@@ -73,7 +99,17 @@
 
 **`Plugin`：**webpack构建过程中，会在特定的时机广播对应的事件，插件监听这些事件，在特定时间点介入编译过程
 
-### 4、从资源转换角度看
+### 4、流程简化
+
+**初始化阶段**： 合并计算配置参数，创建`Compiler`、`Compilation`等基础对象，并初始化**Plugin**，并最终根据`entry`配置，找到所有入口模块
+
+**构建模块**： 从`entry`开始，调用`loader`转译对应的模块，调用 `Acorn`将代码转换为`AST`结构， 遍历`AST`从中 构建出完整的模块依赖关系图（递归操作）
+
+**生成阶段**： 根据`entry`配置，根据模块生成一个个`chunk`对象，之后转译`Chunk`代码并封装为`Asset`， 最后写出到文件系统
+
+> 单次构建过程**自上而下**按顺序执行 如果启动了`watch` 则构建完成后不会退出webpack进程 而是持续监听文件内容 发生变化时回到构建阶段重新执行构建
+
+### 5、从资源转换角度看
 
 - `compiler.make`阶段
   - `entry` 文件以 `dependence` 对象形式加入 `compilation` 的依赖列表 ，`dependence` 对象记录了 `entry` 的相关信息
@@ -162,16 +198,24 @@ Webpack 架构很灵活，但代价是牺牲了源码的直观性，比如说上
 解释一下，构建阶段从入口文件开始：
 
 - 调用 `handleModuleCreate` ，根据文件类型构建 `module` 子类
+
 - 调用 loader-runner 仓库的 `runLoaders` 转译 `module` 内容，通常是从各类资源类型转译为 JavaScript 文本
+
 - 调用 acorn 将 JS 文本解析为AST
+
+  > acorn是一个轻量级、高性能的JavaScript解析器库，它完全由JavaScript编写，能够快速地将源代码解析为抽象语法树（AST）。
+
 - 遍历 AST，触发各种钩子
   - 在 `HarmonyExportDependencyParserPlugin` 插件监听 `exportImportSpecifier` 钩子，解读 JS 文本对应的资源依赖
   - 调用 `module` 对象的 `addDependency` 将依赖对象加入到 `module` 依赖列表中
+  
 - AST 遍历完毕后，调用 `module.handleParseResult` 处理模块依赖
+
 - 对于 `module` 新增的依赖，调用 `handleModuleCreate` ，控制流回到第一步
+
 - 所有依赖都解析完毕后，构建阶段结束
 
-这个过程中数据流 `module => ast => dependences => module` ，先转 AST 再从 AST 找依赖。这就要求 `loaders` 处理完的最后结果必须是可以被 acorn 处理的标准 JavaScript 语法，比如说对于图片，需要从图像二进制转换成类似于 `export default "data:image/png;base64,xxx"` 这类 base64 格式或者 `export default "http://xxx"` 这类 url 格式。
+这个过程中数据流 `module => ast => dependences => module` ，**先转 AST 再从 AST 找依赖。这就要求 `loaders` 处理完的最后结果必须是可以被 acorn 处理的标准 JavaScript 语法**，比如说对于图片，需要从图像二进制转换成类似于 `export default "data:image/png;base64,xxx"` 这类 base64 格式或者 `export default "http://xxx"` 这类 url 格式。
 
 `compilation` 按这个流程递归处理，逐步解析出每个模块的内容以及 `module` 依赖关系，后续就可以根据这些内容打包输出。
 
