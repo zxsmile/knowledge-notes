@@ -1,17 +1,11 @@
----
-title: IP地址
-date: 2019-05-13 17:44:23
-tags:
-cover: /images/psb13.jpg
----
 **1. MAC地址**
 1
 &nbsp;&nbsp;&nbsp;&nbsp;MAC（Media Access Control，介质访问控制）地址，或称为物理地址，也叫硬件地址，用来定义网络设备的位置，MAC地址是网卡出厂时设定的，是固定的（但可以通过在设备管理器中或注册表等方式修改，同一网段内的MAC地址必须唯一）。MAC地址采用十六进制数表示，长度是6个字节（48位），分为前24位和后24位。   
+
 <table><tr><td bgcolor=#FAEBD7  align="left" > 1.前24位叫做组织唯一标志符（Organizationally Unique Identifier，即OUI），是由IEEE的注册管理机构给不同厂家分配的代码，区分了不同的厂家。<br/>
 2.后24位是由厂家自己分配的，称为扩展标识符。同一个厂家生产的网卡中MAC地址后24位是不同的。</td></tr></table>
 MAC地址对应于OSI参考模型的第二层数据链路层，工作在数据链路层的交换机维护着计算机MAC地址和自身端口的数据库，交换机根据收到的数据帧中的“目的MAC地址”字段来转发数据帧。
 <hr/>
-
 **2. IP地址**
 
 &nbsp;&nbsp;&nbsp;&nbsp;(1)介绍
@@ -58,7 +52,7 @@ IP地址对应于OSI参考模型的第三层网络层，工作在网络层的路
    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C类网络最大主机数量256-2=254。
 
 &nbsp;&nbsp;&nbsp;&nbsp;④ D类地址
-  
+
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D类地址不分网络地址和主机地址，它的第1个字节的最高位固定是1110。
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D类地址用于组播（也称为多播）的地址，无子网掩码。
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D类地址范围：224.0.0.0 - 239.255.255.255。
@@ -100,12 +94,11 @@ IP地址对应于OSI参考模型的第三层网络层，工作在网络层的路
 ![](ip7.png)
 
 <hr/>
-
 **3.子网掩码**
 
  <table><tr><td bgcolor=#FAEBD7  align="left" > IP地址是以网络号和主机号来标示网络上的主机的，我们把网络号相同的主机称之为本地网络，网络号不相同的主机称之为远程网络主机，本地网络中的主机可以直接相互通信；远程网络中的主机要相互通信必须通过本地网关（Gateway）来传递转发数据。</td></tr></table>
    &nbsp;&nbsp;&nbsp;&nbsp; (1)子网掩码的概念及作用
- 
+
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① 子网掩码（Subnet Mask）又叫网络掩码、地址掩码，必须结合IP地址一起对应使用。
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② 只有通过子网掩码，才能表明一台主机所在的子网与其他子网的关系，使网络正常工作。
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ 子网掩码和IP地址做“与”运算，分离出IP地址中的网络地址和主机地址，用于判断该IP地址是在本地网络上，还是在远程网络网上。
@@ -121,20 +114,19 @@ IP地址对应于OSI参考模型的第三层网络层，工作在网络层的路
 &nbsp;&nbsp;&nbsp;&nbsp; (3)子网掩码的表示方法
 
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;① 点分十进制表示法
- 
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;二进制转换十进制，每8位用点号隔开
- 
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例如：子网掩码二进制11111111.11111111.11111111.00000000，表示为255.255.255.0
 
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;② CIDR斜线记法
- 
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IP地址/n
- 
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例1：192.168.1.100/24，其子网掩码表示为255.255.255.0，二进制表示为11111111.11111111.11111111.00000000
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;例2：172.16.198.12/20，其子网掩码表示为255.255.240.0，二进制表示为11111111.11111111.11110000.00000000
 不难发现，例1中共有24个１，例2中共有20个１，所以n是这么来的。运营商ISP常用这样的方法给客户分配IP地址。
  <table><tr><td bgcolor=#FAEBD7  align="left" >注：n为1到32的数字，表示子网掩码中网络号的长度，通过n的个数确定子网的主机数=2^(32-n)-2（-2的原因：主机位全为0时表示本网络的网络地址，主机位全为1时表示本网络的广播地址，这是两个特殊地址）。</td></tr></table>
-
 &nbsp;&nbsp;&nbsp;&nbsp; (4)为什么要使用子网掩码？
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前面说道，子网掩码可以分离出IP地址中的网络地址和主机地址，那为什么要分离呢？因为两台主机要通信，首先要判断是否处于同一网段，即网络地址是否相同。如果相同，那么可以把数据包直接发送到目标主机，否则就需要路由网关将数据包转发送到目的地。
@@ -178,6 +170,5 @@ IP地址对应于OSI参考模型的第三层网络层，工作在网络层的路
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;③ 将得出的结果转化为十进制，便得到网络地址。
 
 <hr/>
-
 
 
