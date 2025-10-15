@@ -1,3 +1,4 @@
+```
   // 判断变量否为function
   const isFunction = variable => typeof variable === 'function'
   // 定义Promise的三种状态常量
@@ -197,3 +198,6 @@
       );
     }
   }
+```
+
+
