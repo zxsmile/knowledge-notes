@@ -1,6 +1,6 @@
 - https://juejin.cn/post/6897934019942744077
 - https://juejin.cn/post/6974293549135167495#heading-22
-#### 一、vue构造函数 ####
+# 一、vue构造函数 #
 
 		import { initMixin } from './init'
 		import { stateMixin } from './state'
@@ -20,7 +20,7 @@
 		renderMixin(Vue)    //定义$nextTick，_render将render函数转为vnode。
 
 
-#### 二、computed 的初始化部分 ####
+# 二、computed 的初始化部分 #
 
 		export function initMixin(Vue) {
 		  Vue.prototype._init = function(options) {
@@ -31,29 +31,31 @@
 
 - computed 的初始化发生在 Vue 实例化（源码：https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue%2Fblob%2Fv2.5.21%2Fsrc%2Fcore%2Finstance%2Finit.js）时执行的 initState 方法.
 
-		// vue/src/core/instance/init.js
-		...
-		export function initMixin (Vue: Class<Component>) {
-		  Vue.prototype._init = function (options?: Object) {
+   
 
+       // vue/src/core/instance/init.js
+       	...
+       export function initMixin (Vue: Class<Component>) {
+        Vue.prototype._init = function (options?: Object) {
             const vm: Component = this
-		    ...
-		    initLifecycle(vm)
-		    initEvents(vm)
-		    initRender(vm)
-		    callHook(vm, 'beforeCreate')
-		    initInjections(vm)
-		    initState(vm) // 初始化 state，包括 data/props/computed/methods/watch
-		    initProvide(vm)
-		    callHook(vm, 'created')
-		    ...
-		  }
-		}
-		...
+           ...
+           initLifecycle(vm)
+           initEvents(vm)
+           initRender(vm)
+           callHook(vm, 'beforeCreate')
+           initInjections(vm)
+           initState(vm) // 初始化 state，包括 data/props/computed/methods/watch
+           initProvide(vm)
+           callHook(vm, 'created')
+           ...
+         }
+       }
+       ...
 
 - 接下来再看一下 initState（源码：https://link.juejin.cn/?target=https%3A%2F%2Fgithub.com%2Fvuejs%2Fvue%2Fblob%2Fv2.5.21%2Fsrc%2Fcore%2Finstance%2Fstate.js）做了什么：
 
-		// vue/src/core/instance/state.js
+		```
+	// vue/src/core/instance/state.js
 		...
 		export function initState (vm: Component) {
 		  vm._watchers = []
@@ -71,65 +73,73 @@
 		  }
 		}
 		...
+	```
+	
+	
 
 
 - 从源码中可以看到，initState 里面执行了一些状态(data/props/methods/computed/watch)相关的初始化操作，然后我们找到 initComputed(源码位置同 initState)，再去看看 computed 的初始化都做了什么。
 
 - 先看下computed的使用：
 
-		<body>
-		    <div id="app" style="color:red;background:green">{{fullName}}</div>
-		    <script src="./dist/vue.js"></script>
-		    <script>
-		        const vm=new Vue({
-		            el:'#app',
-		            data:{
-		                firstName:'zhang',
-		                lastName:'san'
-		            },
-		            computed:{
-                       //函数
-		                fullName(){
-		                    console.log('get')
-		                    return this.firstName+this.lastName;
-		                }
- 
-                        //对象
+   
 
-		                fullName:{
-		                   get(){
-		                        console.log('get')
-		                       return this.firstName+this.lastName;
-		                    },
-		                   set(newVal){
-		                      console.log('set',newVal)
-		                   }
-		                }
-		            }
-		        })
-		        setTimeout(() => {
-		            vm.firstName='li'
-		        }, 2000);
-		    </script>
-		</body>
+       <body>
+           <div id="app" style="color:red;background:green">{{fullName}}</div>
+           <script src="./dist/vue.js"></script>
+           <script>
+               const vm=new Vue({
+                   el:'#app',
+                   data:{
+                       firstName:'zhang',
+                       lastName:'san'
+                   },
+                   computed:{
+                       //函数
+                       fullName(){
+                           console.log('get')
+                           return this.firstName+this.lastName;
+                       }
+                     //对象
+       
+                       fullName:{
+                          get(){
+                               console.log('get')
+                              return this.firstName+this.lastName;
+                           },
+                          set(newVal){
+                             console.log('set',newVal)
+                          }
+                       }
+                     }
+                })
+                
+           setTimeout(() => {
+               vm.firstName='li'
+           }, 2000);
+           
+       </script>
+       </body>
 
 - Computed实现
 
+		
+		
+	
 		// vue/src/core/instance/state.js
-		...
+			...
 		const computedWatcherOptions = { lazy: true } // computedWatcher 的配置对象
-		
-		function initComputed (vm: Component, computed: Object) {
+   	function initComputed (vm: Component, computed: Object) {
 		 
-          // 声明一个watchers且同时挂载到vm实例上
-		  const watchers = vm._computedWatchers = Object.create(null)
+		   // 声明一个watchers且同时挂载到vm实例上
+   	  const watchers = vm._computedWatchers = Object.create(null)
 		 
-          // 在SSR模式下computed属性只能触发getter方法
-		  const isSSR = isServerRendering()
+		   // 在SSR模式下computed属性只能触发getter方法
+   	  const isSSR = isServerRendering()
 		
-          // 遍历computed
+   	   // 遍历computed
 		  for (const key in computed) {
-            // 取出computed对象中的每个方法并赋值给userDef
+		     // 取出computed对象中的每个方法并赋值给userDef
 		    const userDef = computed[key]
 		    const getter = typeof userDef === 'function' ? userDef : userDef.get
 		    if (process.env.NODE_ENV !== 'production' && getter == null) {
@@ -137,9 +147,9 @@
 		        `Getter is missing for computed property "${key}".`,
 		        vm
 		      )
-		    }
+   	    }
 		
-            // 如果不是SSR服务端渲染，则创建一个watcher实例
+		     // 如果不是SSR服务端渲染，则创建一个watcher实例
 		    if (!isSSR) {
 		      // create internal watcher for the computed property.
 		      watchers[key] = new Watcher(
@@ -149,13 +159,14 @@
 		        computedWatcherOptions
 		      )
 		    }
-		
-		    
+	
+   
+	​	    
 		    if (!(key in vm)) {
-               // 如果computed中的key没有设置到vm中，通过defineComputed函数挂载上去 
+   	        // 如果computed中的key没有设置到vm中，通过defineComputed函数挂载上去 
 		      defineComputed(vm, key, userDef)
 		    } else if (process.env.NODE_ENV !== 'production') {
-               // 如果data和props有和computed中的key重名的，会产生warning
+		        // 如果data和props有和computed中的key重名的，会产生warning
 		      if (key in vm.$data) {
 		        warn(`The computed property "${key}" is already defined in data.`, vm)
 		      } else if (vm.$options.props && key in vm.$options.props) {
@@ -271,13 +282,13 @@
 - 我们紧接着先看一下计算属性的值是怎么计算的。上 get 方法
 
        get() {
-		    const vm = this.vm
-		    pushTarget(this)
-		    // 执行函数
-		    let value = this.getter.call(vm, vm)
-		    popTarget()
-		    return value
-		  }
+	        const vm = this.vm
+	        pushTarget(this)
+	        // 执行函数
+	        let value = this.getter.call(vm, vm)
+	        popTarget()
+	        return value
+	      }
 
 
 // Dep.js(源码：https://github.com/vuejs/vue/blob/v2.5.21/src/core/observer/dep.js#L58)
@@ -334,10 +345,10 @@
 - 比如说name收集了computed watcher 和 渲染watcher。那么设置name的时候都会去更新执行watcher.update()，在watcher.update()里如果this.lazy为true，也就是该属性为计算属性，执行this.dirty = true，因为name改变了，则计算属性也改变了会触发计算属性的setter，则因为this.dirty为true，所以会执行watcher.evaluate()重新计算值
 
       update(){
-		    if (this.lazy) {
-		      this.dirty = true
-		    } else {
-		      this.get()
-		    }
+	        if (this.lazy) {
+	          this.dirty = true
+	        } else {
+	          this.get()
+	        }
 	  }
 
