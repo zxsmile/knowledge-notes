@@ -55,6 +55,7 @@
    - Date
    - RegExp
    - Error
+
     ...
 
 我们可以说，**Object类是所有子类的父类**
@@ -74,45 +75,45 @@
 **1.对象object（Object类）**
 
     - toString：返回对象的字符串表示。
-
-		var obj = {a: 1};
-		obj.toString();//"[object Object]"
-		Object.prototype.toString.call(obj);//"[object Object]"
-
+    
+    	var obj = {a: 1};
+    	obj.toString();//"[object Object]"
+    	Object.prototype.toString.call(obj);//"[object Object]"
+    
      - **思考：任何对象object都可以通过this绑定调用Object.prototype.toString()方法吗？答案是可以，结果如下：**
-
-		Object.prototype.toString.call({}); 
-		<!--"[object Object]"-->
-
-		Object.prototype.toString.call([]);
-		<!--"[object Array]"-->
-
-		Object.prototype.toString.call(function(){});
-		<!--"[object Function]"-->
-
-		Object.prototype.toString.call('');
-		<!--"[object String]"-->
-
-		Object.prototype.toString.call(1);
-		<!--"[object Number]"-->
-
-		Object.prototype.toString.call(true);
-		<!--"[object Boolean]"-->
-
-		Object.prototype.toString.call(null);
-		<!--"[object Null]"-->
-
-		Object.prototype.toString.call(undefined);
-		<!--"[object Undefined]"-->
-
-		Object.prototype.toString.call();
-		<!--"[object Undefined]"-->
-
-		Object.prototype.toString.call(new Date());
-		<!--"[object Date]"-->
-
-		Object.prototype.toString.call(/at/);
-		<!--"[object RegExp]"-->
+    
+    	Object.prototype.toString.call({}); 
+    	<!--"[object Object]"-->
+    
+    	Object.prototype.toString.call([]);
+    	<!--"[object Array]"-->
+    
+    	Object.prototype.toString.call(function(){});
+    	<!--"[object Function]"-->
+    
+    	Object.prototype.toString.call('');
+    	<!--"[object String]"-->
+    
+    	Object.prototype.toString.call(1);
+    	<!--"[object Number]"-->
+    
+    	Object.prototype.toString.call(true);
+    	<!--"[object Boolean]"-->
+    
+    	Object.prototype.toString.call(null);
+    	<!--"[object Null]"-->
+    
+    	Object.prototype.toString.call(undefined);
+    	<!--"[object Undefined]"-->
+    
+    	Object.prototype.toString.call();
+    	<!--"[object Undefined]"-->
+    
+    	Object.prototype.toString.call(new Date());
+    	<!--"[object Date]"-->
+    
+    	Object.prototype.toString.call(/at/);
+    	<!--"[object RegExp]"-->
 
 
 **从上述代码可以看到，因为Object是所有子类的父类，所以任何类型的对象object都可以通过this绑定调用Object.prototype.toString()方法，返回该对象的字符串表示！**
@@ -120,38 +121,38 @@
 **2.数组array（Array类）**
 
      - toString()：返回由数组中每个值的字符串形式拼接而成的一个以逗号分隔的字符串
-
-	    var array = [1, 's', true, {a: 2}];
-	    array.toString();//"1,s,true,[object Object]"
-	    Array.prototype.toString.call(array);//"1,s,true,[object Object]"
-
+    
+        var array = [1, 's', true, {a: 2}];
+        array.toString();//"1,s,true,[object Object]"
+        Array.prototype.toString.call(array);//"1,s,true,[object Object]"
+    
     - **思考：非数组对象也可以通过this绑定调用Array.prototype.toString()方法吗？答案是可以，结果如下：** 
-
+    
         Array.prototype.toString.call({});
-		<!--"[object Object]"-->
-
-		Array.prototype.toString.call(function(){})
-		<!--"[object Function]"-->
-
-		Array.prototype.toString.call(1)
-		<!--"[object Number]"-->
-
-		Array.prototype.toString.call('')
-		<!--"[object String]"-->
-
-		Array.prototype.toString.call(true)
-		<!--"[object Boolean]"-->
-
-		Array.prototype.toString.call(/s/)
-		<!--"[object RegExp]"-->
-		
-		Array.prototype.toString.call(); 
+    	<!--"[object Object]"-->
+    
+    	Array.prototype.toString.call(function(){})
+    	<!--"[object Function]"-->
+    
+    	Array.prototype.toString.call(1)
+    	<!--"[object Number]"-->
+    
+    	Array.prototype.toString.call('')
+    	<!--"[object String]"-->
+    
+    	Array.prototype.toString.call(true)
+    	<!--"[object Boolean]"-->
+    
+    	Array.prototype.toString.call(/s/)
+    	<!--"[object RegExp]"-->
+    	
+    	Array.prototype.toString.call(); 
         <!--"Uncaught TypeError: Cannot convert undefined or null to object"-->
-
-		Array.prototype.toString.call(undefined);
+    
+    	Array.prototype.toString.call(undefined);
         <!--"Uncaught TypeError: Cannot convert undefined or null to object"-->
-
-		Array.prototype.toString.call(null);
+    
+    	Array.prototype.toString.call(null);
         <!--"Uncaught TypeError: Cannot convert undefined or null to object"-->
 
   **从上述代码中我们可以发现，数组对象通过this绑定调用Array.prototype.toString()方法，返回数组值的字符串拼接，但是非数组对象通过this绑定调用Array.prototype.toString()方法，返回的是该对象的字符串表示，另外null和undefined不可以通过绑定调用Array.prototype.toString()方法。**
@@ -160,53 +161,54 @@
 **3.函数function（Function类）**
 
     - toString()：返回函数的代码
+    
+       function foo(){
+    	 console.log('function');
+       };
+       foo.toString(); //"function foo(){console.log('function')}
 
-	   function foo(){
-		 console.log('function');
-	   };
-	   foo.toString(); //"function foo(){console.log('function')}
-	
-		
+
+​		
 	   Function.prototype.toString.call(foo); //function foo(){console.log}
-
-    - 此处，我们还需要注意到一个问题，上述我们提到的所有“类”，本质上都是构造函数，所以调用toString()方法返回的都是函数代码。
-
+	
+	- 此处，我们还需要注意到一个问题，上述我们提到的所有“类”，本质上都是构造函数，所以调用toString()方法返回的都是函数代码。
+	
 		Object.toString();
 		//"function Object() { [native code] }"
-
+	
 		Function.toString();
 		//"function Function() { [native code] }"
-
+	
 		Array.toString();
 		//"function Array() { [native code] }"
 		....
-
-     - **思考：非数组对象也可以通过this绑定调用Function.prototype.toString()方法吗？答案是不可以，结果如下：** 
-
-        Function.prototype.toString.call({});
-        <!--Function.prototype.toString requires that 'this' be a Function-->
+	
+	 - **思考：非数组对象也可以通过this绑定调用Function.prototype.toString()方法吗？答案是不可以，结果如下：** 
+	
+	    Function.prototype.toString.call({});
+	    <!--Function.prototype.toString requires that 'this' be a Function-->
 
   **4.日期（Date类）**
 
       - toString()：返回带有时区信息的日期和时间
       - Date类型只有构造形式，没有字面量形式
-
+    
          var date = new Date();
-
-		 date.toString();
-		 //"Fri May 11 2018 14:55:43 GMT+0800 (中国标准时间)"
-
-		 Date.prototype.toString.call(date);
-		 //"Fri May 11 2018 14:55:43 GMT+0800 (中国标准时间)"
+    
+    	 date.toString();
+    	 //"Fri May 11 2018 14:55:43 GMT+0800 (中国标准时间)"
+    
+    	 Date.prototype.toString.call(date);
+    	 //"Fri May 11 2018 14:55:43 GMT+0800 (中国标准时间)"
 
 
   **5.正则表达式（RegExp类）**
 
        - toString()：返回正则表达式的字面量
-
+    
          var re = /cat/g;
-		 re.toString();// "/cat/g"
-		 RegExp.prototype.toString.call(re);// "/cat/g"
+    	 re.toString();// "/cat/g"
+    	 RegExp.prototype.toString.call(re);// "/cat/g"
 
 
 
@@ -217,23 +219,23 @@
        - ECMAScript提供了三个特殊的引用类型Boolean、Number、String，它们具有与各自基本类型相应的特殊行为。
        
        - 以String类型为例简单说一下
-
-		  var str = 'wangpf';
-	      str.toString();//"wangpf"
-
+    
+    	  var str = 'wangpf';
+          str.toString();//"wangpf"
+    
        - 关于上述代码存在疑问，首先我定义了一个基本类型的字符串变量str，它不是对象，但为什么可以调用toString()方法呢，另外，toString()方法又是哪里来的呢？
-
+    
        - 我们先看一下str和strObject的区别：
-
-		  var str = 'I am a string';
-		  typeof str; //"string"
-		  str instanceof String; //false
-		
-		  var strObject = new String('I am a string');
-		  typeof strObject; //"object"
-		  strObject instanceof String; //true
-		  strObject instanceof Object; //true
-
+    
+    	  var str = 'I am a string';
+    	  typeof str; //"string"
+    	  str instanceof String; //false
+    	
+    	  var strObject = new String('I am a string');
+    	  typeof strObject; //"object"
+    	  strObject instanceof String; //true
+    	  strObject instanceof Object; //true
+    
     **原来，由于String基本包装类型的存在，在必要的时候JS引擎会把字符串字面量转换成一个String对象，从而可以执行访问属性和方法的操作，具体过程如下所示：**
 
    （1）创建一个String类型的实例；
@@ -241,36 +243,36 @@
    （3）销毁这个实例。
 
       - 因此调用toString()方法的过程如下所示：
-
+    
         var strObject = new String('wangpf');
-		strObject.toString(); //'wangpf'
-		strObject = null;
+    	strObject.toString(); //'wangpf'
+    	strObject = null;
 
    **注意，上述代码是JS引擎自动执行的，你无法访问strObject对象，它只存在于代码的执行瞬间，然后立即销毁，所以我们无法在运行时给基本类型添加属性和方法，除非直接通过new显示调用基本包装类型创建对象，但我们不建议！！！**
 
  **7.字符串string（String类）**
 
       - toString()：返回字符串的一个副本
-
-		var str = "a";
-		str.toString(); //"a"
-		String.prototype.toString.call(str); //"a"
+    
+    	var str = "a";
+    	str.toString(); //"a"
+    	String.prototype.toString.call(str); //"a"
 
  **8.数值number（Number类）**
 
      - toString()：返回字符串形式的数值
-
-		var num = 520;
-		num.toString(); //"520"
-		Number.prototype.toString.call(num); //"520"
+    
+    	var num = 520;
+    	num.toString(); //"520"
+    	Number.prototype.toString.call(num); //"520"
 
  **9.布尔值boolean（Boolean类）**
 
     - toString()：返回字符串"true"或"false"
-
-		var boo = true;
-		boo.toString(); //"true"
-		Boolean.prototype.toString.call(boo); //"true"
+    
+    	var boo = true;
+    	boo.toString(); //"true"
+    	Boolean.prototype.toString.call(boo); //"true"
 
  **10.null和undefined**
 
@@ -290,11 +292,11 @@
 	Window.prototype.toString.call(window);//这里其实有问题
 	<!--"[object Window]"-->
 
-    - **经查看，Winodw类并没有在Window.prototype原型对象上重写toString()方法，它会顺着原型链查找调用Object.prototype.toString()。**
+        - **经查看，Winodw类并没有在Window.prototype原型对象上重写toString()方法，它会顺着原型链查找调用Object.prototype.toString()。**
+        
+        - 所以，**任何对象object都可以通过this绑定调用Window.prototype.toString()方法，也就是调用Object.prototype.toString()方法，结果和Object类一样。**
     
-    - 所以，**任何对象object都可以通过this绑定调用Window.prototype.toString()方法，也就是调用Object.prototype.toString()方法，结果和Object类一样。**
-
-    - 故上述代码实质上是
+        - 故上述代码实质上是
 
 	  Object.prototype.toString.call(window);
 	  <!--"[object Window]"-->
@@ -410,11 +412,11 @@ Object.prototype.toString()中的toString()只有在Object.prototype调用的时
 
 
      - 判断是不是null和undefined;
-
+    
      - 创建一个变量O，将ToObject(this)的值（也就是String对象）赋值给变量O。
-
+    
      - 创建名为class的变量，将O的内部属性[[class]]（也就是"String"）赋值给class。
-
+    
      - 返回[object+class]组成的字符串（也就是[object + String]）。
 
 **3.为什么一定要用Object.prototype.toString.call()？直接在当前数据本身去调用toString()，然后让他顺着原型链去找，最后找到Object.prototype.toString这个方法不行吗？连call都省下了**
@@ -468,7 +470,7 @@ Object.prototype.toString()中的toString()只有在Object.prototype调用的时
  （2）不再访问内置对象的[[call]]属性，而是根据一些特殊内部插槽判断内置对象，例如根据Arguments的[[ParameterMap]]内部插槽标记"Arguments"标识、根据Function的[[ParameterMap]]内部插槽标记"Function"标识等等（这里我认为内部卡槽可以简单理解为标识或属性）。
 
  （3）一部分老的内置对象和新增的内置对象都有@@toStringTag属性值，例如JSON、Symbol、Map、Set、WeekMap、WeekSet、ArrayBuffer、DataView、Promise。
- 
+
  （4）获取对象的@@toStringTag或者内部标识的字符串值。（引擎为它们设置好了toStringTag标签）
 
 
@@ -522,6 +524,6 @@ Object.prototype.toString()中的toString()只有在Object.prototype调用的时
 		​
 		// Person
 		console.log(Person.prototype[Symbol.toStringTag])
-
+	
 		// [object Person]
 		console.log(Object.prototype.toString.call(p))

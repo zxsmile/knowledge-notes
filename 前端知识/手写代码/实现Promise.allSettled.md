@@ -1,3 +1,4 @@
+```
 /*
 Promise.allSettled 的特点：
     入参是个由Promise实例组成的数组,如果数组里面不是promise，会调用Promise.reslove()将其转为promise
@@ -7,7 +8,7 @@ Promise.allSettled 的特点：
       resolved 状态时为 {status:'fulfilled', value:resolve的值}
       rejected 状态时为 {status:'rejected', reason:reject的值}。
 
-     
+
  */
 
 function myPromiseAllSettled(promiseArr) {
@@ -48,4 +49,7 @@ function myPromiseAllSettled(promiseArr) {
  myPromiseAllSettled([promise1,promise2,promise3]).then(res=>{
      console.log(res)
  })
+
+
+```
 

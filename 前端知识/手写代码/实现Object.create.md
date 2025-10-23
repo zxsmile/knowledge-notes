@@ -1,8 +1,10 @@
+```
 Object.prototype.MyCreate = function(proto,properties){
     if(! (proto instanceof Object) && typeof proto !== 'object'){
        throw 'error'
     }
     
+
     function F(){}
     F.prototype = proto
     let obj = new F()
@@ -13,6 +15,7 @@ Object.prototype.MyCreate = function(proto,properties){
        obj.__proto__ = null
     }
     return obj
+
 }
 
 
@@ -26,7 +29,7 @@ Object.prototype.MyCreate = function(proto,properties){
       // 类型校验
         throw new TypeError("proto必须为对象或者函数");
    //}
-   
+
    if (typeof proto !== "object" && typeof proto !== "function") {
     // 类型校验
     throw new TypeError("proto必须为对象或者函数");
@@ -48,3 +51,5 @@ Object.prototype.MyCreate = function(proto,properties){
    return obj
 }
 console.log(Object.MyCreate({555:666}).__proto__)
+```
+

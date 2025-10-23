@@ -1,3 +1,4 @@
+```
 // 1.参数字符串，布尔，数值会报错
 // 2.参数为undefined，null，除了arguments的对象会返回undefined
 // 3.所以用arguments的属性callee（返回正在执行的函数）来区分arguments对象和别的对象
@@ -17,9 +18,10 @@ Function.prototype.myApply = function(newThis,argArr){
     // let hasOriginalVal = newThis.hasOwnProperty(fn);
 	// newThis.fn = this
 	
+
 	let result
-        
-    if(argArr){
+	    
+	if(argArr){
 		let errArr = ['string','boolean','number']
 		let argRes = typeof argArr
 		if(errArr.includes(argRes)){
@@ -44,21 +46,22 @@ Function.prototype.myApply = function(newThis,argArr){
 	//使用缓存
 	//delete newThis.fn
 	// if(hasOriginalVal){
-    //     newThis.fn = originalVal
-    // }
+	//     newThis.fn = originalVal
+	// }
 	return result     
+
 }
 
 let obj = {
     name:'milk',
     fn:5
   }
-  
+
   function bar(){
     console.log(this.name)
     return 6
   }
-  
+
   console.log(bar.myApply(obj,null))
   console.log(obj.fn)
 
@@ -78,7 +81,12 @@ let obj = {
         }
        result = eval(`contexts.fn(${args})`);
        
+
     }
     delete contexts.fn();
     return result;
+
 }
+```
+
+

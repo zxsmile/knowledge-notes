@@ -1,3 +1,4 @@
+```
 /*
  *promise.all 的特点：
     入参是个由Promise实例组成的数组,如果数组里面不是promise，会调用Promise.reslove()将其转为promise
@@ -42,3 +43,5 @@ function myPromiseAll(promiseArr) {
  myPromiseAll([promise1,promise2,promise3]).then(res=>{
      console.log(res)
  })
+```
+

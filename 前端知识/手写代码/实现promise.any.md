@@ -1,3 +1,4 @@
+```
 /*
 promise.any 的特点：
     入参是个由Promise实例组成的数组,如果数组里面不是promise，会调用Promise.reslove()将其转为promise
@@ -11,27 +12,27 @@ promise.any 的特点：
 
 function myPromiseAny(promiseArr) {
     return new Promise((reslove,reject)=>{
-        let count = 0
-        if(!Array.isArray(promiseArr)){
-            return 
-        }
-        if(promiseArr.length===0){
-                reject(new AggregateError('All promises was resolved'))
+       let count = 0
+       if(!Array.isArray(promiseArr)){
+           return 
        }
-        promiseArr.forEach((promise)=>{
-            if(!(promise instanceof Promise)){
-                promise = Promise.resolve(promise)
-            }
-            promise.then(res=>{
-                reslove(res)
-            },err=>{
-                count++
-                if(count===promiseArr.length){
-                    reject(new AggregateError('All promises was resolved'))
-                }
-            })
-        })
-    })
+       if(promiseArr.length===0){
+         reject(new AggregateError('All promises was resolved'))
+       }
+       promiseArr.forEach((promise)=>{
+         if(!(promise instanceof Promise)){
+            promise = Promise.resolve(promise)
+          }
+          promise.then(res=>{
+            reslove(res)
+          },err=>{
+           count++
+           if(count===promiseArr.length){
+            reject(new AggregateError('All promises was resolved'))
+           }
+          })
+      })
+     })
 }
 
 let promise1 = new Promise((res,rej)=>{res(2)})
@@ -43,3 +44,7 @@ myPromiseAny([promise1,promise2,promise3]).then(res=>{
 },err=>{
  console.log(err)
 })
+
+
+```
+

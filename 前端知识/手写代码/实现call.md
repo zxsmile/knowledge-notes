@@ -1,4 +1,4 @@
-
+```
 // call 函数的实现步骤：
 
 // 判断调用对象是否为函数，即使是定义在函数的原型上的，但是可能出现使用 call 等方式调用的情况。
@@ -32,7 +32,7 @@ Function.prototype.myCall = function(newThis){
     result = newThis[fn](...args)
     delete newThis[fn]
     return result
-
+    
     //2. 做个缓存
     let originalVal = newThis.fn;
     let hasOriginalVal = newThis.hasOwnProperty(fn);
@@ -45,16 +45,19 @@ Function.prototype.myCall = function(newThis){
         newThis.fn = originalVal
     }
     return result
+
   }
-  
+
   let obj = {
     name:'milk',
     fn:5
   }
-  
+
   function bar(){
     console.log(this.name)
   }
-  
+
   bar.call(obj)
   console.log(obj.fn)
+```
+

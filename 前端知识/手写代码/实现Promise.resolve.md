@@ -1,3 +1,4 @@
+```
 function myResolve(val){
    if(val instanceof Promise){
        return val
@@ -12,3 +13,5 @@ function myResolve(val){
  let promise3 = new Promise((res,rej)=>{rej(2)})
 
  console.log(myResolve(promise2))
+```
+
