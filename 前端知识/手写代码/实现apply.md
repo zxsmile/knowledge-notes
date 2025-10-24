@@ -9,18 +9,29 @@ Function.prototype.myApply = function(newThis,argArr){
         throw new  TypeError(this + ' is not a function');
     }
     newThis = newThis ? Object(newThis) : window
-	//newThis.fn = this
-	//使用Symbol()
-  let fn = Symbol()
-  newThis[fn] = this
+    
+   //newThis.fn = this
+   //使用Symbol()
+   let fn = Symbol()
+   newThis[fn] = this
 	//使用缓存
 	// let originalVal = newThis.fn;
     // let hasOriginalVal = newThis.hasOwnProperty(fn);
 	// newThis.fn = this
 	
-
+	// 如果 argArray 是 null 或 undefined, 则
+    // 返回提供 newThis 作为 this 值并以空参数列表调用 func 的 [[Call]] 内部方法的结果。
+	if(typeof argArr === 'undefined' || argArr === null){
+        argsArray = [];
+    }
+      
+   // 如果 Type(argArray) 不是 Object, 则抛出一个 TypeError 异常 .
+   if(argArr !== new Object(argArr)){
+        throw new TypeError('CreateListFromArrayLike called on non-object');
+    }
 	let result
-	    
+	result = newThis[fn](...argArr)
+	 
 	if(argArr){
 		let errArr = ['string','boolean','number']
 		let argRes = typeof argArr
@@ -41,6 +52,7 @@ Function.prototype.myApply = function(newThis,argArr){
 		//使用缓存
 		//result = newThis.fn()
 	}
+	
 	//使用symbol()
 	delete newThis[fn]
 	//使用缓存
