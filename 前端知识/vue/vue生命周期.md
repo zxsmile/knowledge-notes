@@ -79,10 +79,75 @@
 
 答：`Mounted`
 
-## keep-alive的生命周期？
+## `keep-alive`的生命周期？
 
 `activated`:页面第一次进入的时候，钩子触发的顺序是：`created->mounted->activated`
 
 `deactivated`:页面退出的时候会触发`deactivated`,当再次进入页面只会触发`activated`
 
+##  `Vue` 子组件和父组件执行顺序
 
+#### 加载渲染过程：
+
+1.父组件 `beforeCreate`
+
+2.父组件 `created`
+
+3.父组件 `beforeMount`
+
+4.子组件 `beforeCreate`
+
+5.子组件 `created`
+
+6.子组件 `beforeMount`
+
+7.子组件 `mounted`
+
+8.父组件 `mounted`
+
+
+
+#### 更新过程：
+
+1. 父组件 `beforeUpdate`
+
+2.子组件 `beforeUpdate`
+
+3.子组件 `updated`
+
+4.父组件 `updated`
+
+
+
+#### 销毁过程：
+
+1. 父组件 `beforeDestroy`
+
+2.子组件 `beforeDestroy`
+
+3.子组件 `destroyed`
+
+4.父组件 `destoryed`
+
+##  一般在哪个生命周期请求异步数据
+
+我们可以在钩子函数 `created`、`beforeMount`、`mounted` 中进行调用，因为在这三个钩子函数中，`data` 已经创建，可以将服务端端返回的数据进行赋值。
+
+
+
+推荐在 `created`钩子函数中调用异步请求，因为在 `created` 钩子函数中调用异步请求有以下优点：
+
+- 能更快获取到服务端数据，减少页面加载时间，用户体验更好；
+- `SSR`不支持 `beforeMount`、`mounted` 钩子函数，放在 `created`中有助于一致性。
+
+##  `keep-alive` 中的生命周期哪些
+
+`keep-alive`是 `Vue` 提供的一个内置组件，用来对组件进行缓存——在组件切换过程中将状态保留在内存中，防止重复渲染`DOM`。
+
+
+
+如果为一个组件包裹了 `keep-alive`，那么它会多出两个生命周期：`deactivated`、`activated`。同时，`beforeDestroy` 和 `destroyed` 就不会再被触发了，因为组件不会被真正销毁。
+
+
+
+当组件被换掉时，会被缓存到内存中、触发 `deactivated` 生命周期；当组件被切回来时，再去缓存里找这个组件、触发 `activated`钩子函数。
