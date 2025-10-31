@@ -1,4 +1,250 @@
-https://juejin.cn/post/6994959998283907102
+# 简答
+
+## `diff`的对比流程
+
+当数据改变时，会触发`setter`，并且通过`Dep.notify`去通知所有订阅者`Watcher`，订阅者们就会调用`patch`方法，给真实`DOM`打补丁，更新相应的视图
+
+### `patch`
+
+`newVnode`和`oldVnode`：同层的新旧虚拟节点**先调用`diff`流程的入口函数`patch`**，通过对比当前同层的虚拟节点（同级比较是指比较两组同深度的`Vnode`）的**`key`、`tag`,、`isComment`,、`inputType`相同并且`data`同为有定义或无定义**，来判断当前同层的虚拟节点是否为同一种类型的标签。如果是，继续执行`patchVnode`方法进行深层比对；如果否，没必要比对了，直接整个节点替换成新虚拟节点。
+
+### `patchVnode`
+
+在`patchVnode`方法中，
+
+- 获取到新旧虚拟`dom`对应的真实`DOM`（`vnode`的`el`属性），
+- 判断`newVnode`和`oldVnode`是否指向同一个对象，如果是，那么直接`return`
+- 如果不是，则继续判断：
+- 如果他们都是文本节点并且不相等，那么将`el`的文本节点设置为`newVnode`的文本节点。
+- 如果`oldVnode`有子节点而`newVnode`没有，则删除`el`的子节点
+- 如果`oldVnode`没有子节点而`newVnode`有，则将`newVnode`的子节点真实化之后添加到`el`
+- 如果两者都有子节点，则执行`updateChildren`函数比较子节点
+
+### `updateChildren`
+
+`updateChildren`主要采用**递归+双指针**方式遍历新旧虚拟节点的子节点，新旧两个子节点集合的首尾指针会互相进行比较，总共有四种比较情况：**头头、尾尾、头尾、尾头**，当前面四种比较逻辑都不行的时候，拿新子节点的子项，直接去旧子节点数组中遍历，找一样的节点出来，这里分为两种情况：
+
+- **`Vnode` 没有 `key`** ，那么就会采用遍历查找的方式去找到对应的旧节点。
+-  **`Vnode` 有 `key`** ，生成旧子节点数组以 `vnode.key` 为`key` 的 `map` 表，新节点的 `key`  去对比旧节点`map`中的`key` ，从而找到相应旧节点。（这里对应的是一个`key => index` 的`map`映射）
+
+**没找到**就认为是一个新增节点。
+
+**找到这个旧子节点**，然后判断和新子节点是否 `sameVnode`，如果相同，直接移动到 `oldStartVnode` 前面；如果不同，直接创建插入 `oldStartVnode`  前面
+
+在`updateChildren` 中，比较完新旧两个数组之后，可能某个数组会剩下部分节点没有被处理过，所以这里需要统一处理：
+
+   新子节点遍历完毕，旧子节点可能还有剩，对剩下的旧节点进行批量删除！就是遍历剩下的节点，逐个删除`DOM`
+
+   旧子节点遍历完毕，新子节点可能有剩，对剩余的新子节点全部新建
+
+
+
+![](./images/diff4.jpg)
+
+### `sameVnode`方法
+
+`patch`关键的一步就是`sameVnode`方法判断是否为同一类型节点，那问题来了，怎么才算是同一类型节点呢？这个类型的标准是什么呢？
+
+咱们来看看`sameVnode`方法的核心原理代码，就一目了然了
+
+```
+function sameVnode(oldVnode, newVnode) {
+    return (
+	    oldVnode.key === newVnode.key && // key值是否一样
+	    oldVnode.tagName === newVnode.tagName && // 标签名是否一样
+	    oldVnode.isComment === newVnode.isComment && // 是否都为注释节点
+	    isDef(oldVnode.data) === isDef(newVnode.data) && // 是否都定义了data
+	    sameInputType(oldVnode, newVnode) // 当标签为input时，type必须是否相同
+	  )
+   }
+```
+
+
+
+### `patch`方法
+
+`patch`函数是`diff`流程的入口函数，这个方法作用就是，对比当前同层的虚拟节点是否为同一种类型的标签(同一类型的标准，下面会讲)：
+
+- 是：继续执行`patchVnode`方法进行深层比对
+- 否：没必要比对了，直接整个节点替换成新虚拟节点
+
+来看看`patch`的核心原理代码
+
+```
+function patch(oldVnode, newVnode) {
+
+  // 比较是否为一个类型的节点
+  if (sameVnode(oldVnode, newVnode)) {
+
+    // 是：继续进行深层比较
+    patchVnode(oldVnode, newVnode)
+
+  } else {
+    // 否
+
+    const oldEl = oldVnode.el // 旧虚拟节点的真实DOM节点
+
+    const parentEle = api.parentNode(oldEl) // 获取父节点
+
+    createEle(newVnode) // 创建新虚拟节点对应的真实DOM节点
+
+    if (parentEle !== null) {
+
+      api.insertBefore(parentEle, vnode.el, api.nextSibling(oEl)) // 将新元素添加进父元素
+
+      api.removeChild(parentEle, oldVnode.el)  // 移除以前的旧元素节点
+
+      // 设置null，释放内存
+      oldVnode = null
+    }
+  }
+
+  return newVnode
+}
+```
+
+### `patchVnode`方法
+
+这个函数做了以下事情：
+
+- 找到对应的真实`DOM`，称为`el`
+
+- 判断`newVnode`和`oldVnode`是否指向同一个对象，如果是，那么直接`return`
+
+- 如果他们都是文本节点并且不相等，那么将`el`的文本节点设置为`newVnode`的文本节点。
+
+- 如果`oldVnode`有子节点而`newVnode`没有，则删除`el`的子节点
+
+- 如果`oldVnode`没有子节点而`newVnode`有，则将`newVnode`的子节点真实化之后添加到`el`
+
+- 如果两者都有子节点，则执行`updateChildren`函数比较子节点，这一步很重要
+
+  ​		
+
+        function patchVnode(oldVnode, newVnode) {
+            // 获取真实DOM对象
+          const el = newVnode.el = oldVnode.el 
+      
+      	  // 获取新旧虚拟节点的子节点数组
+          const oldCh = oldVnode.children, newCh = newVnode.children
+      
+      	  // 如果新旧虚拟节点是同一个对象，则终止
+          if (oldVnode === newVnode) return
+      
+      	  // 如果新旧虚拟节点是文本节点，且文本不一样
+          if (oldVnode.text !== null && newVnode.text !== null && oldVnode.text !== newVnode.text) {
+      
+      	    // 则直接将真实DOM中文本更新为新虚拟节点的文本
+            api.setTextContent(el, newVnode.text)
+      
+      	  } else {
+      	    // 否则
+      	
+      	    if (oldCh && newCh && oldCh !== newCh) {
+      	      // 新旧虚拟节点都有子节点，且子节点不一样
+      	
+      	      // 对比子节点，并更新
+              updateChildren(el, oldCh, newCh)
+      
+      	    } else if (newCh) {
+      	      // 新虚拟节点有子节点，旧虚拟节点没有
+      	
+      	      // 创建新虚拟节点的子节点，并更新到真实DOM上去
+              createEle(newVnode)
+      
+      	    } else if (oldCh) {
+      	      // 旧虚拟节点有子节点，新虚拟节点没有
+      	
+      	      //直接删除真实DOM里对应的子节点
+      	      api.removeChild(el)
+      	    }
+      	  }
+      	}
+
+### `updateChildren`方法
+
+```
+function updateChildren(parentElm, oldCh, newCh) {
+  let oldStartIdx = 0, newStartIdx = 0
+  let oldEndIdx = oldCh.length - 1
+  let oldStartVnode = oldCh[0]
+  let oldEndVnode = oldCh[oldEndIdx]
+  let newEndIdx = newCh.length - 1
+  let newStartVnode = newCh[0]
+  let newEndVnode = newCh[newEndIdx]
+  let oldKeyToIdx
+  let idxInOld
+  let elmToMove
+  let before
+  
+  while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+  
+    if (oldStartVnode == null) {
+      oldStartVnode = oldCh[++oldStartIdx]
+    } else if (oldEndVnode == null) {
+      oldEndVnode = oldCh[--oldEndIdx]
+    } else if (newStartVnode == null) {
+      newStartVnode = newCh[++newStartIdx]
+    } else if (newEndVnode == null) {
+      newEndVnode = newCh[--newEndIdx]
+    } else if (sameVnode(oldStartVnode, newStartVnode)) {
+      patchVnode(oldStartVnode, newStartVnode)
+      oldStartVnode = oldCh[++oldStartIdx]
+      newStartVnode = newCh[++newStartIdx]
+    } else if (sameVnode(oldEndVnode, newEndVnode)) {
+      patchVnode(oldEndVnode, newEndVnode)
+      oldEndVnode = oldCh[--oldEndIdx]
+      newEndVnode = newCh[--newEndIdx]
+    } else if (sameVnode(oldStartVnode, newEndVnode)) {
+      patchVnode(oldStartVnode, newEndVnode)
+      api.insertBefore(parentElm, oldStartVnode.el, api.nextSibling(oldEndVnode.el))
+      oldStartVnode = oldCh[++oldStartIdx]
+      newEndVnode = newCh[--newEndIdx]
+
+    } else if (sameVnode(oldEndVnode, newStartVnode)) {
+
+      patchVnode(oldEndVnode, newStartVnode)
+      api.insertBefore(parentElm, oldEndVnode.el, oldStartVnode.el)
+      oldEndVnode = oldCh[--oldEndIdx]
+      newStartVnode = newCh[++newStartIdx]
+
+    } else {
+      // 使用key时的比较
+      if (oldKeyToIdx === undefined) {
+        oldKeyToIdx = createKeyToOldIdx(oldCh, oldStartIdx, oldEndIdx) // 有key生成index表
+      }
+      idxInOld = oldKeyToIdx[newStartVnode.key]
+      //不存在旧子节点数组中，直接创建DOM，并插入oldStartVnode 前面
+      if (!idxInOld) {
+        api.insertBefore(parentElm, createEle(newStartVnode).el, oldStartVnode.el)
+        newStartVnode = newCh[++newStartIdx]
+      } else {
+        elmToMove = oldCh[idxInOld]
+        if (elmToMove.sel !== newStartVnode.sel) {
+          api.insertBefore(parentElm, createEle(newStartVnode).el, oldStartVnode.el)
+        } else {
+          patchVnode(elmToMove, newStartVnode)
+          oldCh[idxInOld] = null
+          api.insertBefore(parentElm, elmToMove.el, oldStartVnode.el)
+        }
+        newStartVnode = newCh[++newStartIdx]
+      }
+    }
+  }
+  
+  if (oldStartIdx > oldEndIdx) {
+  
+    before = newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].el
+    addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx)
+    
+  } else if (newStartIdx > newEndIdx) {
+  
+    removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx)
+  }
+}
+```
+
+
 
 # 一、在虚拟`dom`之前
 
@@ -737,9 +983,13 @@ parentElm.insertBefore(
 
 #### 5、当前面四种比较逻辑都不行的时候，这是最后一种处理方法
 
-拿新子节点的子项，直接去旧子节点数组中遍历，找一样的节点出来
+由于前四步的对比都无法成立，接下来就是未知序列的处理，首先大体说下原理吧
 
-**流程大概是**
+**我们可以想到的是，我需要尽最大力来完成旧节点的复用，**所以我们遍历当前的`newStartVnode`的时候，需要看在`oldChildren`中的`[oldStartIndex, oldEndIndex]`区间内是否有相同节点可以复用
+
+具体实现方式，对`oldChildren`中的`[oldStartIndex, oldEndIndex]`区间内所有旧节点生成`key --> oldIndex`的映射哈希表，也就是我们最一开始初始化时声明的变量`oldKeyToIdx`，拿新子节点的子项，直接去旧子节点数组中遍历，找一样的节点出来
+
+##### 流程大概是
 
 （1）生成旧子节点数组以 `vnode.key` 为`key` 的 `map` 表
 
@@ -799,6 +1049,8 @@ oldKeyToIdx[newStartVnode.key]
 
 ##### 5.3、不存在旧子节点数组中
 
+如果不存在旧子节点数组中，就说明`oldChildren`中没有可以复用的节点
+
 直接创建`DOM`，并插入`oldStartVnode` 前面
 
 ```
@@ -812,6 +1064,8 @@ createElm(newStartVnode, parentElm, oldStartVnode.elm);
 
 
 ##### 5.4、存在旧子节点数组中
+
+如果存在旧子节点数组中，则说明`oldChildren`存在可以复用的节点
 
 找到这个旧子节点，然后判断和新子节点是否 `sameVnode`
 
@@ -1098,7 +1352,7 @@ oldS > oldE
 
 `key` 这个特殊的 `attribute` 主要作为 `Vue` 的虚拟 `DOM` 算法提示，在比较新旧节点列表时用于识别 `vnode`。在没有 `key`  的情况下，`Vue` 将使用一种最小化元素移动的算法，并尽可能地就地更新/复用相同类型的元素。如果传了 `key` ，则将根据 `key` 的变化顺序来重新排列元素，并且将始终移除/销毁 `key`  已经不存在的元素。
 
-## 用 key 管理可复用的元素
+## 用 `key` 管理可复用的元素
 
 `Vue` 会尽可能高效地渲染元素，通常会复用已有元素而不是从头开始渲染。这种复用不仅仅是在使用列表时会有成效，当我们在使用 条件渲染时，依然成立。
 
@@ -1132,7 +1386,7 @@ methods: {
 但是这种方式也并不是都是我们想要的，在某些场景下，我们需要在元素切换的时候是最新的，所以 `Vue` 为你提供了一种方式来表达“这两个元素是完全独立的，不要复用它们”。只需添加一个具有唯一值的 `key attribute` 即可：
 
 ```xml
-xml 体验AI代码助手 代码解读复制代码// status 默认 true
+// status 默认 true
 methods: {
   toggle() {
     this.status = !this.status;
@@ -1176,7 +1430,7 @@ methods: {
 ifConditions 是撒？
 ```
 
-`ifConditions` 其实是条件渲染的集合，在 `Vue` 的`parse`阶段进行 `AST` 生成时，会将条件渲染元素进行收集。每一个`ifCondjiitions`元素 的 `block` 描述就是节点内容。
+`ifConditions` 其实是条件渲染的集合，在 `Vue` 的`parse`阶段进行 `AST` 生成时，会将条件渲染元素进行收集。每一个`ifConditions`元素 的 `block` 描述就是节点内容。
 
 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/9e2834b820a4484c8d175250076a4bbc~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
@@ -1309,7 +1563,7 @@ function createKeyToOldIdx (children, beginIdx, endIdx) {
 { 1: 2}
 ```
 
-这这种情况下，`email: inputkey` 为 2，在映射中找不到对应的关系。所以会重新创建元素。这也就是当都有 `key` 设置和都没有 `key` 设置时，`input` 元素表现不是一样的原因了。因为元素被重新创建，所以原本的输入也没有了。
+这种情况下，`email: inputkey` 为 2，在映射中找不到对应的关系。所以会重新创建元素。这也就是当都有 `key` 设置和都没有 `key` 设置时，`input` 元素表现不是一样的原因了。因为元素被重新创建，所以原本的输入也没有了。
 
 ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c6c0fcf0a4e14368b4d00d2151376fff~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
 
@@ -1338,7 +1592,7 @@ function findIdxInOld(node, oldCh, start, end) {
 
 ## 准确
 
-在进行 `diff` 对比时， `sameVnode` 函数需要进行判断：`a.key === b.key`。对于列表渲染来说，已经可以判断为相同节点，然后调用 `patchVnode` 。在带key的情况下，`a.key === b.key`对比中可以避免就地复用的情况，所以会更加准确。
+在进行 `diff` 对比时， `sameVnode` 函数需要进行判断：`a.k ey === b.key`。对于列表渲染来说，已经可以判断为相同节点，然后调用 `patchVnode` 。在带key的情况下，`a.key === b.key`对比中可以避免就地复用的情况，所以会更加准确。
 
 ## 更快
 
@@ -1380,6 +1634,59 @@ function findIdxInOld(node, oldCh, start, end) {
 ![](./images/diff12.jpg)
 
 
+
+# 六、`Vue2`中`updateChildren`的缺点
+
+> 但是`Vue2`中的`updateChildren`这个流程一样存在性能上的一些缺点。
+>
+> 如果有注意，以上图5、图6、图7、图8、图9都统计了`dom`节点移动的次数，一共移动了5次。
+>
+> 但是，其实我们来看这个序列
+
+```js
+oldChildren : 2 3 4 5 6 7 8
+newChildren : 8 5 6 7 3 4 2
+// 在Vue3中，尤大的团队采用了移动次数更少的diff算法来解决这个缺点
+// 其实更少的移动次数是依据最大递增子序列来处理的
+// 以上的oldChildren和newChildren，因为我这个例子是newChildren中的key的顺序就是各自在oldChildren中的相对位置，所以我们可以直接找到最大递增子序列为 5 6 7
+// 也就是说5 6 7 这三个节点我们不需要移动
+// 只需要将8 移动到 5之前
+// 其次将3 4 2依次追加到父节点的末尾即可
+// 在Vue3中的diff算法中，这个例子只移动了4次，所以节省了一些dom操作次数，达到了性能优化的目的
+```
+
+# 七、`Vue3`的`diff`
+
+`Vue3`的`diff`也是双指针来处理同级的`diff`的
+
+但是不同的是，规则是：
+
+- 旧的头部与新的头部对比
+
+- 旧的尾部与新的尾部对比
+
+- 如果`oldStartIndex > oldEndIndex && newStartIndex <= newEndIndex`，则进行新节点的创建并插入
+
+- 如果`oldStartIndex <= oldEndIndex && newStartIndex > newEndIndex`，则进行旧节点的卸载
+
+- 如果`oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex`，则进入这一步
+
+  - 先为`newChildren`创建`keyToNewIndexMap`，用来判断是否需要移动节点
+  - 循环`oldChildren`（未知子序列区间内）
+    - 如果`oldChild.key`存在于`keyToNewIndexMap`，就说明有这个节点可以复用，然后与对应的新节点`patch`更新
+      - 这一步还需要看拿到的`newIndex`是否是递增的，如果不是递增的，就说明是需要移动的，就需要去计算最大递增子序列
+      - 以及需要将`newChildren`对应`newIndex`位置设置为已经diff过的标志（`newIndexToOldIndexMap`）（也是为了用来计算最大递增子序列），因为说明已经diff过，就可以判断某个索引位置是否是diff过的，需不需要新建的节点
+    - 如果不存在，就卸载掉这个旧节点
+
+  - 如果需要移动，计算最大递增子序列（根据`newIndexToOldIndexMap`）
+
+  - 循环`newChildren`（未知子序列区间内）
+
+    - 如果`newIndexToOldIndexMap`中对应索引的位置`diff`过（条件不赘述了，未`diff`是0）
+      - 如果索引位置在最大递增子序列中，则不动跳过，更新指针
+      - 如果索引位置不在最大递增子序列中，则移动，锚点需要注意
+
+    - 如果没被`diff`过，则新建节点插入
 
 
 
