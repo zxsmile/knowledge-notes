@@ -53,7 +53,7 @@
 
 * 你可以给其他域名推送资源
 
-# 三、HTTP头信息缓存机制
+# 三、`HTTP`头信息缓存机制
 
 通常浏览器缓存策略分为两种：强缓存和协商缓存，并且缓存策略都是通过设置 `HTTP Header` 来实现的
 
@@ -88,7 +88,7 @@
 
 * 具体来说响应可被任何中间节点缓存，如 `Browser <-- proxy1 <-- proxy2 <-- Server`，中间的`proxy`可以缓存资源，比如下次再请求同一资源，`proxy1`直接把自己缓存的东西给 `Browser` 而不再向`proxy2`要
 
-##### `max-age=xxx`：缓存的内容将在xxx 秒后失效
+##### `max-age=xxx`：缓存的内容将在`xxx` 秒后失效
 
 ##### `s-maxage=xxx`：
 
@@ -119,7 +119,7 @@
 
 #### `Last-Modified`  /  `If-Modified-Since` 
 
-浏览器在第一次访问资源时，服务器返回资源的同时，在`response header`中添加` Last-Modified`的`header`，值是这个资源在服务器上的最后修改时间，浏览器接收后缓存文件和`header`,浏览器下一次请求这个资源，当资源过期时（使用`Cache-Control`标识的`max-age`），浏览器检测到有` Last-Modified`这个`header`，于是添加`If-Modified-Since`这个`header`，值就是`Last-Modified`中的值；服务器再次收到这个资源请求，会根据 `If-Modified-Since` 中的值与服务器中这个资源的最后修改时间对比：
+浏览器在第一次访问资源时，服务器返回资源的同时，在`response header`中添加` Last-Modified`的`header`，**值是这个资源在服务器上的最后修改时间**，浏览器接收后缓存文件和`header`，浏览器下一次请求这个资源，当资源过期时（使用`Cache-Control`标识的`max-age`），浏览器检测到有` Last-Modified`这个`header`，于是添加`If-Modified-Since`这个`header`，值就是`Last-Modified`中的值；服务器再次收到这个资源请求，会根据 `If-Modified-Since` 中的值与服务器中这个资源的最后修改时间对比：
 
 * 比对成功，代表数据未修改过，返回状态码 304和空的响应体， 重定向到缓存数据库
 
@@ -191,5 +191,5 @@
 浏览器缓存行为还有用户的行为有关，所谓用户行为对浏览器缓存的影响，指的就是用户在浏览器如何操作时，会触发怎样的缓存策略。主要有 3 种：
 
 * 打开网页，地址栏输入地址： 查找 `Disk Cache` 中是否有匹配。如有则使用；如没有则发送网络请求。
-* 普通刷新 (F5)：因为 TAB 并没有关闭，因此 `Memory Cache` 是可用的，会被优先使用(如果匹配的话)。其次才是 `Disk Cache`。
-* 强制刷新 (Ctrl + F5)：浏览器不使用缓存，因此发送的请求头部均带有 `Cache-Control: no-cache(`为了兼容，还带了 `Pragma: no-cache`),服务器直接返回 200 和最新内容。
+* 普通刷新 (`F5`)：因为 TAB 并没有关闭，因此 `Memory Cache` 是可用的，会被优先使用(如果匹配的话)。其次才是 `Disk Cache`。
+* 强制刷新 (`Ctrl + F5`)：浏览器不使用缓存，因此发送的请求头部均带有 `Cache-Control: no-cache(`为了兼容，还带了 `Pragma: no-cache`),服务器直接返回 200 和最新内容。

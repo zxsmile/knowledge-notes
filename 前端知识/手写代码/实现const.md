@@ -1,3 +1,4 @@
+```
 function newConst(key,val){
     let dsc={
         value:val,
@@ -35,3 +36,5 @@ console.log(a)
 //报错
 
 //注：value或者writable不能和set和get同时出现
+```
+
