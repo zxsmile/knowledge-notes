@@ -99,6 +99,29 @@ let obj = {
     return result;
 
 }
+
+//轻盈版
+Function.prototype.myApply = function(newThis) {
+  // 判断调用对象是否为函数
+  if (typeof this !== "function") {
+    throw new TypeError("Error");
+  }
+  let result = null;
+  // 判断 context 是否存在，如果未传入则为 window
+  newThis = newThis ? Object(newThis) : window
+  // 将函数设为对象的方法
+  let fn = Symbol()
+  newThis[fn] = this
+  // 调用方法
+  if (arguments[1]) {
+    result = newThis.fn(...arguments[1]);
+  } else {
+    result = newThis.fn();
+  }
+  // 将属性删除
+  delete newThis.fn;
+  return result;
+};
 ```
 
 

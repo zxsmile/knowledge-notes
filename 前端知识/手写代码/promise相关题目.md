@@ -130,26 +130,26 @@
         console.log(3);
         return 3
       })
-      
+   
       function mergePromise () {
         // 在这里写代码
       }
-      
+   
       mergePromise([ajax1, ajax2, ajax3]).then(data => {
         console.log("done");
         console.log(data); // data 为 [1, 2, 3]
       });
-      
+   
       // 要求分别输出
       // 1
       // 2
       // 3
       // done
       // [1, 2, 3]
-      
+   
       //解法一：
 
-      
+   
     function mergePromise (arr) {
         let data = []
         return arr.reduce((prev,next) => {
@@ -164,7 +164,7 @@
         // 在这里写代码
       }
 
-            
+   
       //解法二：
       function mergePromise (arr) {
         let data = []
@@ -222,7 +222,7 @@
               img.onerror = () => {
                   reject(new Error('图片加载失败'))
               }
-
+    
               img.src = url
           })
       }
@@ -230,9 +230,9 @@
 #### 五、限制异步操作的并发个数并尽可能快的完成全部 ####
 
 - 有8个图片资源的url，已经存储在数组urls中。urls类似于['https://image1.png', 'https://image2.png', ....]，而且已经有一个函数function loadImg，输入一个url链接，返回一个Promise，该Promise在图片下载完成的时候resolve，下载失败则reject。
-     
+  
 - 但有一个要求，任何时刻同时下载的链接数量不可以超过3个。
-        
+  
 - 请写一段代码实现这个需求，要求尽可能快速地将所有图片下载完成。
 
      var urls = [
@@ -245,7 +245,7 @@
         "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmn7.png",
         "https://hexo-blog-1256114407.cos.ap-shenzhen-fsi.myqcloud.com/bpmn8.png",
      ];
-    
+       
     function loadImg(url) {
 	    return new Promise((resolve, reject) => {
 	      const img = new Image();
@@ -311,22 +311,22 @@
 
 
     //判断是否超时(不使用Promise.race)
-
-	function timeoutPromise(requestFn, delay) {
-	    let promiseArr = [requestFn(1000),sleep(delay)]
-	    return new Promise((resolve,reject) => {
-	        for(let promise in promiseArr){
-	            // 超时则执行失败，不超时则执行成功
-	            promise.then(res=>resolve(res),err=>reject(err))
-	        }
-	    })
-	}
-	
-	//判断是否超时(使用Promise.race)
-	
-	function timeoutPromise(requestFn, delay) {
-	    return Promise.race([requestFn(1000),sleep(delay)])
-	}
+    
+    function timeoutPromise(requestFn, delay) {
+        let promiseArr = [requestFn(1000),sleep(delay)]
+        return new Promise((resolve,reject) => {
+            for(let promise in promiseArr){
+                // 超时则执行失败，不超时则执行成功
+                promise.then(res=>resolve(res),err=>reject(err))
+            }
+        })
+    }
+    
+    //判断是否超时(使用Promise.race)
+    
+    function timeoutPromise(requestFn, delay) {
+        return Promise.race([requestFn(1000),sleep(delay)])
+    }
 
 
 #### 七、转盘抽奖 ####
@@ -347,18 +347,18 @@
 	 * @returns {Promise<any>}
 	 */
 	function sleep(delay) {
-	  return new Promise((_, reject) => {
+	    return new Promise((_, reject) => {
 	    setTimeout(() => reject('超时喽'), delay)
-	  })
+	    })
 	}
 	
 	/**
 	 * 模拟请求
 	 */
 	function request(delay) {
-	  return new Promise(resolve => {
+	    return new Promise(resolve => {
 	    setTimeout(() => resolve('成功喽'), delay)
-	  })
+	    })
 	}
 	
 	/**
@@ -386,9 +386,9 @@
 	 * @returns {Promise<any>}
 	 */
 	 function turntableSleep(delay) {
-	  return new Promise(resolve => {
+	    return new Promise(resolve => {
 	    setTimeout(() => resolve('停止转动喽'), delay)
-	  })
+	    })
 	}
 	
 	/**
@@ -586,7 +586,7 @@
 	// runPromiseInSeq3(requestFns);
 
 #### 十一、最简实现Promise，支持异步链式调用（20行） ####
-	
+
 	function Promise(fn) {
 	  // Promise resolve时的回调函数集
 	  this.cbs = [];
@@ -608,21 +608,22 @@
 	}
 
    
+
     Promise.prototype.then = function (onResolved) {
-	  // 这里叫做promise2
-	  return new Promise((resolve) => {
-	    this.cbs.push(() => {
-	      const res = onResolved(this.data);
-	      if (res instanceof Promise) {
-	        // resolve的权力被交给了user promise
-	        res.then(resolve);
-	      } else {
-	        // 如果是普通值 就直接resolve
-	        // 依次执行cbs里的函数 并且把值传递给cbs
-	        resolve(res);
-	      }
-	    });
-	  });
-	};
-	
+      // 这里叫做promise2
+      return new Promise((resolve) => {
+        this.cbs.push(() => {
+          const res = onResolved(this.data);
+          if (res instanceof Promise) {
+            // resolve的权力被交给了user promise
+            res.then(resolve);
+          } else {
+            // 如果是普通值 就直接resolve
+            // 依次执行cbs里的函数 并且把值传递给cbs
+            resolve(res);
+          }
+        });
+      });
+    };
+
 

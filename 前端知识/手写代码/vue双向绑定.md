@@ -2,19 +2,19 @@ class Vue{
     constructor(options) {
       // 获取到传入的对象 没有默认为空对象
        this.$options = options || {}
-  
+
        // 获取 el
        this.$el = options.el === 'string'?document.querySelector(options.el):options.el
-  
+      
        // 获取 data
        this.$data = options.data || {}
-  
+      
        // 调用 proxyData 处理data中的属性，将data属性代理给Vue实例
        this.proxyData(this.$data)
-  
+      
        //使用 Obsever 把data中的数据转为响应式
        new Observer(this.$data)
-  
+      
        //编译模板
        new Compiler(this)
       }
@@ -43,93 +43,103 @@ class Vue{
             })
          })
        }
-  
-  }
-  
+       } 
+
+ 
+
+```
   class Observer{
-  
-    constructor(data){
-      //用来遍历data
-      this.walk(data)
-    }
-  
-    // 遍历 data 转为响应式
-    walk() {
-      // 判断 data是否为空 和 对象
-      if(!data || typeof data !== 'object'){
-        return
-      }
-      // 遍历 data
-      Object.keys(data).forEach(key => {
-        // 转为响应式
-        this.defineReactive(data,key,data[key])
-      })
-    }
-  
+
+constructor(data){
+  //用来遍历data
+  this.walk(data)
+}
+
+// 遍历 data 转为响应式
+walk() {
+  // 判断 data是否为空 和 对象
+  if(!data || typeof data !== 'object'){
+    return
+  }
+  // 遍历 data
+  Object.keys(data).forEach(key => {
     // 转为响应式
-    // 要注意的 和vue.js 写的不同的是
-    // vue.js中是将 属性给了 Vue 转为 getter setter
-    // 这里是 将data中的属性转为getter setter
-  
-    defineReactive(obj,key,value) {
-  
-      // 如果是对象类型的 也调用walk 变成响应式，不是对象类型的直接在walk会被return
-      this.walk(value)
-      // 保存一下 this
-      let self = this
-     // 创建 Dep 对象
-      let dep = new Dep()
-      Object.defineProperty(obj,key,{
-        enumerable:true,
-        configurable:true,
-  
-        get:() => {
-          // 在这里添加观察者对象 Dep.target 表示观察者
-          if(Dep.target){
-            dep.addSub(Dep.target)
-          }
-          return value
-        },
-  
-        set:newVal => {
-           if(value === newVal){
-             return
-           }
-           
-           // 赋值的话如果是newValue是对象，对象里面的属性也应该设置为响应式的
-           self.walk(newVal)
-            // 触发通知 更新视图
-           dep.notify()
-        }
-      })
+    this.defineReactive(data,key,data[key])
+  })
+}
+
+// 转为响应式
+// 要注意的 和vue.js 写的不同的是
+// vue.js中是将 属性给了 Vue 转为 getter setter
+// 这里是 将data中的属性转为getter setter
+
+defineReactive(obj,key,value) {
+
+  // 如果是对象类型的 也调用walk 变成响应式，不是对象类型的直接在walk会被return
+  this.walk(value)
+  // 保存一下 this
+  let self = this
+ // 创建 Dep 对象
+  let dep = new Dep()
+  Object.defineProperty(obj,key,{
+    enumerable:true,
+    configurable:true,
+
+    get:() => {
+     // 在这里添加观察者对象 Dep.target 表示观察者
+      if(Dep.target){
+        dep.addSub(Dep.target)
+      }
+      return value
+    },
+
+    set:newVal => {
+       if(value === newVal){
+         return
+       }
+       
+       // 赋值的话如果是newValue是对象，对象里面的属性也应该设置为响应式的
+       self.walk(newVal)
+        // 触发通知 更新视图
+       dep.notify()
     }
+  })
+}
+
   } 
-  
-  class Dep{
+```
+
+ 
+
+```
+ class Dep{
     constructor() {
       // 存储观察者
       this.subs = []
     }
-  
-    // 添加观察者
-    addSub(sub) {
-      // 判断观察者是否存在 和 是否拥有update方法
-       if(sub && sub.updata){
-         this.subs.push(sub)
-       }
-    }
-  
-    notify() {
-      // 通知方法
-      this.subs.forEach(sub => {
-        // 触发每个观察者的更新方法
-        sub.updata()
-      })
-    }
+
+// 添加观察者
+addSub(sub) {
+  // 判断观察者是否存在 和 是否拥有update方法
+   if(sub && sub.updata){
+     this.subs.push(sub)
+   }
+}
+
+notify() {
+  // 通知方法
+  this.subs.forEach(sub => {
+    // 触发每个观察者的更新方法
+    sub.updata()
+  })
+}
+
   }
+```
+
+```
   
-  
-  
+
   class Compiler {
     // vm 指 Vue 实例
     constructor(vm) {
@@ -229,23 +239,27 @@ class Vue{
         this.vm[key] = node.value
       })
     }
-  
-    // 判断元素的属性是否是 vue 指令
-    isDirective(attr) {
-      return attr.startsWith('v-')
-    }
-    // 判断是否是元素节点
-    isElementNode(node) {
-      return node.nodeType === 1
-    }
-    // 判断是否是 文本 节点
-    isTextNode(node) {
-      return node.nodeType === 3
-    }
+
+// 判断元素的属性是否是 vue 指令
+isDirective(attr) {
+  return attr.startsWith('v-')
+}
+// 判断是否是元素节点
+isElementNode(node) {
+  return node.nodeType === 1
+}
+// 判断是否是 文本 节点
+isTextNode(node) {
+  return node.nodeType === 3
+}
+
   }
-  
-  
-  class watcher{
+```
+
+ 
+
+```
+ class watcher{
     constructor(vm,key,cb){
       // vm 是 Vue 实例
       this.vm = vm
@@ -274,3 +288,6 @@ class Vue{
       this.cb(newVal)
     }
   }
+```
+
+
