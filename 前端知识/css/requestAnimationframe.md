@@ -14,8 +14,8 @@
 		   }
 		
 		   window.requestAnimationFrame(animation)
-
-           可以看到，div向右移动了100px
+	
+  	     可以看到，div向右移动了100px
 
 - 但是它只执行了一次，怎么做动画呢？别急，再看看 MDN 怎么说。
 - 注意：若你想在浏览器下次重绘之前继续更新下一帧动画，那么回调函数自身必须再次调用window.requestAnimationFrame()
@@ -23,15 +23,15 @@
 		   let test = document.querySelector('#test')
 		   let i=0
 		   function animation(){
-
+	
 		     test.style.marginLeft = i+'px'
 		     i++
 		     window.requestAnimationFrame(animation)
 		   }
 		
 		   window.requestAnimationFrame(animation)
-
-           这个div会一直移动下去
+	
+  	     这个div会一直移动下去
 
 #### 三、执行频率 ####
 
@@ -59,25 +59,30 @@
 
 - 在同一个帧中的 多个回调函数 ，它们每一个都会接受到一个 相同的时间戳
 
-		(() => {
-		  function test1(timestamp) {
-		    console.log(`🚀🚀hello ~ requestAnimationFrame1 ${timestamp}`);
-		    requestAnimationFrame(test1)
-		  }
-		  function test2(timestamp) {
-		    console.log(`🚀🚀hello ~ requestAnimationFrame2 ${timestamp}`);
-		    requestAnimationFrame(test2)
-		  }
-		  requestAnimationFrame(test1)
-		  requestAnimationFrame(test2)
-		
-		})()
+   ```
+   (() => {
+   	  function test1(timestamp) {
+   	    console.log(`🚀🚀hello ~ requestAnimationFrame1 ${timestamp}`);
+   	    requestAnimationFrame(test1)
+   	  }
+   	  function test2(timestamp) {
+   	    console.log(`🚀🚀hello ~ requestAnimationFrame2 ${timestamp}`);
+   	    requestAnimationFrame(test2)
+   	  }
+   	  requestAnimationFrame(test1)
+   	  requestAnimationFrame(test2)
+   	
+   
+   })()
+   ```
+
+   
 
 - 可以看到，两个 requestAnimationFrame 在控制台输出的时间戳是一样的。也就是浏览器刷新一次的时候，执行所有的 requestAnimationFrame ，并且它们的回调参数是一模一样的。
 
 #### 五、浏览器的自我拯救 ####
 
-- 为了提高性能和电池寿命，因此在大多数浏览器里，当requestAnimationFrame() 运行在后台标签页或者隐藏的<iframe> 里时，requestAnimationFrame() 会被暂停调用以提升性能和电池寿命。
+- 为了提高性能和电池寿命，因此在大多数浏览器里，当requestAnimationFrame() 运行在后台标签页或者隐藏的`<iframe> `里时，requestAnimationFrame() 会被暂停调用以提升性能和电池寿命。
 - 这个就厉害了，你要是当时没有浏览页面，并且也没关掉，那么 requestAnimationFrame() 一直在这跑，多消耗性能啊。
 
 		   let test = document.querySelector('#test')
@@ -133,17 +138,21 @@
 
         - 在 JavaScript 中，setTimeout任务被放进异步队列中，只有当主线程上的任务执行完以后，才会去检查该队列的任务是否需要开始执行。所以，setTimeout的实际执行时间一般比其设定的时间晚一些。这种运行机制决定了时间间隔参数实际上只是指定了把动画代码添加到【浏览器 UI 线程队列】中以等待执行的时间。如果队列前面已经加入了其他任务，那动画代码就要等前面的任务完成后再执行
         
-			let startTime = performance.now();
-			setTimeout(() => {
-			  let endTime = performance.now();
-			  console.log(endTime - startTime);
-			}, 50);
-			/* 一个非常耗时的任务 */
-			for (let i = 0; i < 20000; i++) {
-			  console.log(0);
-			}
-
-
+			```
+			- - - let startTime = performance.now();
+			      setTimeout(() => {
+			        let endTime = performance.now();
+			        console.log(endTime - startTime);
+			      }, 50);
+			      /* 一个非常耗时的任务 */
+			      for (let i = 0; i < 20000; i++) {
+			        console.log(0);
+			      }
+			
+			
+			```
+			
+			
 
 
  - 刷新频率受屏幕分辨率和屏幕尺寸影响，不同设备的屏幕刷新率可能不同，setTimeout只能设置固定的时间间隔，这个时间和屏幕刷新间隔可能不同
@@ -160,7 +169,8 @@
 
 - 使用 setTimeout 实现的动画，当页面被隐藏或最小化时，定时器setTimeout仍在后台执行动画任务，此时刷新动画是完全没有意义的（实际上 FireFox/Chrome 浏览器对定时器做了优化：页面闲置时，如果时间间隔小于 1000ms，则停止定时器，与requestAnimationFrame行为类似。如果时间间隔>=1000ms，定时器依然在后台执行）
 
-		// 当开始输出count后，切换浏览器tab页，再切换回来，可以发现打印的值没有停止，甚至可能已经执行完了
+		```
+	// 当开始输出count后，切换浏览器tab页，再切换回来，可以发现打印的值没有停止，甚至可能已经执行完了
 		let count = 0;
 		let timer = setInterval(() => {
 		  if (count < 20) {
@@ -171,6 +181,9 @@
 		    timer = null;
 		  }
 		}, 2000);
+	```
+	
+	
 
 
 - 使用requestAnimationFrame，当页面处于未激活的状态下，该页面的屏幕刷新任务会被系统暂停，由于requestAnimationFrame保持和屏幕刷新同步执行，所以也会被暂停。当页面被激活时，动画从上次停留的地方继续执行，节约 CPU 开销。

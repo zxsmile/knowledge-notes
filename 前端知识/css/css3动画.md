@@ -6,18 +6,20 @@ CSS3中有三个关于动画的样式属性transform、transition和animation
 
 * 语法：
 
+```
 .transform-class {
 
    transform ： none | <transform -function>
 }
+```
 
 none表示不做变换；<transform-function>表示一个或多个变化函数，变化函数由函数名和参数组成，参数包含在()里面，用空格分开
 
-	
+
     如：.transform-class {
-	    
+        
           transform ： rotate(30deg) scale(2,3);
-	   }
+       }
 
 (1)transform-origin基点
 
@@ -28,9 +30,9 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 * 使用规则:
 
       * transform-origin(X,Y):用来设置元素的运动的基点（参照点）。默认点是元素的中心点。其中X和Y的值可以是百分值,em,px，其中X也可以是字符参数值left,center,right；Y和X一样除了百分值外还可以设置字符值top,center,bottom
-
+    
       * left,center right是水平方向取值，对应的百分值为left=0%;center=50%;right=100%而top center bottom是垂直方向的取值，其中top=0%;center=50%;bottom=100%;如果只取一个值，表示垂直方向值不变
-
+    
           * top left | left top 等价于 0 0
           * top | top center | center top 等价于 50% 0
           * right top | top right 等价于 100% 0
@@ -50,10 +52,10 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 * 用法：
 
       * rotate(<angle>)
-
-		如：.transform-rotate {
-			    transform: rotate(30deg);
-			}
+    
+	    如：.transform-rotate {
+	    	    transform: rotate(30deg);
+	    	}
 
 (3)scale 缩放
 
@@ -65,20 +67,25 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 
 * 入参代表水平或者垂直方向的缩放比例。缩放比例如果大于1则放大，反之则缩小，如果等于1代表原始大小
 
+	```
 	如：.transform-scale {
-		    transform: scale(2,1.5);
-		}
-		
-		.transform-scaleX {
-		    transform: scaleX(2);
-		}
-		
-		.transform-scaleY {
-		    transform: scaleY(1.5);
-		}
-
-
-(4)translate 移动
+	  	    transform: scale(2,1.5);
+	  	}
+	  	
+	
+	  	.transform-scaleX {
+	  	    transform: scaleX(2);
+	  	}
+	  	
+	  	.transform-scaleY {
+	  	    transform: scaleY(1.5);
+	  	}
+	
+	
+	
+	```
+	
+	(4)translate 移动
 
 * 移动也分三种情况：
 
@@ -92,6 +99,7 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 		    transform: translate(400px, 20px);
 		}
 		
+	
 		.transform-translateX {
 		    transform: translateX(300px);
 		}
@@ -107,7 +115,7 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
       * skew(<angle>[, <angle>]):水平和垂直方向同时扭曲
       * skewX(<angle>):水平方向的扭曲
       * skewY(<angle>):垂直方向的扭曲
-     
+  
 * 单位为角度
 
 	如：.transform-skew {
@@ -122,6 +130,7 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 		    transform: skewY(10deg);
 		}
 	
+
 (6)matrix 矩阵变换
 
 * x和y是元素初始的坐标，x' 和y'则是通过矩阵变换后得到新的坐标。通过中间的那个3×3的变换矩阵，对原先的坐标施加变换，就能得到新的坐标了。依据矩阵变换规则即可得到： x'=ax+cy+e,y'=bx+dy+f
@@ -130,16 +139,17 @@ none表示不做变换；<transform-function>表示一个或多个变化函数�
 
       *  matrix(a,b,c,d,e,f) 
       *  对应的矩阵:
-
+      
             a,c,e
             b,d,f
             0,0,1
 
      * 2D的转换是由一个3*3的矩阵表示的，前两行代表转换的值，分别是 a b c d e f ，要注意是竖着排的，第一行代表的是X轴变化，第二行代表的是Y轴的变化，第三行代表的是Z轴的变化，2D不涉及到Z轴，这里使用 0 0 1
-        
-	如：.transform-skew {
-		   transform: matrix(1,0,0,1,100,100);
-	  }
+       
+
+  如：.transform-skew {
+  	   transform: matrix(1,0,0,1,100,100);
+    }
 
 * transform中translate，scale，rotate，skew背后实现原理也对应着matrix变化
 
@@ -171,7 +181,7 @@ https://www.tuicool.com/articles/na6jy2
       * none
       * all
       * 元素属性名：
-
+    
             * color
             * length
             * visibility
@@ -186,10 +196,10 @@ https://www.tuicool.com/articles/na6jy2
 		   transition-property： height
 		 }
 	    
-        div:hover{
-                 
-             height:200px
-         }
+	    div:hover{
+	             
+	         height:200px
+	     }
 
 表示当鼠标移到该div上时，发生transition动画，将height变为200px;因为上面指定的是height属性触发动画效果，所有只有该div的height变化才能触发动画效果
 
@@ -228,7 +238,7 @@ https://www.tuicool.com/articles/na6jy2
     * 语法为：cubic-bezier (x1,y1,x2,y2)
     
     * 其中起始点固定值为A(0,0),终止点固定为D(1,1)剩下的中间点B(x1,y1),C(x2,y2)也就是所要动态操控的两个点了,对应cubic-bezier (x1,y1,x2,y2)中的四个参数,通过改变B,C两点的坐标值来动态生成一条贝塞尔曲线表示动画中的速度变化
- 
+
 * 用法：
 
 .transition-timing {
@@ -238,7 +248,7 @@ https://www.tuicool.com/articles/na6jy2
 	如：.transition-timing {
 		    transition-timing-function ： ease 
 		}
-	        
+
 
 (3)transition-delay
 
@@ -261,14 +271,14 @@ https://www.tuicool.com/articles/na6jy2
    transition ：<property> <duration> <timing function> <delay>;
 }
 
- 
+
 	如：transition: height 1s ease 1s
 
 
 2.总结
 
 * 不是所有的CSS属性都支持transition
- 
+
 * transition需要明确知道，开始状态和结束状态的具体数值，才能计算出中间状态。比如，height从0px变化到100px，transition可以算出中间状态。但是，transition没法算出0px到auto的中间状态，也就是说，如果开始或结束的设置是height: auto，那么就不会产生动画效果。类似的情况还有，display: none到block，background: url(foo.jpg)到url(bar.jpg)等等
 
 * transition需要事件触发，所以没法在网页加载时自动发生
@@ -280,16 +290,19 @@ https://www.tuicool.com/articles/na6jy2
        * 媒体查询触发 
        * JavaScript触发 
 
-	如：div {
-		  opacity: 1;
-		  transition: opacity 1s linear;
-		}
-		
-		div:hover {
-		  opacity: 0;
-		}
+   ```
+   如：div {
+   	  opacity: 1;
+   	  transition: opacity 1s linear;
+   	}
+   	
+   
+   div:hover {
+     opacity: 0;
+   }
+   ```
 
-	点击一个div会让div透明度变为0，上例中使用hover触发了transition动画
+   点击一个div会让div透明度变为0，上例中使用hover触发了transition动画
 
 * transition是一次性的，不能重复发生，除非一再触发
 
@@ -325,12 +338,12 @@ https://www.tuicool.com/articles/na6jy2
 	    }
 	    to {
 	        properties: value;
-
+	
 	    }
 	}
-
+	
 	//or
-
+	
 	@keyframes animationName {
 	    0% {
 	        properties: value;
@@ -342,7 +355,7 @@ https://www.tuicool.com/articles/na6jy2
 	        properties: value;
 	    }
 	}
-	
+
 
 
 * animationName：动画名称，开发人员自己命名；
@@ -350,6 +363,7 @@ https://www.tuicool.com/articles/na6jy2
 * properties：样式属性名称，例如：color、left、width等等。
 
 	   
+
 2.animation
 
 (1)animation-name

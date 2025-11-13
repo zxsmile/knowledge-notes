@@ -21,7 +21,7 @@
 6. inherit规定应该从父元素继承 position 属性的值。
    - initial：设置该属性为默认值。
 
-#### 二、主要属性值详解####
+#### 二、主要属性值详解
 
 1. 首先说一下什么文档流
 
@@ -41,7 +41,7 @@
 
 3. 默认情况下，所有元素都在z-index:0这一层，元素的top,left,right,bottom,z-index属性都没有被激活，设置了也没有用。position:relative/ablolute/fixed/sticky,都可以让元素激活top,left,right,bottom,z-index属性。如果使用absolute/relative/sticky定位的话，必须指定top,left,right,bottom属性中的至少一个，否则top,left,right,bottom属性会使用它们的默认值auto,这将导致对象遵从正常的HTML布局规则，在前一个对象之后立即被呈递，简单讲就是都变成relative。如果top和bottom一同存在的话，那么只有top生效。如果left和right一同存在的话，那么只有left生效。
 4. static
- 
+
    - 默认值，一般元素不设置定位属性就属于静态定位，元素处于标准流中。
 
 5. relative
@@ -66,6 +66,7 @@
    - 绝对定位会使元素脱离文档流，它会让元素浮起来(即：z-index的值大于0)，它在文档流中的位置会被删除。它只能根据祖先类元素(父类以上)进行定位，而这个祖先类还必须是以postion非static方式定位的
    - 举个例子，a元素使用absoulte定位，它会从父类开始找起，寻找以position非static方式定位的祖先类元素(注意，一定要是直系祖先才算哦~），直到<html>标签为止，这里还需要注意的是，relative和static方式在最外层时是以<body>标签为定位原点的，而absoulte方式在无父级是position非static定位时是以<html>作为原点定位。<html>和<body>元素相差9px左右。
    
+
 ![](absolute1.jpg)
 
 ![](absolute2.jpg)
@@ -103,7 +104,7 @@
       - 改变行内元素的呈现方式，将display置为inline-block  
       - 使元素脱离普通文档流，不再占据文档物理空间
       - 覆盖非定位文档元素
- 
+
    - 不同点：
 
      - abuselute与fixed的根元素不同，abuselute的根元素可以设置，fixed根元素是浏览器。
