@@ -16,7 +16,7 @@
        tr{
 	       visibility:collapse;
 	     }
-
+    
 	     .box{
 	      visibility:collapse;
 	     }
@@ -28,3 +28,4 @@
 
 - 对于一般的元素，它的表现跟visibility：hidden;是一样的。元素是不可见的，但此时仍占用页面空间。
 - 但例外的是，如果这个元素是table相关的元素，例如table行，table group，table列，table column group，它的表现却跟display:none一样，也就是说，它们占用的空间也会释放。
+
