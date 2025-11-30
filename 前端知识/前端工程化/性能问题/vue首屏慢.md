@@ -76,7 +76,7 @@ import debounce from 'lodash/debounce';
 - **`Gzip`**：可压缩 `JS/CSS` 70% 体积
 - **`Brotli`**：比 `Gzip` 再小 15%（推荐）
 
-#### Nginx 配置示例：
+#### `Nginx` 配置示例：
 
 ```
 gzip on;
