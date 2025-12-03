@@ -133,7 +133,7 @@ fetch('/dashboard/index.html')
 
 # 五、`bundle` 放在 `dist/app1/`、`dist/app2/`是分包还是一个包
 
-> **`bundle` 放在 `dist/app1/`、`dist/app2/` 属于「多个独立的包」（multiple separate bundles），不是「一个包的分包」（code-split chunks of a single bundle）。**
+> **`bundle` 放在 `dist/app1/`、`dist/app2/` 属于「多个独立的包」（`multiple separate bundles`），不是「一个包的分包」（`code-split chunks of a single bundle`）。**
 
 下面从 **构建产物、依赖关系、加载机制、缓存行为** 四个维度详细解释两者的本质区别。
 
