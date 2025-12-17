@@ -197,3 +197,43 @@ module.exports = {
 2. **按需引入 + `Tree Shaking`**
 3. **开启 `Gzip/Brotli`**
 4. **考虑 `SSR/SSG`**（对 `SEO` 或极致体验要求高时）
+
+start promise end promise next promise 1 promise 2 setTimeout 1 promise3 promise4
+
+console.log("start");
+
+setTimeout(() => {
+  console.log("setTimeout 1");
+
+  Promise.resolve()
+    .then(() => {
+      console.log("promise 3");
+    })
+    .then(() => {
+      console.log("promise 4");
+    });
+}, 0);
+
+new Promise((resolve, reject) => {
+  console.log("promise");
+  resolve("promise next");
+}).then((res) => {
+  console.log(res);
+});
+
+Promise.resolve()
+  .then(() => {
+    console.log("promise 1");
+  })
+  .then(() => {
+    console.log("promise 2");
+  });
+
+console.log("end");
+
+
+
+
+
+
+
